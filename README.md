@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Braj pilgrimage tours website
 
-## Getting Started
+A multi-page, SEO-focused site for a business planning private pilgrimage trips to Vrindavan, Mathura and the wider Braj region. Built with Next.js 16 (App Router, Cache Components), React 19, TypeScript and Tailwind CSS v4.
 
-First, run the development server:
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then fill in your details
+npm run dev                  # http://localhost:3000
+npm run build && npm start   # production
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Configuration (`.env.local`)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All brand and contact details come from environment variables. See `.env.example` for the full list.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **`NEXT_PUBLIC_SITE_URL`** sets the canonical URL. Set it to the live domain before deploying, because it's used for canonical tags, the sitemap, Open Graph and JSON-LD.
+- **`NEXT_PUBLIC_BRAND_NAME`** sets the brand shown in the header, titles and schema.
+- **`NEXT_PUBLIC_WHATSAPP_NUMBER`** takes digits only, with the country code (e.g. `919876543210`). WhatsApp buttons appear only when it is set.
+- **`NEXT_PUBLIC_PHONE` and `NEXT_PUBLIC_EMAIL`** appear only when set. No placeholder contact details are ever shown.
+- **`NEXT_PUBLIC_ADDRESS_*` and `NEXT_PUBLIC_SOCIAL_*`** are optional.
+- **`ENQUIRY_WEBHOOK_URL`** is server-only and optional. When set, each form enquiry is POSTed there as JSON (Zapier, Make, Google Apps Script, a Slack webhook, etc.). Without it, enquiries are only logged on the server, and visitors are asked to send their details on WhatsApp, by email or by phone so that nothing is lost.
 
-## Learn More
+`NEXT_PUBLIC_*` values are inlined at build time, so rebuild after changing them.
 
-To learn more about Next.js, take a look at the following resources:
+## Editing content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All text lives in typed files in `src/content/`, so no component changes are needed:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| File | What it holds |
+| --- | --- |
+| `home.ts` | Hero copy, experiences, circuits, why-us, about, gallery, **testimonials** |
+| `destinations.ts` | The four destination pages (Vrindavan, Mathura, Govardhan & Barsana, Braj Yatra) |
+| `temples.ts` | Temple pages: history, approximate timings, dress code, tips |
+| `packages.ts` | Tour packages. `price` is optional; leave it out to show "Price on request" |
+| `festivals.ts` | Festival guides with approximate months |
+| `guides.ts` | Travel guide articles |
+| `faqs.ts` | FAQ page and home FAQ selection |
+| `images.ts` | Photo imports, alt text and credits (Wikimedia Commons) |
 
-## Deploy on Vercel
+Content rules the site is built around:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Testimonials:** the section stays hidden until `testimonials` in `home.ts` has entries. Add only real reviews, with the guest's permission.
+- **Prices:** only set `price` on a package if you will honour it. An `Offer` is added to the schema only when a price exists.
+- **Temple timings:** these are approximate and always shown with a "subject to change" note.
+- **Photos:** new photos go in `src/assets/photos/` and are registered in `images.ts` with an accurate credit. The `/image-credits` page is generated from those credits.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Structure
+
+```
+src/
+  app/          routes, globals.css (design tokens), sitemap.ts, robots.ts, actions/enquiry.ts
+  components/   layout, home, cards, forms, pages, seo, svg, ui
+  config/       site.ts — brand, contact (env), navigation
+  content/      typed content files
+  lib/          seo.ts (buildMetadata), schema.ts (JSON-LD), whatsapp.ts
+```
+
+Client components are limited to the header/mobile menu, the gallery lightbox and the enquiry form. Package and temple filters use CSS only (radio inputs plus `:has()`), and every page is prerendered at build time.
