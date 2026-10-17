@@ -12,9 +12,46 @@ export const hero = {
     { value: "1–7 days", label: "flexible itineraries" },
     { value: "Private", label: "transport & local help" },
   ],
-  image: "prem-mandir-night" as PhotoKey,
-  inset: "keshi-ghat-ritual" as PhotoKey,
 };
+
+/** Hero carousel cards. Keep titles short — they're set in large uppercase type. */
+export const heroSlides: { eyebrow: string; title: string; text: string; image: PhotoKey; cta: { label: string; href: string } }[] = [
+  {
+    eyebrow: "Vrindavan · Prem Mandir",
+    title: "Marble that glows at dusk",
+    text: "Banke Bihari darshan by day, Prem Mandir’s evening lights by night — Vrindavan at an easy pace.",
+    image: "prem-mandir",
+    cta: { label: "Explore Vrindavan", href: "/vrindavan" },
+  },
+  {
+    eyebrow: "Mathura · Evening aarti",
+    title: "Lamps on the Yamuna",
+    text: "Brass lamps and floating diyas at Vishram Ghat, where Krishna rested after defeating Kamsa.",
+    image: "vishram-ghat",
+    cta: { label: "Explore Mathura", href: "/mathura" },
+  },
+  {
+    eyebrow: "Govardhan · Parikrama",
+    title: "Walk around Giriraj ji",
+    text: "The 21 km parikrama past Kusum Sarovar, Mansi Ganga and Radha Kund — on foot or by car.",
+    image: "kusum-sarovar",
+    cta: { label: "Plan a Govardhan day", href: "/govardhan-barsana" },
+  },
+  {
+    eyebrow: "Festival yatras",
+    title: "A week of colour in Braj",
+    text: "Flower Holi at Banke Bihari, Lathmar Holi in Barsana and Nandgaon. Book early — we’ll time it.",
+    image: "holi-vrindavan",
+    cta: { label: "See festivals", href: "/festivals" },
+  },
+  {
+    eyebrow: "Barsana · Shri Radha",
+    title: "Radha Rani’s hilltop home",
+    text: "Climb Bhanugarh hill to the Shriji temple, then on to Nanda Baba’s village of Nandgaon.",
+    image: "radha-rani-barsana",
+    cta: { label: "View the temple", href: "/temples/radha-rani-temple-barsana" },
+  },
+];
 
 export const destinationCards: { name: string; href: string; image: PhotoKey; text: string; distance: string }[] = [
   { name: "Vrindavan", href: "/vrindavan", image: "prem-mandir", text: "Banke Bihari, Prem Mandir, ISKCON and the Yamuna ghats.", distance: "Heart of Braj" },

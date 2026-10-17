@@ -5,6 +5,7 @@ import {
   AboutHighlights,
   Circuits,
   Experiences,
+  ExploreMore,
   FaqSection,
   FeaturedPackages,
   FestivalsSection,
@@ -56,6 +57,7 @@ export default function HomePage() {
       </section>
       <GuidesSection />
       <Testimonials />
+      <ExploreMore />
       <FaqSection />
       <FinalCta />
       <JsonLd data={[webPageSchema({ path: "/", name: title, description }), faqSchema(homeFaqs)]} />

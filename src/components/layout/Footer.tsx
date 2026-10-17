@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
-import { Mandala, TempleSkyline } from "@/components/svg/Ornaments";
+import { TempleSkyline } from "@/components/svg/Ornaments";
 import { FacebookIcon, InstagramIcon, WhatsappIcon, YoutubeIcon } from "@/components/svg/TravelIcons";
 import { formatAddress, phoneHref, policyLinks, site } from "@/config/site";
 import { guides } from "@/content/guides";
@@ -24,13 +24,13 @@ function FooterColumn({ title, links }: { title: string; links: { label: string;
   const id = `footer-${title.toLowerCase().replace(/\W+/g, "-")}`;
   return (
     <nav aria-labelledby={id}>
-      <h2 id={id} className="text-sm font-semibold uppercase tracking-[0.16em] text-saffron-soft">
+      <h2 id={id} className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-ember-deep">
         {title}
       </h2>
-      <ul className="mt-4 grid gap-2.5 text-[0.95rem]">
+      <ul className="mt-4 grid gap-2 text-sm">
         {links.map((l) => (
           <li key={l.href}>
-            <Link href={l.href} className="text-white/75 transition-colors hover:text-white hover:underline hover:underline-offset-4">
+            <Link href={l.href} className="text-ink-soft transition-colors hover:text-ember-deep">
               {l.label}
             </Link>
           </li>
@@ -52,43 +52,40 @@ export function Footer() {
   const hasContact = Boolean(wa || tel || site.contact.email || address);
 
   return (
-    <footer className="mt-auto">
-      <TempleSkyline className="-mb-px block h-14 w-full text-[#121417] sm:h-20" />
-      <div className="relative overflow-hidden bg-[#121417] text-white">
-      <Mandala className="spin-slow pointer-events-none absolute -right-40 -top-24 size-[34rem] text-saffron/10" />
-
-      <div className="container-x relative pb-10 pt-12">
-        <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
+    <footer className="relative mt-auto overflow-hidden border-t border-line bg-cream">
+      <TempleSkyline className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-orange-100/70" />
+      <div className="container-x relative pb-8 pt-12 sm:pt-14">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr] lg:gap-14">
           <div>
-            <Logo light />
-            <p className="mt-5 max-w-sm leading-relaxed text-white/70">{site.description}</p>
+            <Logo />
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-stone">{site.description}</p>
 
             {hasContact && (
-              <ul className="mt-7 grid gap-3 text-[0.95rem]">
+              <ul className="mt-6 grid gap-2.5 text-sm">
                 {wa && (
                   <li>
-                    <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 text-white/85 hover:text-white">
-                      <WhatsappIcon size={18} className="text-whatsapp" /> Chat on WhatsApp
+                    <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 font-medium text-ink-soft hover:text-ink">
+                      <WhatsappIcon size={17} className="text-whatsapp-deep" /> Chat on WhatsApp
                     </a>
                   </li>
                 )}
                 {tel && (
                   <li>
-                    <a href={tel} className="inline-flex items-center gap-3 text-white/85 hover:text-white">
-                      <Phone size={18} aria-hidden="true" className="text-saffron" /> {site.contact.phone}
+                    <a href={tel} className="inline-flex items-center gap-2.5 font-medium text-ink-soft hover:text-ink">
+                      <Phone size={16} aria-hidden="true" className="text-orange-500" /> {site.contact.phone}
                     </a>
                   </li>
                 )}
                 {site.contact.email && (
                   <li>
-                    <a href={`mailto:${site.contact.email}`} className="inline-flex items-center gap-3 text-white/85 hover:text-white">
-                      <Mail size={18} aria-hidden="true" className="text-saffron" /> {site.contact.email}
+                    <a href={`mailto:${site.contact.email}`} className="inline-flex items-center gap-2.5 font-medium text-ink-soft hover:text-ink">
+                      <Mail size={16} aria-hidden="true" className="text-orange-500" /> {site.contact.email}
                     </a>
                   </li>
                 )}
                 {address && (
-                  <li className="flex items-start gap-3 text-white/85">
-                    <MapPin size={18} aria-hidden="true" className="mt-0.5 shrink-0 text-saffron" />
+                  <li className="flex items-start gap-2.5 text-ink-soft">
+                    <MapPin size={16} aria-hidden="true" className="mt-0.5 shrink-0 text-orange-500" />
                     <address className="not-italic">{address}</address>
                   </li>
                 )}
@@ -96,7 +93,7 @@ export function Footer() {
             )}
 
             {socials.length > 0 && (
-              <ul className="mt-7 flex gap-3" aria-label="Social media">
+              <ul className="mt-6 flex gap-2.5" aria-label="Social media">
                 {socials.map(({ href, label, Icon }) => (
                   <li key={label}>
                     <a
@@ -104,9 +101,9 @@ export function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={label}
-                      className="grid size-11 place-items-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-saffron hover:text-white"
+                      className="grid size-10 place-items-center rounded-full border border-line bg-white text-ink-soft transition-all hover:-translate-y-0.5 hover:border-orange-300 hover:text-ember-deep"
                     >
-                      <Icon size={20} />
+                      <Icon size={18} />
                     </a>
                   </li>
                 ))}
@@ -114,7 +111,7 @@ export function Footer() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             <FooterColumn title="Explore" links={quickLinks} />
             <FooterColumn title="Packages" links={packages.slice(0, 6).map((p) => ({ label: p.title, href: `/tour-packages/${p.slug}` }))} />
             <FooterColumn title="Guides" links={guides.slice(0, 6).map((g) => ({ label: g.title.replace(/:.*$/, ""), href: `/travel-guide/${g.slug}` }))} />
@@ -122,13 +119,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {site.name}. Temple timings and festival dates are indicative — please confirm before travel.
-          </p>
-          <p>Radhe Radhe 🙏</p>
+        <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 text-xs text-stone sm:flex-row sm:items-center sm:justify-between">
+          <p>© {site.name}. Temple timings and festival dates are indicative — please confirm before travel.</p>
+          <p className="font-medium text-ink-soft">Radhe Radhe 🙏</p>
         </div>
-      </div>
       </div>
     </footer>
   );

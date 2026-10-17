@@ -9,6 +9,7 @@ import { DiyaIcon } from "@/components/svg/TravelIcons";
 import { EnquiryButtons } from "@/components/ui/EnquiryButtons";
 import { FaqList } from "@/components/ui/FaqList";
 import { FilterChips, FilterRoot } from "@/components/ui/FilterChips";
+import { CardRail } from "@/components/ui/CardRail";
 import { Icon } from "@/components/ui/Icon";
 import { Eyebrow, SectionHeading } from "@/components/ui/SectionHeading";
 import { homeFaqs } from "@/content/faqs";
@@ -17,41 +18,38 @@ import { guides } from "@/content/guides";
 import { about, circuits, experiences, testimonials, whyUs } from "@/content/home";
 import { photos } from "@/content/images";
 import { durationFilters, packages } from "@/content/packages";
-import { getTemples } from "@/content/temples";
+import { getTemples, temples } from "@/content/temples";
 
-const viewAll = (href: string, label: string) => (
-  <Link href={href} className="btn btn-outline btn-sm">
+const seeAll = (href: string, label: string) => (
+  <Link href={href} className="link-arrow text-sm">
     {label}
     <ArrowRight size={16} aria-hidden="true" className="btn-arrow" />
   </Link>
 );
 
-/* 3. Featured tour packages ------------------------------------------------ */
+/* 3. Tour packages rail ---------------------------------------------------- */
 export function FeaturedPackages() {
-  const feature = packages.find((p) => p.featured) ?? packages[0];
-  const rest = packages.filter((p) => p.slug !== feature.slug).slice(0, 6);
+  const ordered = [...packages].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
   return (
     <section aria-labelledby="packages-title" className="bg-cream py-14 sm:py-16 lg:py-20">
       <div className="container-x">
-        <SectionHeading centerOnMobile
+        <SectionHeading
+          centerOnMobile
           id="packages-title"
           eyebrow="Tour packages"
           title="Private yatras, paced for darshan"
-          lede="Every trip is private and flexible — these are starting points we tailor to your dates, your group and the temples closest to your heart."
-          action={viewAll("/tour-packages", "All packages")}
+          lede="Starting points we tailor to your dates, your group and the temples closest to your heart."
+          action={seeAll("/tour-packages", "All packages")}
         />
-        <div className="reveal mt-8 lg:mt-10">
-          <PackageCard pkg={feature} variant="feature" />
-        </div>
-        <FilterRoot className="mt-8 lg:mt-10">
+        <FilterRoot className="mt-7 lg:mt-8">
           <FilterChips name="home-duration" legend="Filter packages by duration" options={durationFilters.map((f) => ({ value: f.id, label: f.label }))} allLabel="All trips" />
-          <ul className="mt-5 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-            {rest.map((p) => (
-              <li key={p.slug} data-filters={p.filters.join(" ")}>
+          <CardRail label="Tour packages" className="reveal mt-5">
+            {ordered.map((p) => (
+              <li key={p.slug} data-filters={p.filters.join(" ")} className="w-[80%] sm:w-[46%] lg:w-[calc((100%-3.75rem)/4)]">
                 <PackageCard pkg={p} />
               </li>
             ))}
-          </ul>
+          </CardRail>
         </FilterRoot>
       </div>
     </section>
@@ -107,26 +105,27 @@ export function Experiences() {
   );
 }
 
-/* 5. Temples you'll visit -------------------------------------------------- */
+/* 5. Temples rail ---------------------------------------------------------- */
 export function TemplesSection() {
-  const list = getTemples(["banke-bihari", "prem-mandir", "iskcon-krishna-balaram", "radha-raman", "krishna-janmabhoomi", "dwarkadhish", "radha-rani-temple-barsana", "daan-ghati-govardhan"]);
+  const list = getTemples(["banke-bihari", "prem-mandir", "iskcon-krishna-balaram", "radha-raman", "nidhivan", "krishna-janmabhoomi", "dwarkadhish", "vishram-ghat", "radha-rani-temple-barsana", "daan-ghati-govardhan"]);
   return (
     <section aria-labelledby="temples-title" className="bg-cream py-14 sm:py-16 lg:py-20">
       <div className="container-x">
-        <SectionHeading centerOnMobile
+        <SectionHeading
+          centerOnMobile
           id="temples-title"
           eyebrow="Temples you’ll visit"
           title="Darshan at the great temples of Braj"
-          lede="Timings shown are indicative — they change with the seasons and festivals, and we check them for your dates."
-          action={viewAll("/temples", "All temples")}
+          lede="Timings are indicative — they change with seasons and festivals, and we check them for your dates."
+          action={seeAll("/temples", "All temples")}
         />
-        <ul className="mt-8 grid grid-cols-2 gap-x-3 gap-y-7 sm:gap-x-5 sm:gap-y-9 lg:mt-10 lg:grid-cols-4">
+        <CardRail label="Temples" className="reveal mt-8 lg:mt-10">
           {list.map((t) => (
-            <li key={t.slug} className="reveal">
+            <li key={t.slug} className="w-[46%] sm:w-[30%] lg:w-[calc((100%-5rem)/5)]">
               <TempleCard temple={t} />
             </li>
           ))}
-        </ul>
+        </CardRail>
       </div>
     </section>
   );
@@ -137,30 +136,31 @@ export function Circuits() {
   return (
     <section aria-labelledby="circuits-title" className="bg-white py-14 sm:py-16 lg:py-20">
       <div className="container-x">
-        <SectionHeading centerOnMobile
+        <SectionHeading
+          centerOnMobile
           id="circuits-title"
           eyebrow="Extend your yatra"
           title="Combine Braj with India’s great tirthas"
-          lede="Add the Taj Mahal, Shri Ram’s Ayodhya and Kashi, or the Ganga at Haridwar and Rishikesh — all as one private journey."
+          lede="Add the Taj Mahal, Shri Ram’s Ayodhya and Kashi, or the Ganga at Haridwar and Rishikesh — as one private journey."
         />
-        <ul className="reveal swipe-row mt-8 lg:mt-10 md:grid md:grid-flow-row md:grid-cols-3 md:gap-5 md:overflow-visible">
+        <ul className="mt-8 grid gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-10">
           {circuits.map((c) => {
             const img = photos[c.image];
             return (
-              <li key={c.title}>
-                <article className="group relative h-full overflow-hidden rounded-card bg-ink">
-                  <div className="zoom-media relative aspect-[4/5] lg:aspect-[4/4.6]">
-                    <Image src={img.src} alt={img.alt} fill sizes="(min-width: 768px) 31vw, 78vw" className="object-cover" placeholder="blur" />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/5" aria-hidden="true" />
+              <li key={c.title} className="reveal">
+                <article className="group relative h-full overflow-hidden rounded-2xl bg-ink shadow-soft transition-shadow duration-500 hover:shadow-lift">
+                  <div className="zoom-media relative aspect-[16/11] sm:aspect-[4/5] lg:aspect-[4/4.4]">
+                    <Image src={img.src} alt={img.alt} fill sizes="(min-width: 640px) 31vw, 92vw" className="object-cover" placeholder="blur" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-transparent" aria-hidden="true" />
                   </div>
+                  <span className="absolute left-4 top-4 rounded-full bg-linear-to-r from-orange-500 to-amber-500 px-3 py-1 text-xs font-bold text-ink shadow-glow">{c.days}</span>
                   <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                    <span className="tag bg-white/95">{c.days}</span>
-                    <h3 className="mt-2.5 text-lg font-bold text-white sm:text-xl">
+                    <h3 className="text-lg font-bold text-white sm:text-xl">
                       <Link href={c.href} className="after:absolute after:inset-0 after:content-['']">
                         {c.title}
                       </Link>
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/85">{c.text}</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-white/80">{c.text}</p>
                     <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-300" aria-hidden="true">
                       See itinerary <ArrowRight size={16} className="btn-arrow" />
                     </span>
@@ -175,50 +175,53 @@ export function Circuits() {
   );
 }
 
-/* 7. Festival yatras ------------------------------------------------------- */
+/* 7. Festival yatras rail -------------------------------------------------- */
 export function FestivalsSection() {
   return (
     <section aria-labelledby="festivals-title" className="bg-cream py-14 sm:py-16 lg:py-20">
       <div className="container-x">
-        <SectionHeading centerOnMobile
+        <SectionHeading
+          centerOnMobile
           id="festivals-title"
           eyebrow="Festival yatras"
           title="Be in Braj when it celebrates"
-          lede="Festival dates follow the lunar calendar and move every year — confirm the date for your year, and book early."
-          action={
-            <Link href="/festivals" className="btn btn-outline btn-sm">
-              All festivals <ArrowRight size={16} aria-hidden="true" className="btn-arrow" />
-            </Link>
-          }
+          lede="Dates follow the lunar calendar and move every year — confirm the date for your year, and book early."
+          action={seeAll("/festivals", "All festivals")}
         />
-        <ul className="reveal swipe-row mt-8 lg:mt-10 md:grid md:grid-flow-row md:grid-cols-2 md:gap-5 md:overflow-visible lg:grid-cols-3">
+        <CardRail label="Festivals" className="reveal mt-8 lg:mt-10">
           {festivals.map((f) => {
             const img = photos[f.image];
             return (
-              <li key={f.slug}>
+              <li key={f.slug} className="w-[80%] sm:w-[46%] lg:w-[calc((100%-2.5rem)/3)]">
                 <article className="group surface card-hover relative flex h-full flex-col overflow-hidden">
                   <div className="zoom-media relative aspect-[16/10]">
-                    <Image src={img.src} alt={img.alt} fill sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 78vw" className="object-cover" placeholder="blur" />
+                    <Image src={img.src} alt={img.alt} fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 80vw" className="object-cover" placeholder="blur" />
+                    <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-[0.7rem] font-semibold text-ember-deep">
+                      <CalendarDays size={13} aria-hidden="true" /> {f.months.replace(/\s*\(.*\)$/, "")}
+                    </span>
                   </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <p className="inline-flex items-center gap-1.5 text-xs font-medium text-ember-deep">
-                      <CalendarDays size={14} aria-hidden="true" /> {f.months}
-                    </p>
-                    <h3 className="mt-1.5 text-base font-semibold sm:text-lg">
+                  <div className="flex flex-1 flex-col p-4 sm:p-5">
+                    <h3 className="text-base font-semibold leading-snug sm:text-[1.05rem]">
                       <Link href={`/festivals/${f.slug}`} className="after:absolute after:inset-0 after:content-['']">
                         {f.name}
                       </Link>
                     </h3>
-                    <p className="mt-1.5 line-clamp-3 text-sm leading-relaxed text-stone">{f.summary}</p>
-                    <p className="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs text-stone">
-                      <DiyaIcon size={14} className="text-orange-500" /> {f.places.join(" · ")}
+                    <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-stone">{f.summary}</p>
+                    <p className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-3 text-xs text-stone">
+                      <span className="inline-flex min-w-0 items-center gap-1.5">
+                        <DiyaIcon size={14} className="shrink-0 text-orange-500" />
+                        <span className="truncate">{f.places.join(" · ")}</span>
+                      </span>
+                      <span className="link-arrow shrink-0 text-xs" aria-hidden="true">
+                        Guide <ArrowRight size={14} className="btn-arrow" />
+                      </span>
                     </p>
                   </div>
                 </article>
               </li>
             );
           })}
-        </ul>
+        </CardRail>
       </div>
     </section>
   );
@@ -307,7 +310,7 @@ export function GuidesSection() {
           eyebrow="Travel guide"
           title="Plan with confidence"
           lede="Honest, practical advice on seasons, routes, darshan and travelling with elders."
-          action={viewAll("/travel-guide", "All guides")}
+          action={seeAll("/travel-guide", "All guides")}
         />
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:mt-10 lg:grid-cols-3">
           {list.map((g) => (
@@ -348,10 +351,42 @@ export function Testimonials() {
   );
 }
 
+/* 12b. Explore more — curated internal links ------------------------------- */
+export function ExploreMore() {
+  const groups = [
+    { title: "Temples", links: temples.map((t) => ({ label: t.name.replace(/^Shri\s/, ""), href: `/temples/${t.slug}` })) },
+    { title: "Tour packages", links: packages.map((p) => ({ label: p.title, href: `/tour-packages/${p.slug}` })) },
+    { title: "Travel guides", links: guides.map((g) => ({ label: g.title.replace(/:.*$/, ""), href: `/travel-guide/${g.slug}` })) },
+  ];
+  return (
+    <section aria-labelledby="explore-title" className="bg-white py-14 sm:py-16 lg:py-20">
+      <div className="container-x">
+        <SectionHeading centerOnMobile id="explore-title" eyebrow="Explore more" title="Popular across Braj" />
+        <div className="mt-8 grid gap-7 lg:mt-10">
+          {groups.map((g) => (
+            <div key={g.title} className="reveal">
+              <h3 className="text-center text-xs font-semibold uppercase tracking-[0.16em] text-stone sm:text-left">{g.title}</h3>
+              <ul className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
+                {g.links.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="chip transition-all hover:-translate-y-0.5 hover:border-orange-300 hover:text-ember-deep hover:shadow-soft">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* 13. FAQ ------------------------------------------------------------------ */
 export function FaqSection() {
   return (
-    <section aria-labelledby="faq-title" className="bg-white py-14 sm:py-16 lg:py-20">
+    <section aria-labelledby="faq-title" className="bg-cream py-14 sm:py-16 lg:py-20">
       <div className="container-x grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
         <div className="flex flex-col items-center sm:items-start">
           <SectionHeading centerOnMobile id="faq-title" eyebrow="FAQ" title="Questions pilgrims often ask" lede="Can’t find your answer? Ask us — we reply personally." />
@@ -370,19 +405,24 @@ export function FinalCta({ title = "Ready to plan your Braj yatra?", text = "Tel
   return (
     <section aria-labelledby="cta-title" className="bg-white py-14 sm:py-16 lg:py-20">
       <div className="container-x">
-        <div className="relative overflow-hidden rounded-card bg-linear-to-r from-orange-500 to-amber-500 px-5 pb-16 pt-10 text-center shadow-glow sm:px-10 sm:pb-20 sm:pt-12 lg:px-16">
-          <div className="relative">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink/80">Radhe Radhe</p>
-            <h2 id="cta-title" className="display-2 mx-auto mt-3 max-w-2xl text-ink">
-              {title}
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-[0.95rem] leading-relaxed text-ink/85 sm:text-base">{text}</p>
-            <EnquiryButtons onGradient className="mt-7 justify-center" />
-            <Link href="/contact" className="mt-5 inline-block text-sm font-semibold text-ink underline underline-offset-4 hover:no-underline">
-              Prefer a form? Send us your trip details
-            </Link>
+        <div className="reveal relative overflow-hidden rounded-[1.5rem] bg-linear-to-r from-orange-500 to-amber-500 px-5 pb-16 pt-9 shadow-glow sm:px-10 sm:pb-20 sm:pt-11 lg:rounded-[1.75rem] lg:px-14 lg:py-14">
+          <div className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-white/15 blur-2xl" aria-hidden="true" />
+          <div className="relative grid items-center gap-7 text-center lg:grid-cols-[1.4fr_auto] lg:gap-12 lg:text-left">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink/75">Free trip planning · Radhe Radhe</p>
+              <h2 id="cta-title" className="display-2 mx-auto mt-3 max-w-2xl text-ink lg:mx-0">
+                {title}
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl text-[0.95rem] leading-relaxed text-ink/85 lg:mx-0">{text}</p>
+            </div>
+            <div className="flex flex-col items-center gap-3 lg:items-end">
+              <EnquiryButtons onGradient className="justify-center lg:justify-end" />
+              <Link href="/contact" className="text-sm font-semibold text-ink underline underline-offset-4 hover:no-underline">
+                Prefer a form? Send your trip details
+              </Link>
+            </div>
           </div>
-          <TempleSkyline className="pointer-events-none absolute inset-x-0 bottom-0 h-12 w-full text-white/25 sm:h-16" />
+          <TempleSkyline className="pointer-events-none absolute inset-x-0 bottom-0 h-12 w-full text-white/25 sm:h-16 lg:h-14" />
         </div>
       </div>
     </section>
