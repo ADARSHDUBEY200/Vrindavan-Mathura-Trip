@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { Flute, Mandala } from "@/components/svg/Ornaments";
 
 export const metadata = { title: "Page not found", robots: { index: false } };
@@ -13,6 +14,7 @@ const suggestions = [
 
 export default function NotFound() {
   return (
+    <SiteChrome>
     <section aria-labelledby="nf-title" className="bg-hero relative overflow-hidden pb-24 pt-36">
       <Mandala className="spin-slow pointer-events-none absolute left-1/2 top-1/2 size-[40rem] -translate-x-1/2 -translate-y-1/2 text-saffron/15" />
       <div className="container-x relative text-center">
@@ -41,5 +43,6 @@ export default function NotFound() {
         </ul>
       </div>
     </section>
+    </SiteChrome>
   );
 }

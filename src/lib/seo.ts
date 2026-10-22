@@ -8,9 +8,13 @@ type BuildMetadataInput = {
   description: string;
   /** Path beginning with `/`, used for the canonical URL. */
   path: string;
-  image?: StaticImageData;
+  image?: StaticImageData | { src: string; width: number; height: number };
   imageAlt?: string;
-  type?: "website" | "article";
+  type?: "website" | "article" | "profile";
+  /** For `type: "profile"`. */
+  profile?: { firstName: string; lastName: string };
+  /** Explicit `index, follow, max-image-preview:large`. */
+  largeImagePreview?: boolean;
   /** Use the title as-is, without the "| Brand" suffix. */
   absoluteTitle?: boolean;
   noIndex?: boolean;
@@ -30,6 +34,8 @@ export function buildMetadata({
   type = "website",
   absoluteTitle = false,
   noIndex = false,
+  profile,
+  largeImagePreview = false,
 }: BuildMetadataInput): Metadata {
   const ogTitle = absoluteTitle ? title : `${title} | ${site.name}`;
   const images = [{ url: image.src, width: image.width, height: image.height, alt: imageAlt ?? title }];
@@ -39,6 +45,7 @@ export function buildMetadata({
     alternates: { canonical: path },
     openGraph: {
       type,
+      ...(type === "profile" && profile ? { firstName: profile.firstName, lastName: profile.lastName } : {}),
       title: ogTitle,
       description,
       url: path,
@@ -52,6 +59,10 @@ export function buildMetadata({
       description,
       images: images.map((i) => i.url),
     },
-    robots: noIndex ? { index: false, follow: true } : undefined,
+    robots: noIndex
+      ? { index: false, follow: true }
+      : largeImagePreview
+        ? { index: true, follow: true, "max-image-preview": "large", googleBot: { index: true, follow: true, "max-image-preview": "large" } }
+        : undefined,
   };
 }

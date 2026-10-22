@@ -23,8 +23,8 @@ export function Logo({ light = false, className = "" }: { light?: boolean; class
   return (
     <Link href="/" className={`inline-flex items-center gap-2.5 rounded-full ${className}`} aria-label={`${site.name} — home`}>
       <LogoMark className="size-9 shrink-0 sm:size-10" />
-      <span className="flex flex-col leading-none">
-        <span className={`text-[1.02rem] font-bold tracking-tight sm:text-lg ${light ? "text-white" : "text-ink"}`}>{site.name}</span>
+      <span className="flex flex-col whitespace-nowrap leading-none">
+        <span className={`text-[0.98rem] font-bold tracking-tight sm:text-lg xl:text-[1.05rem] ${light ? "text-white" : "text-ink"}`}>{site.name}</span>
         <span className={`mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.2em] ${light ? "text-saffron-soft" : "text-ember-deep"}`}>
           Vrindavan · Mathura
         </span>

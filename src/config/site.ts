@@ -1,35 +1,111 @@
 /**
  * Brand, contact and navigation settings.
- * Contact details come only from environment variables (see .env.example);
- * anything that is not set stays `undefined` and the UI hides it.
+ * The brand facts below are the single source of truth for copy, metadata and schema.
+ * Environment variables (see .env.example) can still override the URL, name and contact details.
  */
+
+/* ------------------------------------------------------------------ */
+/* Brand facts                                                         */
+/* ------------------------------------------------------------------ */
+
+export const BRAND_NAME = "Mathura Vrindavan Trips";
+export const SITE_URL = "https://vrindavanmathuratrip.com";
+
+export const FOUNDER = { name: "Harsh Sharma", jobTitle: "Founder & Local Guide", bornIn: "Mathura" } as const;
+
+export const FOUNDED = "2015";
+export const RATING = 4.9;
+export const PILGRIMS = "75,000+";
+export const YEARS = "11+";
+
+export const PHONE_DISPLAY = "+91 99975 28849";
+export const PHONE_E164 = "+919997528849";
+export const WHATSAPP = "919997528849";
+export const EMAIL = "vrindavanmathuratrip@gmail.com";
+
+/**
+ * TODO(owner): number of real, verifiable reviews behind the 4.9 rating (e.g. your Google Business Profile count).
+ * While this is `null`, no aggregateRating is published in schema. "75,000+ pilgrims" is NOT a review count.
+ */
+export const REVIEW_COUNT: number | null = null;
+
+/** TODO(owner): office/postal address. Schema omits the address while `streetAddress` is empty. */
+export const ADDRESS = {
+  streetAddress: "",
+  addressLocality: "Mathura",
+  addressRegion: "Uttar Pradesh",
+  postalCode: "",
+  addressCountry: "IN",
+} as const;
+
+/** TODO(owner): latitude/longitude of the office. Schema omits `geo` while this is `null`. */
+export const GEO: { latitude: number; longitude: number } | null = null;
+
+/** TODO(owner): official profile URLs (Google Business Profile, Instagram, Facebook, YouTube…). */
+export const SAME_AS: string[] = [];
+
+/** TODO(owner): when the phone line is answered, e.g. `{ opens: "06:00", closes: "21:00" }` for all 7 days. */
+export const OPENING_HOURS: { opens: string; closes: string } | null = null;
+
+/** TODO(owner): Harsh Sharma's own public profiles (not the business pages). Person schema omits `sameAs` while empty. */
+export const FOUNDER_SAME_AS: string[] = [];
+
+/** "From" price (INR) quoted on the About page and in the business schema. */
+export const STARTING_PRICE = 1199;
+
+/**
+ * TODO(owner): one line saying what the ₹1,199 starting price covers (e.g. "per person, …").
+ * Nothing is shown on the About page while this is `null` — never fill it with guessed inclusions.
+ */
+export const STARTING_PRICE_INCLUDES: string | null = null;
+
+/** Date (ISO) the About page copy was last reviewed. Shown on the page and used as `dateModified`. */
+export const LAST_UPDATED = "2026-10-22";
+
+/**
+ * TODO(owner): set to `true` only once Nidhivan Sarovar Portico and Kridha Residency are confirmed, active partners.
+ * While `false`, /tour-packages shows the stays paragraph and FAQ 19 with both hotel names removed,
+ * and no LodgingBusiness nodes are published in schema.
+ */
+export const HOTEL_PARTNERS_CONFIRMED = false;
+
+/**
+ * TODO(owner): ISO date (e.g. "2026-11-02") on which the temple timings on /tour-packages were last checked
+ * against current temple notices. While `null`, no "Timings verified on …" line is shown.
+ */
+export const TIMINGS_VERIFIED_ON: string | null = null;
+
+/** `₹1,199` — Indian digit grouping. */
+export function formatInr(amount: number): string {
+  return `₹${amount.toLocaleString("en-IN")}`;
+}
 
 function env(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
 }
 
-const siteUrl = (env(process.env.NEXT_PUBLIC_SITE_URL) ?? "http://localhost:3000").replace(/\/+$/, "");
+const siteUrl = (env(process.env.NEXT_PUBLIC_SITE_URL) ?? SITE_URL).replace(/\/+$/, "");
 
 const address = {
-  street: env(process.env.NEXT_PUBLIC_ADDRESS_STREET),
+  street: env(process.env.NEXT_PUBLIC_ADDRESS_STREET) ?? (ADDRESS.streetAddress || undefined),
   locality: env(process.env.NEXT_PUBLIC_ADDRESS_LOCALITY),
-  region: env(process.env.NEXT_PUBLIC_ADDRESS_REGION),
-  postalCode: env(process.env.NEXT_PUBLIC_ADDRESS_POSTAL_CODE),
-  country: env(process.env.NEXT_PUBLIC_ADDRESS_COUNTRY),
+  region: env(process.env.NEXT_PUBLIC_ADDRESS_REGION) ?? ADDRESS.addressRegion,
+  postalCode: env(process.env.NEXT_PUBLIC_ADDRESS_POSTAL_CODE) ?? (ADDRESS.postalCode || undefined),
+  country: env(process.env.NEXT_PUBLIC_ADDRESS_COUNTRY) ?? ADDRESS.addressCountry,
 };
 
 export const site = {
-  name: env(process.env.NEXT_PUBLIC_BRAND_NAME) ?? "Braj Dham Yatra",
+  name: env(process.env.NEXT_PUBLIC_BRAND_NAME) ?? BRAND_NAME,
   url: siteUrl,
   locale: "en_IN",
   tagline: "Private pilgrimage trips to Vrindavan, Mathura & Braj",
   description:
     "Private, unhurried pilgrimage trips to Vrindavan, Mathura, Govardhan, Barsana, Nandgaon and Gokul — planned around darshan timings, with a private car, local Braj know-how and WhatsApp support.",
   contact: {
-    whatsapp: env(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)?.replace(/\D/g, "") || undefined,
-    phone: env(process.env.NEXT_PUBLIC_PHONE),
-    email: env(process.env.NEXT_PUBLIC_EMAIL),
+    whatsapp: env(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER)?.replace(/\D/g, "") || WHATSAPP,
+    phone: env(process.env.NEXT_PUBLIC_PHONE) ?? PHONE_DISPLAY,
+    email: env(process.env.NEXT_PUBLIC_EMAIL) ?? EMAIL,
   },
   /** Shown only once a street or locality is configured (region/country alone are not an address). */
   address: address.street || address.locality ? address : undefined,
@@ -44,6 +120,8 @@ export const site = {
 export function phoneHref(phone = site.contact.phone): string | undefined {
   return phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : undefined;
 }
+
+export const mailtoHref = (subject?: string) => `mailto:${site.contact.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ""}`;
 
 export function formatAddress(): string | undefined {
   if (!site.address) return undefined;

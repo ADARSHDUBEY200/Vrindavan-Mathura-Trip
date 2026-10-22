@@ -17,7 +17,7 @@ export function FilterChips({ name, legend, options, allLabel = "All" }: { name:
           return (
             <span key={o.value} className="relative shrink-0">
               <input id={id} type="radio" name={name} value={o.value} defaultChecked={i === 0} className="filter-input" />
-              <label htmlFor={id} className="chip cursor-pointer select-none">
+              <label htmlFor={id} className="chip min-h-11 cursor-pointer select-none">
                 {o.label}
               </label>
             </span>

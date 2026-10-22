@@ -15,7 +15,7 @@ import { Eyebrow, SectionHeading } from "@/components/ui/SectionHeading";
 import { homeFaqs } from "@/content/faqs";
 import { festivals } from "@/content/festivals";
 import { guides } from "@/content/guides";
-import { about, circuits, experiences, testimonials, whyUs } from "@/content/home";
+import { about, circuits, experiences, testimonials, whyUs } from "@/content/sections";
 import { photos } from "@/content/images";
 import { durationFilters, packages } from "@/content/packages";
 import { getTemples, temples } from "@/content/temples";

@@ -4,6 +4,7 @@ import { festivals } from "@/content/festivals";
 import { guides } from "@/content/guides";
 import { packages } from "@/content/packages";
 import { temples } from "@/content/temples";
+import { LAST_UPDATED } from "@/config/site";
 import { absoluteUrl } from "@/lib/seo";
 
 /** Bump when content changes meaningfully. A fixed date keeps the sitemap fully static. */
@@ -28,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...festivals.map((f) => entry(`/festivals/${f.slug}`, 0.6)),
     entry("/travel-guide", 0.7, "weekly"),
     ...guides.map((g) => entry(`/travel-guide/${g.slug}`, 0.6, "monthly", g.updated)),
-    entry("/about", 0.5),
+    entry("/about", 0.5, "monthly", LAST_UPDATED),
     entry("/contact", 0.6),
     entry("/faq", 0.5),
     entry("/privacy-policy", 0.2, "yearly"),

@@ -1,11 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { site } from "@/config/site";
-import { organizationSchema, websiteSchema } from "@/lib/schema";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -34,24 +29,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Public chrome (header, footer, WhatsApp button) lives in app/(site)/layout.tsx
+// so the admin CMS and login page render without it.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-IN" className={`${poppins.variable} antialiased`}>
-      <body className="flex min-h-dvh flex-col">
-        <a
-          href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white shadow-lift transition-transform focus:translate-y-0"
-        >
-          Skip to content
-        </a>
-        <Header />
-        <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
-          {children}
-        </main>
-        <Footer />
-        <FloatingWhatsApp />
-        <JsonLd data={[organizationSchema(), websiteSchema()]} />
-      </body>
+      <body className="flex min-h-dvh flex-col">{children}</body>
     </html>
   );
 }

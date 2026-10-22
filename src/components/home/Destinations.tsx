@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { festivals } from "@/content/festivals";
 import { guides } from "@/content/guides";
-import { destinationCards } from "@/content/home";
+import { destinationCards } from "@/content/sections";
 import { photos, type PhotoKey } from "@/content/images";
 import { packages } from "@/content/packages";
 import { temples, type Town } from "@/content/temples";

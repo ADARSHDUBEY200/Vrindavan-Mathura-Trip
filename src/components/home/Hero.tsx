@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { HeroSlider, type HeroSlideData } from "@/components/home/HeroSlider";
 import { WhatsappIcon } from "@/components/svg/TravelIcons";
 import { photos } from "@/content/images";
-import { hero, heroSlides } from "@/content/home";
+import { hero, heroSlides } from "@/content/sections";
 import { whatsappLink } from "@/lib/whatsapp";
 
 /** Devanagari display face for the decorative "राधे राधे" accent only. */

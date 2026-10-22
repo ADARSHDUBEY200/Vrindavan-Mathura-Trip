@@ -61,13 +61,13 @@ export function Header() {
     <>
       <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4">
         <div className="header-pill relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 rounded-full border border-line/80 bg-white/95 pl-3 pr-1.5 backdrop-blur-md sm:h-16 sm:pl-5 sm:pr-2">
-          <Logo />
+          <Logo className="shrink-0" />
 
           <nav aria-label="Main" className="hidden xl:block" data-mega-root>
-            <ul className="flex items-center gap-0.5">
+            <ul className="flex items-center gap-0.5 whitespace-nowrap">
               {mainNav.map((item, i) => {
                 const active = isActive(pathname, item);
-                const linkCls = `relative rounded-full px-2.5 py-2 text-[0.9rem] font-medium transition-colors hover:bg-saffron-wash hover:text-ink ${
+                const linkCls = `relative whitespace-nowrap rounded-full px-2 py-2 text-[0.9rem] font-medium 2xl:px-2.5 transition-colors hover:bg-saffron-wash hover:text-ink ${
                   active ? "text-ink after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-linear-to-r after:from-orange-500 after:to-amber-500" : "text-ink-soft"
                 }`;
                 if (!item.menu) {
@@ -150,7 +150,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             {wa ? (
               <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-sm hidden sm:inline-flex">
                 <WhatsappIcon size={18} />

@@ -1,0 +1,81 @@
+/* Dark skin for SunEditor inside the admin CMS. */
+.cms-editor .sun-editor {
+  border: 0;
+  background: #0b1220;
+  color: #fff;
+  font-family: inherit;
+}
+
+.cms-editor .sun-editor .se-toolbar {
+  background: #0f172a;
+  outline: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.cms-editor .sun-editor .se-btn {
+  color: rgb(255 255 255 / 0.75);
+}
+
+.cms-editor .sun-editor .se-btn:enabled:hover,
+.cms-editor .sun-editor .se-btn:enabled:focus {
+  background: rgb(99 102 241 / 0.25);
+}
+
+.cms-editor .sun-editor .se-btn:enabled.active {
+  color: #7dd3fc;
+  background: rgb(14 165 233 / 0.15);
+}
+
+.cms-editor .sun-editor .se-wrapper .se-wrapper-inner,
+.cms-editor .sun-editor-editable {
+  background: #0b1220;
+  color: rgb(255 255 255 / 0.9);
+}
+
+.cms-editor .sun-editor-editable a {
+  color: #7dd3fc;
+}
+
+.cms-editor .sun-editor-editable table td,
+.cms-editor .sun-editor-editable table th {
+  border-color: rgb(255 255 255 / 0.2);
+}
+
+.cms-editor .sun-editor .se-placeholder {
+  color: rgb(255 255 255 / 0.35);
+}
+
+.cms-editor .sun-editor .se-resizing-bar {
+  background: #0f172a;
+  border-top-color: rgb(255 255 255 / 0.08);
+  color: rgb(255 255 255 / 0.45);
+}
+
+.cms-editor .sun-editor textarea.se-wrapper-code {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+/* Dropdowns and dialogs stay light for readability. */
+.cms-editor .sun-editor .se-list-layer,
+.cms-editor .sun-editor .se-dialog .se-dialog-inner .se-dialog-content {
+  color: #1f2328;
+}
+
+/* Paste-table preview */
+.cms-table-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.cms-table-preview th,
+.cms-table-preview td {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.cms-table-preview th {
+  background: rgb(255 255 255 / 0.05);
+}

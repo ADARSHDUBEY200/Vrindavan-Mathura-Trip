@@ -1,5 +1,5 @@
-import { site } from "@/config/site";
 import { absoluteUrl } from "@/lib/seo";
+import { NODE_IDS, compact } from "./nodes";
 import type { Destination } from "@/content/destinations";
 import type { Guide } from "@/content/guides";
 import type { Photo } from "@/content/images";
@@ -9,54 +9,12 @@ import type { Faq } from "@/content/types";
 
 type Json = Record<string, unknown>;
 
-const ORG_ID = `${site.url}/#organization`;
-const WEBSITE_ID = `${site.url}/#website`;
+// Same @ids as the shared nodes in ./nodes.ts.
+const ORG_ID = NODE_IDS.organization;
+const WEBSITE_ID = NODE_IDS.website;
 
 function imageUrl(photo: Photo): string {
   return absoluteUrl(photo.src.src);
-}
-
-function compact<T extends Json>(obj: T): T {
-  return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined && v !== null && !(Array.isArray(v) && v.length === 0))) as T;
-}
-
-export function organizationSchema(logo?: string): Json {
-  const a = site.address;
-  return compact({
-    "@context": "https://schema.org",
-    "@type": ["TravelAgency", "Organization"],
-    "@id": ORG_ID,
-    name: site.name,
-    url: site.url,
-    description: site.description,
-    logo,
-    telephone: site.contact.phone,
-    email: site.contact.email,
-    areaServed: ["Vrindavan", "Mathura", "Govardhan", "Barsana", "Nandgaon", "Gokul"].map((name) => ({ "@type": "Place", name })),
-    address: a
-      ? compact({
-          "@type": "PostalAddress",
-          streetAddress: a.street,
-          addressLocality: a.locality,
-          addressRegion: a.region,
-          postalCode: a.postalCode,
-          addressCountry: a.country,
-        })
-      : undefined,
-    sameAs: Object.values(site.social).filter(Boolean),
-  });
-}
-
-export function websiteSchema(): Json {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": WEBSITE_ID,
-    url: site.url,
-    name: site.name,
-    inLanguage: "en-IN",
-    publisher: { "@id": ORG_ID },
-  };
 }
 
 export function webPageSchema({ path, name, description }: { path: string; name: string; description: string }): Json {
