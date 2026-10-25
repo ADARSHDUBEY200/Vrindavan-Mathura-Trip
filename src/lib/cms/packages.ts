@@ -1,9 +1,9 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
-import { createClient } from "@supabase/supabase-js";
 import type { StaticImageData } from "next/image";
 import { photos } from "@/content/images";
 import { getPackage, packages as staticPackages } from "@/content/packages";
+import { createPublicClient } from "@/lib/supabase/public";
 import { TABLES } from "./config";
 
 export const CMS_PACKAGES_TAG = "cms-packages";
@@ -48,12 +48,10 @@ export async function getPublishedPackages(): Promise<CmsPackage[]> {
   cacheLife("hours");
   cacheTag(CMS_PACKAGES_TAG);
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return [];
+  const supabase = createPublicClient();
+  if (!supabase) return [];
 
   try {
-    const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
     const { data, error } = await supabase.from(TABLES.Package).select("slug,title,price,day,night,rating,heroimage").eq("status", "published");
     if (error || !data) {
       console.error("[cms] published packages", error?.message);
@@ -109,11 +107,46 @@ export type CatalogPackage = {
   durationLabel: string | null;
   rating: number | null;
   image?: { src: string | StaticImageData; alt: string };
+  /** Places on the trip, e.g. ["Mathura", "Vrindavan", "Agra"]. May be empty. */
+  route: string[];
   /** Product page, only when one actually renders (see CMS_PACKAGE_PAGES_LIVE). */
   path?: string;
 };
 
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+const PLACES: [RegExp, string][] = [
+  [/84 kos/i, "Braj 84 Kos"],
+  [/mathura/i, "Mathura"],
+  [/vrindavan/i, "Vrindavan"],
+  [/gokul/i, "Gokul"],
+  [/govardhan/i, "Govardhan"],
+  [/barsana/i, "Barsana"],
+  [/nandgaon/i, "Nandgaon"],
+  [/agra|taj mahal/i, "Agra"],
+  [/delhi/i, "Delhi"],
+  [/jaipur/i, "Jaipur"],
+  [/ayodhya/i, "Ayodhya"],
+  [/kashi/i, "Kashi"],
+  [/varanasi/i, "Varanasi"],
+  [/prayagraj/i, "Prayagraj"],
+  [/chitrakoot/i, "Chitrakoot"],
+  [/haridwar/i, "Haridwar"],
+  [/rishikesh/i, "Rishikesh"],
+  [/khatu/i, "Khatu Shyam"],
+  [/salasar/i, "Salasar"],
+  [/ajmer/i, "Ajmer"],
+  [/pushkar/i, "Pushkar"],
+];
+
+/** Places a CMS title names, in the order the title names them ("…from Delhi" is the pickup, not a stop). */
+function placesInTitle(title: string): string[] {
+  const stops = title.replace(/\bfrom\b.*$/i, "");
+  return PLACES.map(([re, name]) => ({ name, at: stops.search(re) }))
+    .filter((p) => p.at >= 0)
+    .sort((a, b) => a.at - b.at)
+    .map((p) => p.name);
+}
 
 /**
  * Published CMS packages, or — when the CMS is empty or unreachable — the static packages in content/packages.ts,
@@ -126,9 +159,11 @@ export function toCatalog(cms: CmsPackage[]): CatalogPackage[] {
         title: p.title,
         price: p.price,
         days: p.days,
-        durationLabel: p.days ? [plural(p.days, "Day"), p.nights ? plural(p.nights, "Night") : ""].filter(Boolean).join(" / ") : null,
+        // Some rows carry negative nights (e.g. -2 on a day trip): only a positive count is a real overnight.
+        durationLabel: p.days ? [plural(p.days, "Day"), p.nights && p.nights > 0 ? plural(p.nights, "Night") : ""].filter(Boolean).join(" / ") : null,
         rating: p.rating ?? null,
         image: p.image,
+        route: placesInTitle(p.title),
         path: cmsPackagePath(p.slug),
       }))
     : staticPackages.map((p) => ({
@@ -139,9 +174,21 @@ export function toCatalog(cms: CmsPackage[]): CatalogPackage[] {
         durationLabel: p.duration,
         rating: null,
         image: { src: photos[p.image].src, alt: photos[p.image].alt },
+        route: p.route,
         path: `/tour-packages/${p.slug}`,
       }));
   return list.sort((a, b) => (a.days ?? 99) - (b.days ?? 99) || (a.price ?? Infinity) - (b.price ?? Infinity) || a.title.localeCompare(b.title));
+}
+
+const BRAJ = /mathura|vrindavan|gokul|govardhan|barsana|nandgaon|braj|84 kos|premanand/i;
+
+/**
+ * Trips that actually reach Braj, without the "…from Bangalore / Chennai / Mumbai" copies of the same itinerary.
+ * Falls back to the whole catalogue if that leaves nothing.
+ */
+export function brajCatalog(catalog: CatalogPackage[]): CatalogPackage[] {
+  const core = catalog.filter((p) => BRAJ.test(p.title) && !/\bfrom\b/i.test(p.title));
+  return core.length ? core : catalog;
 }
 
 /** Combined circuits and far-away starting points: never the match for a Vrindavan-only package. */

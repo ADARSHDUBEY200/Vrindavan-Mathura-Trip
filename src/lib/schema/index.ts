@@ -1,3 +1,4 @@
+import { FOUNDER } from "@/config/site";
 import { absoluteUrl } from "@/lib/seo";
 import { NODE_IDS, compact } from "./nodes";
 import type { Destination } from "@/content/destinations";
@@ -132,6 +133,48 @@ export function articleSchema(g: Guide, photo: Photo, path: string): Json {
     author: { "@id": ORG_ID },
     publisher: { "@id": ORG_ID },
   };
+}
+
+/** BlogPosting for a CMS blog. The founder is referenced by @id; any other author is an inline Person. */
+export function blogPostingSchema(b: {
+  path: string;
+  headline: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  author: string;
+  authorRole?: string;
+  category: string;
+  publishedAt: string;
+  updatedOn: string;
+  wordCount?: number;
+  keywords?: string[];
+}): Json {
+  const url = absoluteUrl(b.path);
+  const author = !b.author
+    ? { "@id": ORG_ID }
+    : b.author.trim().toLowerCase() === FOUNDER.name.toLowerCase()
+      ? { "@id": NODE_IDS.founder }
+      : compact({ "@type": "Person", name: b.author, jobTitle: b.authorRole || undefined, worksFor: { "@id": ORG_ID } });
+  return compact({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    headline: b.headline.slice(0, 110),
+    description: b.description,
+    image: b.image ? { "@type": "ImageObject", url: b.image, caption: b.imageAlt } : undefined,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    datePublished: b.publishedAt,
+    dateModified: b.updatedOn > b.publishedAt.slice(0, 10) ? b.updatedOn : b.publishedAt,
+    articleSection: b.category,
+    keywords: b.keywords?.length ? b.keywords.join(", ") : undefined,
+    wordCount: b.wordCount,
+    inLanguage: "en-IN",
+    author,
+    publisher: { "@id": ORG_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+  });
 }
 
 export function itemListSchema(name: string, items: { name: string; href: string }[]): Json {

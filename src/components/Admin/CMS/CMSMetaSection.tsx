@@ -32,15 +32,17 @@ export function CMSMetaSection({
 
   return (
     <Section title="Basic details" helper={`Title, ${label.toLowerCase()} and URL slug.`}>
-      <Field label="Title" required>
-        <TextInput
-          required
-          value={title}
-          placeholder="Enter a clear, descriptive title"
-          onChange={(value) => onChange(slugTouched ? { title: value } : { title: value, slug: slugify(value) })}
-        />
-      </Field>
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="md:col-span-2">
+          <Field label="Title" required>
+            <TextInput
+              required
+              value={title}
+              placeholder="Enter a clear, descriptive title"
+              onChange={(value) => onChange(slugTouched ? { title: value } : { title: value, slug: slugify(value) })}
+            />
+          </Field>
+        </div>
         <Field label={label} required>
           <Select required value={category} onChange={(value) => onChange({ category: value })} options={CATEGORY_OPTIONS[editorType]} placeholder={`Select ${label.toLowerCase()}`} />
         </Field>
@@ -65,8 +67,8 @@ export function CMSMetaSection({
             }}
           />
         </Field>
+        {children}
       </div>
-      {children}
     </Section>
   );
 }

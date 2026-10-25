@@ -5,12 +5,14 @@ import { guides } from "@/content/guides";
 import { packages } from "@/content/packages";
 import { temples } from "@/content/temples";
 import { LAST_UPDATED } from "@/config/site";
+import { BLOGS_PATH, blogPath, getPublishedBlogs } from "@/lib/cms/blogs";
 import { absoluteUrl } from "@/lib/seo";
 
 /** Bump when content changes meaningfully. A fixed date keeps the sitemap fully static. */
 const CONTENT_UPDATED = "2026-10-15";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const blogs = await getPublishedBlogs();
   const entry = (path: string, priority: number, changeFrequency: "weekly" | "monthly" | "yearly" = "monthly", lastModified = CONTENT_UPDATED) => ({
     url: absoluteUrl(path),
     lastModified,
@@ -24,11 +26,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/tour-packages", 0.9, "weekly"),
     ...packages.map((p) => entry(`/tour-packages/${p.slug}`, 0.8)),
     entry("/temples", 0.8),
+    entry("/mathura-vrindavan-temple-timings", 0.8),
     ...temples.map((t) => entry(`/temples/${t.slug}`, 0.7)),
     entry("/festivals", 0.7),
     ...festivals.map((f) => entry(`/festivals/${f.slug}`, 0.6)),
     entry("/travel-guide", 0.7, "weekly"),
     ...guides.map((g) => entry(`/travel-guide/${g.slug}`, 0.6, "monthly", g.updated)),
+    entry(BLOGS_PATH, 0.7, "weekly", blogs[0]?.updatedOn ?? CONTENT_UPDATED),
+    ...blogs.map((b) => entry(blogPath(b.slug), 0.6, "monthly", b.updatedOn)),
     entry("/about", 0.5, "monthly", LAST_UPDATED),
     entry("/contact", 0.6),
     entry("/faq", 0.5),

@@ -23,7 +23,7 @@ function greeting(hour: number | null) {
 
 function RecentPanel({ title, items, loading, href, meta }: { title: string; items: Item[]; loading: boolean; href: string; meta: (i: Item) => string }) {
   return (
-    <section className="rounded-2xl border border-white/10 bg-[#0f172a]/70 p-5">
+    <section className="rounded-xl border border-white/10 bg-[#0b1220]/90 p-4 sm:p-5">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-semibold">{title}</h2>
         <Link href={href} className="text-sm text-sky-300 hover:text-sky-200">
@@ -37,14 +37,14 @@ function RecentPanel({ title, items, loading, href, meta }: { title: string; ite
           ))}
         </ul>
       ) : items.length === 0 ? (
-        <p className="py-8 text-center text-sm text-white/40">Nothing yet.</p>
+        <p className="py-8 text-center text-sm text-slate-400">Nothing yet.</p>
       ) : (
         <ul className="divide-y divide-white/5">
           {items.slice(0, 6).map((i) => (
             <li key={i.id} className="group flex items-center gap-3 py-3">
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{i.title || "Untitled"}</p>
-                <p className="truncate text-xs text-white/45">{meta(i)}</p>
+                <p className="truncate text-xs text-slate-400">{meta(i)}</p>
               </div>
               <span
                 className={`rounded-full px-2.5 py-0.5 text-xs ${i.status === "published" ? "bg-emerald-500/15 text-emerald-300" : "bg-amber-500/15 text-amber-300"}`}
@@ -106,11 +106,11 @@ export default function AdminDashboardPage() {
   const drafts = (items: Item[]) => items.length - published(items);
 
   return (
-    <div className="mx-auto max-w-7xl space-y-8">
+    <div className="mx-auto max-w-[1600px] space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="min-h-5 text-sm text-white/50">{today}</p>
-          <h1 className="mt-1 text-2xl font-bold md:text-3xl">{greeting(hour)}, Admin</h1>
+          <p className="min-h-5 text-sm text-slate-400">{today}</p>
+          <h1 className="mt-1 text-xl font-semibold tracking-tight md:text-2xl">{greeting(hour)}, Admin</h1>
         </div>
         <Link href={`${ADMIN_ROUTES.Blog}/create`} className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-5 py-2.5 text-sm font-semibold hover:bg-sky-500">
           <Plus size={16} /> New Blog
@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
         <StatsCard title="Temples" value={data.temples.length} subtitle={`${drafts(data.temples)} drafts`} icon={Landmark} variant="amber" loading={loading} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 lg:grid-cols-2">
         <RecentPanel
           title="Recent Blogs"
           items={data.blogs}
@@ -142,10 +142,10 @@ export default function AdminDashboardPage() {
       </div>
 
       <section>
-        <h2 className="mb-4 font-semibold">Quick Actions</h2>
+        <h2 className="mb-3 font-semibold">Quick Actions</h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {QUICK_ACTIONS.map(({ label, href, icon: Icon, tone }) => (
-            <Link key={href} href={href} className={`flex items-center gap-4 rounded-2xl border border-white/10 bg-linear-to-br ${tone} p-5 transition hover:-translate-y-0.5 hover:border-white/20`}>
+            <Link key={href} href={href} className={`flex items-center gap-4 rounded-xl border border-white/10 bg-linear-to-br ${tone} p-4 transition hover:-translate-y-0.5 hover:border-white/20`}>
               <span className="grid size-11 place-items-center rounded-xl bg-white/10">
                 <Icon size={20} />
               </span>

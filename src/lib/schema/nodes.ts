@@ -73,6 +73,12 @@ export function imageObjectNode(id: string, image: AboutImage): Json {
     width: image.width,
     height: image.height,
     caption: image.alt,
+    ...(image.credit && {
+      creditText: image.credit.author,
+      creator: { "@type": "Person", name: image.credit.author },
+      license: image.credit.licenseUrl,
+      acquireLicensePage: image.credit.sourceUrl,
+    }),
   };
 }
 
@@ -91,10 +97,10 @@ export function logoNode(): Json {
   return {
     "@type": "ImageObject",
     "@id": NODE_IDS.logo,
-    url: absoluteUrl("/icon.svg"),
-    contentUrl: absoluteUrl("/icon.svg"),
-    width: 512,
-    height: 512,
+    url: absoluteUrl("/images/brand/mathura-vrindavan-trip-logo.png"),
+    contentUrl: absoluteUrl("/images/brand/mathura-vrindavan-trip-logo.png"),
+    width: 306,
+    height: 228,
     caption: `${BRAND_NAME} logo`,
   };
 }

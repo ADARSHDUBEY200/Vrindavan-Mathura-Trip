@@ -1,6 +1,6 @@
 "use server";
 
-export type EnquiryField = "name" | "phone" | "dates" | "travellers" | "city" | "package" | "message";
+export type EnquiryField = "name" | "phone" | "email" | "dates" | "travellers" | "city" | "package" | "message";
 
 export type EnquiryState = {
   status: "idle" | "error" | "success";
@@ -17,6 +17,7 @@ export type EnquiryState = {
 const LIMITS: Record<EnquiryField, number> = {
   name: 80,
   phone: 20,
+  email: 120,
   dates: 80,
   travellers: 3,
   city: 80,
@@ -39,6 +40,7 @@ export async function submitEnquiry(_prev: EnquiryState, formData: FormData): Pr
   const values = {
     name: field(formData, "name"),
     phone: field(formData, "phone"),
+    email: field(formData, "email"),
     dates: field(formData, "dates"),
     travellers: field(formData, "travellers"),
     city: field(formData, "city"),
@@ -52,6 +54,7 @@ export async function submitEnquiry(_prev: EnquiryState, formData: FormData): Pr
   if (digits.length < 10 || digits.length > 15 || !/^[+\d\s()-]+$/.test(values.phone)) {
     errors.phone = "Please enter a valid phone or WhatsApp number, e.g. +91 98765 43210.";
   }
+  if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) errors.email = "Please enter a valid email address.";
   if (values.travellers) {
     const n = Number(values.travellers);
     if (!Number.isInteger(n) || n < 1 || n > 200) errors.travellers = "Please enter the number of travellers (1–200).";
@@ -65,6 +68,7 @@ export async function submitEnquiry(_prev: EnquiryState, formData: FormData): Pr
     "Radhe Radhe! I'd like to plan a trip.",
     `Name: ${values.name}`,
     `Phone: ${values.phone}`,
+    values.email && `Email: ${values.email}`,
     values.dates && `Travel dates: ${values.dates}`,
     values.travellers && `Travellers: ${values.travellers}`,
     values.city && `Starting from: ${values.city}`,

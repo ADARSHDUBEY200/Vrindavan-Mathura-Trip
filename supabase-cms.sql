@@ -28,6 +28,13 @@ create table if not exists public."Blog" (
   subcontent    text,
   content       text,                                 -- HTML
   faqs          jsonb not null default '[]'::jsonb,   -- [{ id, question, answer }]
+  -- Blog page blocks (all optional; shape in src/lib/cms/blog-fields.ts):
+  --   location, updatedOn, readMinutes, featured, authorRole, authorImage, guideBio,
+  --   quickAnswer (HTML), quickFacts [{label,value}], keyTakeaways [{text}], guideIntro,
+  --   honestNote, guideTip, relatedLinks [{label,href}], cta {title,text},
+  --   videoSrc, videoDuration, videoTitle, videoOverlayTitle, videoTestimonials [{title,url,city}],
+  --   recommendations [...], reviews [...], totalRating, totalReviews, pilgrimsServed,
+  --   templeTimings {title,note,htmlContent}
   "seoContent"  jsonb not null default '{}'::jsonb,
   status        text not null default 'draft' check (status in ('draft', 'published'))
 );

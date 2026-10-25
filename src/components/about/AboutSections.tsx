@@ -1,15 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import {
   ArrowRight,
+  CircleCheck,
   Clock,
   EyeOff,
   Footprints,
   Hotel,
   House,
   Hourglass,
+  Landmark,
   Mail,
   Map as MapIcon,
+  MapPin,
   Phone,
   Quote,
   Receipt,
@@ -23,13 +27,13 @@ import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { WhatsappIcon } from "@/components/svg/TravelIcons";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Eyebrow } from "@/components/ui/SectionHeading";
-import { LAST_UPDATED, SAME_AS, STARTING_PRICE, STARTING_PRICE_INCLUDES, formatInr, mailtoHref, phoneHref, site } from "@/config/site";
-import { PACKAGES_PATH, aboutContact, aboutHero, aboutImages, aboutMilestone, aboutPhilosophy, aboutStory, aboutTeam, aboutWhy } from "@/content/about";
+import { FOUNDED, FOUNDER, LAST_UPDATED, SAME_AS, STARTING_PRICE, STARTING_PRICE_INCLUDES, formatInr, mailtoHref, phoneHref, site } from "@/config/site";
+import { PACKAGES_PATH, aboutContact, aboutHero, aboutImages, aboutMilestone, aboutPhilosophy, aboutStory, aboutTeam, aboutWhy, type AboutImage } from "@/content/about";
 import { testimonials } from "@/content/sections";
 import { aboutCrumbs } from "@/lib/schema/about";
 import { whatsappLink } from "@/lib/whatsapp";
 import { CountUp } from "./CountUp";
-import { LetterHeading, LetterSection, Paragraphs, Rich, crimson, letterFont, letterLink, letterText } from "./letter";
+import { LetterHeading, LetterSection, Paragraphs, Rich, accent, eyebrowChip, letterFont, letterLink, letterText } from "./letter";
 
 const icons: Record<string, LucideIcon> = {
   shield: ShieldCheck,
@@ -44,11 +48,45 @@ const icons: Record<string, LucideIcon> = {
   hotel: Hotel,
 };
 
-function IconBadge({ name, className = "size-11 rounded-xl" }: { name: string; className?: string }) {
+function IconBadge({ name, className = "size-10" }: { name: string; className?: string }) {
   const Cmp = icons[name] ?? ShieldCheck;
   return (
-    <span className={`icon-badge ${className}`}>
-      <Cmp size={20} aria-hidden="true" />
+    <span className={`about-icon ${className}`}>
+      <Cmp size={19} aria-hidden="true" />
+    </span>
+  );
+}
+
+/** Rounded photo with a gentle scroll-in and hover zoom. */
+function Photo({ img, sizes, className = "aspect-4/3" }: { img: AboutImage; sizes: string; className?: string }) {
+  return (
+    <div className={`about-photo reveal-zoom ${className}`}>
+      <Image src={img.src} alt={img.alt} width={img.width} height={img.height} sizes={sizes} className="h-full w-full object-cover" />
+    </div>
+  );
+}
+
+/**
+ * Image-beside-text layout. The image column is narrower (5/12) and sticks while the text scrolls on desktop;
+ * on mobile the image sits above the text.
+ */
+function Split({ img, side = "left", children }: { img: AboutImage; side?: "left" | "right"; children: ReactNode }) {
+  return (
+    <div className="mx-auto grid max-w-6xl items-start gap-7 lg:grid-cols-12 lg:gap-12">
+      <div className={`lg:sticky lg:top-28 lg:col-span-5 ${side === "right" ? "lg:order-last" : ""}`}>
+        <Photo img={img} sizes="(min-width: 1280px) 30rem, (min-width: 1024px) 40vw, 100vw" />
+      </div>
+      <div className="min-w-0 lg:col-span-7">{children}</div>
+    </div>
+  );
+}
+
+function Stars({ size = 16, className = "text-amber-400" }: { size?: number; className?: string }) {
+  return (
+    <span className={`flex gap-0.5 ${className}`} aria-hidden="true">
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star key={i} size={size} fill="currentColor" strokeWidth={0} />
+      ))}
     </span>
   );
 }
@@ -62,231 +100,270 @@ const reviewsHref =
 const tel = phoneHref();
 
 /* 1. Hero ------------------------------------------------------------------ */
+
+/** Trust items that lead with a figure ("11+ Years Guiding") become stats; the rest become check pills. */
+const trustStats = aboutHero.trust.flatMap((t) => {
+  const m = t.match(/^([\d.,]+[+★]?)\s+(.+)$/);
+  return m ? [{ text: t, value: m[1], label: m[2] }] : [];
+});
+const trustPills = aboutHero.trust.filter((t) => !trustStats.some((s) => s.text === t));
+
 export function AboutHero() {
-  const img = aboutImages.founder;
+  const img = aboutImages.hero;
+  // "About Mathura Vrindavan Trips: Your Local Companions in Braj Bhoomi" → brand name in the orange gradient, subtitle on its own line.
+  const [lead, ...rest] = aboutHero.title.split(": ");
+  const subtitle = rest.join(": ");
+  const brand = lead.startsWith("About ") ? lead.slice(6) : "";
   return (
-    <section aria-labelledby="about-title" className="bg-hero relative overflow-hidden pb-12 pt-28 sm:pt-32 lg:pb-16">
-      <div className="bg-dots pointer-events-none absolute inset-0 mask-[radial-gradient(60%_70%_at_20%_30%,black,transparent)]" aria-hidden="true" />
-      <div className="container-x relative">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-          <div className="min-w-0">
-            <Breadcrumbs items={aboutCrumbs} />
-            <h1 id="about-title" className="display-1 mt-5 max-w-3xl">
-              {aboutHero.title}
+    <section aria-labelledby="about-title" className="about-hero relative overflow-hidden pb-10 pt-24 sm:pt-28 lg:pb-12">
+      <div className="container-x">
+        <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="min-w-0 lg:col-span-7">
+            <div className="hero-in">
+              <Breadcrumbs items={aboutCrumbs} />
+            </div>
+
+            <p className="hero-in hero-in-1 mt-4 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[0.8125rem] font-medium text-orange-600">
+              <MapPin size={15} aria-hidden="true" />
+              A letter from {FOUNDER.name}, {FOUNDER.jobTitle}
+            </p>
+
+            <h1 id="about-title" className="hero-in hero-in-2 mt-4 max-w-2xl text-[clamp(1.6rem,1.25rem+1.4vw,2.375rem)] font-extrabold leading-[1.2] tracking-tight text-gray-900">
+              {brand ? (
+                <>
+                  About <span className="about-brand-text">{brand}</span>
+                  {subtitle && ":"}
+                </>
+              ) : (
+                lead
+              )}
+              {subtitle && <span className="block">{subtitle}</span>}
             </h1>
-            <p className={`${letterFont.className} mt-6 text-2xl text-[#8b2510] sm:text-3xl`}>
+
+            <p className={`${letterFont.className} hero-in hero-in-3 mt-4 text-lg text-gray-900 sm:text-xl`}>
               <Rich text={aboutHero.greeting} />
             </p>
-            <Paragraphs items={aboutHero.paragraphs} className="mt-5 max-w-3xl" />
-            <p className={`${letterText} mt-6 max-w-3xl italic text-ink-soft`}>{aboutHero.leadOut}</p>
+
+            <div className="hero-in hero-in-3 mt-3 max-w-xl space-y-3 text-[0.9375rem] leading-7 text-gray-600">
+              {aboutHero.paragraphs.map((p) => (
+                <p key={p.slice(0, 48)}>
+                  <Rich text={p} />
+                </p>
+              ))}
+            </div>
+
+            <p className={`${letterFont.className} hero-in hero-in-4 mt-4 max-w-xl border-l-2 border-orange-300 pl-4 text-base italic text-gray-700`}>{aboutHero.leadOut}</p>
+
+            <div className="hero-in hero-in-4 mt-5">
+              {trustPills.length > 0 && (
+                <ul aria-label="About us" className="flex flex-wrap gap-2.5">
+                  {trustPills.map((t) => (
+                    <li key={t} className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-900 shadow-[0_1px_2px_rgb(17_24_39/0.05)]">
+                      <CircleCheck size={16} aria-hidden="true" className="text-orange-500" />
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {trustStats.length > 0 && (
+                <ul aria-label="At a glance" className="mt-5 flex flex-wrap gap-y-4 divide-x divide-gray-200">
+                  {trustStats.map((s) => (
+                    <li key={s.text} className="px-5 first:pl-0 sm:px-6">
+                      <span className="block text-xl font-extrabold tracking-tight text-orange-500 sm:text-2xl">{s.value}</span>
+                      <span className="mt-0.5 block text-xs text-gray-500">{s.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <p className="mt-4 text-xs text-gray-500">
+              Last updated: <time dateTime={LAST_UPDATED}>{lastUpdatedLabel}</time>
+            </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm lg:max-w-md">
-            <div aria-hidden="true" className="absolute -inset-5 rounded-[2.5rem] bg-linear-to-br from-orange-300/60 via-amber-200/50 to-orange-100/30 blur-2xl" />
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={img.width}
-              height={img.height}
-              preload
-              sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, 90vw"
-              className="relative aspect-[4/5] h-auto w-full rounded-[2rem] bg-sand object-cover shadow-lift ring-4 ring-orange-200 ring-offset-4 ring-offset-white"
-            />
-          </div>
+          <figure className="hero-in hero-in-2 relative mx-auto w-full max-w-xs sm:max-w-sm lg:col-span-5 lg:mt-9 lg:max-w-92">
+            <div className="rounded-[1.75rem] bg-white p-2 shadow-[0_1px_2px_rgb(17_24_39/0.06),0_32px_64px_-32px_rgb(17_24_39/0.5)] ring-1 ring-gray-200/70">
+              <Image
+                src={img.src}
+                alt={img.alt}
+                width={img.width}
+                height={img.height}
+                preload
+                sizes="(min-width: 1024px) 23rem, (min-width: 640px) 24rem, 90vw"
+                className="aspect-4/5 h-auto w-full rounded-[1.35rem] bg-sand object-cover"
+              />
+            </div>
+            {/* Repeats facts from the text, so it is hidden from assistive tech. */}
+            <div aria-hidden="true" className="absolute inset-x-5 bottom-5 flex items-center gap-3 rounded-2xl bg-white/95 p-3.5 shadow-lift backdrop-blur">
+              <span className="about-icon size-10">
+                <Landmark size={18} />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-sm font-semibold text-gray-900">Serving pilgrims since {FOUNDED}</span>
+                <span className="mt-0.5 block text-xs text-gray-500">Born and raised in {FOUNDER.bornIn}</span>
+              </span>
+            </div>
+          </figure>
         </div>
-
-        <ul
-          aria-label="At a glance"
-          className={`${crimson} mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 rounded-2xl px-5 py-3.5 text-sm font-semibold text-white shadow-lift sm:text-[0.95rem] [&>li+li]:before:mr-4 [&>li+li]:before:text-amber-300 [&>li+li]:before:content-['·']`}
-        >
-          {aboutHero.trust.map((t) => (
-            <li key={t}>{t}</li>
-          ))}
-        </ul>
-        <p className="mt-4 text-center text-sm text-stone sm:text-left">
-          Last updated: <time dateTime={LAST_UPDATED}>{lastUpdatedLabel}</time>
-        </p>
       </div>
     </section>
   );
 }
 
-/* 2. My story ---------------------------------------------------------------- */
+/* 2. My story: image left ---------------------------------------------------- */
 export function AboutStory() {
-  const img = aboutImages.lane;
   const s = aboutStory;
   return (
     <LetterSection id={s.id}>
-      <div className="mx-auto max-w-3xl">
-        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} />
-      </div>
-      <div className="mx-auto mt-10 max-w-5xl">
-        <Image src={img.src} alt={img.alt} width={img.width} height={img.height} sizes="(min-width: 1024px) 64rem, 100vw" className="aspect-video h-auto w-full rounded-2xl bg-sand object-cover shadow-soft" />
-      </div>
-      <div className="mx-auto mt-10 max-w-3xl">
-        <Paragraphs items={s.paragraphs} />
+      <Split img={aboutImages.lane}>
+        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} align="left" />
+        <Paragraphs items={s.paragraphs} className="mt-5" />
 
-        <div className="relative mt-12 rounded-2xl border-l-4 border-orange-500 bg-saffron-wash px-6 pb-7 pt-9 sm:px-9">
-          <span className="absolute -top-5 left-6 grid size-10 place-items-center rounded-full bg-white text-orange-500 shadow-soft">
-            <Quote size={20} aria-hidden="true" />
-          </span>
+        <figure className="reveal mt-6 rounded-2xl border-l-[3px] border-orange-500 bg-orange-50/60 py-5 pl-5 pr-5 sm:pl-6">
           <p className={letterText}>
-            <span className={`${letterFont.className} block text-2xl leading-snug text-[#8b2510] sm:text-3xl`}>{s.pullQuote.lead}</span>
-            <span className="mt-4 block">
+            <span className={`${letterFont.className} block text-lg leading-snug text-gray-900 sm:text-xl`}>{s.pullQuote.lead}</span>
+            <span className="mt-2 block">
               <Rich text={s.pullQuote.rest} />
             </span>
           </p>
-        </div>
+        </figure>
 
-        <div className="mt-12 rounded-2xl border border-orange-100 bg-saffron-wash p-6 sm:p-8">
-          <h3 className="display-3">{s.connection.title}</h3>
-          <Paragraphs items={s.connection.paragraphs} className="mt-4" />
+        <div className="reveal mt-6">
+          <h3 className="text-base font-bold text-gray-900 sm:text-lg">{s.connection.title}</h3>
+          <Paragraphs items={s.connection.paragraphs} className="mt-2" />
         </div>
-      </div>
+      </Split>
     </LetterSection>
   );
 }
 
-/* 3. Why we started -------------------------------------------------------- */
+/* 3. Why we started: image right ------------------------------------------- */
 export function AboutWhy() {
-  const img = aboutImages.elders;
   const s = aboutWhy;
   return (
-    <LetterSection id={s.id} cream>
-      <div className="mx-auto max-w-3xl">
-        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} />
-      </div>
-      <div className="mx-auto mt-10 grid max-w-5xl items-start gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
-        <Image
-          src={img.src}
-          alt={img.alt}
-          width={img.width}
-          height={img.height}
-          sizes="(min-width: 1024px) 26rem, 100vw"
-          className="aspect-[4/3] h-auto w-full rounded-2xl bg-sand object-cover shadow-soft lg:sticky lg:top-28"
-        />
-        <Paragraphs items={s.story} />
-      </div>
-      <div className="mx-auto mt-8 max-w-3xl space-y-6">
-        <p className={letterText}>
-          {s.conveyor.before}
-          <strong className="rounded-md bg-orange-100 px-1.5 py-0.5 font-bold text-[#8b2510]">{s.conveyor.emphasis}</strong>
-          {s.conveyor.after}
-        </p>
-        <p className={letterText}>
-          <Rich text={s.promisesIntro} />
-        </p>
-      </div>
-      <ul className="mx-auto mt-8 grid max-w-5xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+    <LetterSection id={s.id} tone="grey">
+      <Split img={aboutImages.elders} side="right">
+        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} align="left" />
+        <div className="mt-5 space-y-4">
+          <Paragraphs items={s.story} />
+          <p className={letterText}>
+            {s.conveyor.before}
+            <strong className="box-decoration-clone rounded bg-orange-100 px-1 font-semibold text-gray-900">{s.conveyor.emphasis}</strong>
+            {s.conveyor.after}
+          </p>
+          <p className={letterText}>
+            <Rich text={s.promisesIntro} />
+          </p>
+        </div>
+      </Split>
+      <ul className="reveal-stagger mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {s.promises.map((p) => (
-          <li key={p.text} className="reveal surface flex flex-col items-center gap-3 p-5 text-center sm:p-6">
-            <IconBadge name={p.icon} className="size-12 rounded-2xl" />
-            <strong className="text-base font-bold text-ink sm:text-lg">{p.text}</strong>
+          <li key={p.text} className="about-card flex items-center gap-3 p-4 sm:p-5">
+            <IconBadge name={p.icon} />
+            <strong className="text-sm font-semibold text-gray-900 sm:text-[0.95rem]">{p.text}</strong>
           </li>
         ))}
       </ul>
-      <p className={`${letterText} mx-auto mt-8 max-w-3xl italic`}>{s.closing}</p>
+      <p className={`${letterText} reveal mx-auto mt-6 max-w-3xl text-center italic`}>{s.closing}</p>
     </LetterSection>
   );
 }
 
-/* 4. Philosophy -------------------------------------------------------------- */
+/* 4. Philosophy (the one dark section) ------------------------------------- */
 export function AboutPhilosophy() {
   const s = aboutPhilosophy;
   const includes = STARTING_PRICE_INCLUDES;
   return (
-    <LetterSection id={s.id}>
+    <LetterSection id={s.id} tone="dark">
       <div className="mx-auto max-w-3xl">
         <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} />
-        <p className={`${letterText} mt-8`}>
+        <p className={`${letterText} mt-4 text-center`}>
           <Rich text={s.intro} />
         </p>
       </div>
-      <div className={`${crimson} relative mx-auto my-10 max-w-4xl overflow-hidden rounded-2xl px-6 py-10 text-center shadow-lift sm:px-12 sm:py-12`}>
-        <Quote size={36} aria-hidden="true" className="mx-auto text-amber-300" />
-        <p className={`${letterFont.className} mt-4 text-2xl leading-snug text-white sm:text-3xl`}>
+
+      <figure className="reveal mx-auto my-7 max-w-3xl border-y border-white/10 py-6 text-center">
+        <Quote size={24} aria-hidden="true" className="mx-auto text-orange-400" />
+        <p className={`${letterFont.className} mt-3 text-xl leading-snug text-white sm:text-2xl`}>
           <strong className="font-normal">{s.quote}</strong>
         </p>
-      </div>
-      <div className="mx-auto max-w-3xl space-y-6">
+      </figure>
+
+      <div className="mx-auto max-w-3xl space-y-4 text-center">
         <p className={letterText}>{s.introAfter}</p>
         <p className={letterText}>{s.beliefsIntro}</p>
       </div>
-      <ul className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-2">
+      <ul className="reveal-stagger mx-auto mt-7 grid max-w-6xl gap-4 sm:grid-cols-2">
         {s.beliefs.map((b) => (
-          <li key={b.lead} className="reveal surface flex gap-4 p-5 sm:p-6">
+          <li key={b.lead} className="about-card flex gap-4 p-5">
             <IconBadge name={b.icon} />
-            <p className="text-base leading-7 text-gray-700">
+            <p className="text-[0.9375rem] leading-7 text-stone-600">
               <strong className="font-semibold text-ink">{b.lead}</strong> {b.text}
             </p>
           </li>
         ))}
       </ul>
 
-      <div className="mx-auto mt-14 max-w-5xl">
-        <h3 className="display-3 mx-auto max-w-3xl text-center sm:text-left lg:mx-0">{s.luxury.title}</h3>
-        <div className="mt-6 grid items-start gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-12">
-          <div className="rounded-2xl border border-orange-100 bg-saffron-wash p-7 text-center shadow-soft">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-ember-deep">Braj tour packages</p>
-            <p className="mt-2 leading-none">
-              <span className="text-lg font-semibold text-ink-soft">from </span>
-              <span className="text-5xl font-extrabold tracking-tight text-orange-600 sm:text-6xl">{formatInr(STARTING_PRICE)}</span>
+      <div className="mx-auto mt-10 grid max-w-6xl items-center gap-7 border-t border-white/10 pt-10 lg:grid-cols-12 lg:gap-12">
+        <div className="lg:col-span-7">
+          <h3 className="reveal text-center text-lg font-bold sm:text-xl lg:text-left">{s.luxury.title}</h3>
+          <Paragraphs items={s.luxury.paragraphs} className="mt-3" />
+        </div>
+        <div className="reveal-zoom rounded-2xl border border-orange-300/25 bg-white/4 p-6 text-center lg:col-span-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-400">Braj tour packages</p>
+          <p className="mt-3 leading-none">
+            <span className="text-base font-medium text-stone">from </span>
+            <span className="text-4xl font-extrabold tracking-tight text-white">{formatInr(STARTING_PRICE)}</span>
+          </p>
+          {includes && (
+            <p className="mt-4 text-sm leading-6 text-stone">
+              <span className="font-semibold text-ink">What the {formatInr(STARTING_PRICE)} starting price includes:</span> {includes}
             </p>
-            {includes && (
-              <p className="mt-4 text-sm leading-6 text-stone">
-                <span className="font-semibold text-ink">What the {formatInr(STARTING_PRICE)} starting price includes:</span> {includes}
-              </p>
-            )}
-            <Link href={PACKAGES_PATH} className="btn btn-primary mt-6">
-              Explore our tour packages <ArrowRight size={18} aria-hidden="true" className="btn-arrow" />
-            </Link>
-          </div>
-          <Paragraphs items={s.luxury.paragraphs} />
+          )}
+          <Link href={PACKAGES_PATH} className="btn btn-primary mt-5">
+            Explore our tour packages <ArrowRight size={18} aria-hidden="true" className="btn-arrow" />
+          </Link>
         </div>
       </div>
     </LetterSection>
   );
 }
 
-/* 5. Milestone --------------------------------------------------------------- */
+/* 5. Milestone: image left + orange numbers band --------------------------- */
 export function AboutMilestone() {
-  const img = aboutImages.milestone;
   const s = aboutMilestone;
   const shownTestimonials = testimonials.slice(0, 3);
   return (
-    <LetterSection id={s.id} cream>
-      <div className="mx-auto max-w-3xl">
-        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} />
-        <p className={`${letterText} mt-8`}>{s.intro}</p>
-      </div>
-      <div className="mx-auto mt-10 max-w-5xl">
-        <Image src={img.src} alt={img.alt} width={img.width} height={img.height} sizes="(min-width: 1024px) 64rem, 100vw" className="aspect-video h-auto w-full rounded-2xl bg-sand object-cover shadow-soft" />
-      </div>
+    <LetterSection id={s.id}>
+      <Split img={aboutImages.milestone}>
+        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} align="left" />
+        <p className={`${letterText} mt-4`}>{s.intro}</p>
 
-      <div className="mx-auto mt-10 grid max-w-5xl gap-6 lg:grid-cols-2">
-        <article className="surface p-6 sm:p-8">
-          <p className="text-center text-5xl font-extrabold tracking-tight text-orange-600 sm:text-6xl">
-            <CountUp value={s.pilgrims.value} suffix="+" />
-          </p>
-          <h3 className="display-3 mt-5">{s.pilgrims.title}</h3>
-          <Paragraphs items={s.pilgrims.paragraphs} className="mt-4" />
+        {/* The headline figures — the same numbers are in the H3s below, so this band is decorative. */}
+        <div aria-hidden="true" className="reveal mt-6 grid grid-cols-2 overflow-hidden rounded-2xl bg-linear-to-r from-orange-500 to-amber-500 text-white shadow-[0_18px_36px_-20px_rgb(249_115_22/0.8)]">
+          <div className="px-5 py-5 text-center">
+            <p className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+              <CountUp value={s.pilgrims.value} suffix="+" />
+            </p>
+            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/90">Pilgrims guided</p>
+          </div>
+          <div className="border-l border-white/25 px-5 py-5 text-center">
+            <p className="text-3xl font-extrabold tracking-tight sm:text-4xl">{s.rating.value}★</p>
+            <Stars size={14} className="mt-1.5 justify-center text-white" />
+          </div>
+        </div>
+      </Split>
+
+      <div className="reveal-stagger mx-auto mt-8 grid max-w-6xl gap-4 lg:grid-cols-2">
+        <article className="about-card p-6">
+          <h3 className="text-base font-bold text-gray-900 sm:text-lg">{s.pilgrims.title}</h3>
+          <Paragraphs items={s.pilgrims.paragraphs} className="mt-2" />
         </article>
 
-        <article className="surface p-6 sm:p-8">
-          <div className="text-center">
-            <p className="text-5xl font-extrabold tracking-tight text-orange-600 sm:text-6xl">
-              <span aria-hidden="true">{s.rating.value}★</span>
-              <span className="sr-only">Rated {s.rating.value} out of 5 stars</span>
-            </p>
-            <div className="mt-3 flex justify-center gap-1 text-amber-500" aria-hidden="true">
-              {Array.from({ length: 5 }, (_, i) => (
-                <Star key={i} size={24} fill="currentColor" strokeWidth={0} />
-              ))}
-            </div>
-          </div>
-          <h3 className="display-3 mt-5">{s.rating.title}</h3>
-          <Paragraphs items={s.rating.paragraphs} className="mt-4" />
-          <div className="mt-6 flex flex-wrap gap-3">
+        <article className="about-card p-6">
+          <h3 className="text-base font-bold text-gray-900 sm:text-lg">{s.rating.title}</h3>
+          <Paragraphs items={s.rating.paragraphs} className="mt-2" />
+          <div className="mt-5 flex flex-wrap gap-3">
             {reviewsHref && (
               <a href={reviewsHref} className="btn btn-outline" {...(reviewsHref.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
                 <Star size={18} aria-hidden="true" /> Read guest reviews
@@ -303,25 +380,28 @@ export function AboutMilestone() {
       </div>
 
       {/* Visual echo of the paragraph above — hidden from assistive tech to avoid reading it twice. */}
-      <ul aria-hidden="true" className="mx-auto mt-6 grid max-w-5xl gap-4 sm:grid-cols-3">
+      <ul aria-hidden="true" className="reveal-stagger mx-auto mt-4 grid max-w-6xl gap-4 sm:grid-cols-3">
         {s.pilgrims.remembered.map((r) => (
-          <li key={r.who} className="reveal rounded-2xl border border-orange-100 bg-white p-5 shadow-soft">
-            <Quote size={22} className="text-orange-500" />
-            <p className={`${letterFont.className} mt-3 text-xl text-[#8b2510]`}>{r.who}</p>
-            <p className="mt-1 text-[0.95rem] leading-6 text-gray-700">{r.moment}</p>
+          <li key={r.who} className="about-card flex gap-3 p-5">
+            <Quote size={18} className="mt-1 shrink-0 text-orange-500" />
+            <div>
+              <p className={`${letterFont.className} text-lg ${accent}`}>{r.who}</p>
+              <p className="mt-0.5 text-sm leading-6 text-gray-600">{r.moment}</p>
+            </div>
           </li>
         ))}
       </ul>
 
       {shownTestimonials.length > 0 && (
-        <ul className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-3" aria-label="What our guests say">
+        <ul className="reveal-stagger mx-auto mt-6 grid max-w-6xl gap-4 md:grid-cols-3" aria-label="What our guests say">
           {shownTestimonials.map((t) => (
-            <li key={t.name + t.quote.slice(0, 20)} className="surface p-5 sm:p-6">
+            <li key={t.name + t.quote.slice(0, 20)} className="about-card p-5">
               <figure>
-                <blockquote className="leading-relaxed text-ink-soft">{t.quote}</blockquote>
-                <figcaption className="mt-4 text-sm">
-                  <span className="font-semibold text-ink">{t.name}</span>
-                  {t.place && <span className="text-stone">, {t.place}</span>}
+                <Stars />
+                <blockquote className="mt-3 text-[0.9375rem] leading-relaxed text-gray-700">{t.quote}</blockquote>
+                <figcaption className="mt-3 text-sm">
+                  <span className="font-semibold text-gray-900">{t.name}</span>
+                  {t.place && <span className="text-gray-500">, {t.place}</span>}
                 </figcaption>
               </figure>
             </li>
@@ -332,24 +412,18 @@ export function AboutMilestone() {
   );
 }
 
-/* 6. Team -------------------------------------------------------------------- */
+/* 6. Team: image right ------------------------------------------------------- */
 export function AboutTeam() {
-  const img = aboutImages.team;
   const s = aboutTeam;
   return (
-    <LetterSection id={s.id}>
-      <div className="mx-auto max-w-3xl">
-        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} />
-      </div>
-      <div className="mx-auto mt-10 max-w-5xl">
-        <Image src={img.src} alt={img.alt} width={img.width} height={img.height} sizes="(min-width: 1024px) 64rem, 100vw" className="aspect-video h-auto w-full rounded-2xl bg-sand object-cover shadow-soft" />
-      </div>
-      <div className="mx-auto mt-10 max-w-3xl">
-        <Paragraphs items={[s.intro, s.knowledgeIntro]} />
-        <ul className="mt-8 grid gap-4">
+    <LetterSection id={s.id} tone="grey">
+      <Split img={aboutImages.team} side="right">
+        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} align="left" />
+        <Paragraphs items={[s.intro, s.knowledgeIntro]} className="mt-5" />
+        <ul className="reveal-stagger mt-5 grid gap-3">
           {s.knowledge.map((k) => (
-            <li key={k.lead} className="flex gap-4">
-              <IconBadge name={k.icon} />
+            <li key={k.lead} className="flex gap-3.5">
+              <IconBadge name={k.icon} className="size-9" />
               <p className={letterText}>
                 <strong className="font-semibold text-ink">{k.lead}</strong>
                 {k.text.startsWith(",") ? "" : " "}
@@ -358,126 +432,146 @@ export function AboutTeam() {
             </li>
           ))}
         </ul>
-        <p className={`${letterText} mt-8`}>{s.drivers}</p>
-        <div className="mt-10 flex gap-4 rounded-2xl border border-orange-100 border-l-4 border-l-orange-500 bg-saffron-wash p-6 sm:p-8">
-          <House size={28} aria-hidden="true" className="mt-1 shrink-0 text-orange-600" />
-          <p className={`${letterText} [&_strong]:text-[#8b2510] [&_strong:last-of-type]:text-xl`}>
-            <Rich text={s.local} />
-          </p>
-        </div>
+        <p className={`${letterText} mt-5`}>{s.drivers}</p>
+      </Split>
 
-        {/*
-          Team grid — add once real team members (with consent) and photos are available, e.g. in content/about.ts:
-          <ul className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {team.map((m) => (
-              <li key={m.name} className="surface overflow-hidden text-center">
-                <Image src={m.photo} alt={`${m.name}, ${m.role} at Mathura Vrindavan Trips`} width={600} height={750} className="aspect-[4/5] h-auto w-full object-cover" />
-                <p className="mt-3 font-semibold">{m.name}</p>
-                <p className="mb-4 text-sm text-stone">{m.role}</p>
-              </li>
-            ))}
-          </ul>
-        */}
+      <div className="reveal mx-auto mt-8 flex max-w-6xl gap-4 rounded-2xl border border-gray-200 border-l-[3px] border-l-orange-500 bg-white p-5 sm:p-6">
+        <span className="about-icon size-10">
+          <House size={19} aria-hidden="true" />
+        </span>
+        <p className={`${letterText} [&_strong]:text-gray-900`}>
+          <Rich text={s.local} />
+        </p>
       </div>
+
+      {/*
+        Team grid — add once real team members (with consent) and photos are available, e.g. in content/about.ts:
+        <ul className="reveal-stagger mx-auto mt-8 grid max-w-6xl grid-cols-2 gap-4 sm:grid-cols-4">
+          {team.map((m) => (
+            <li key={m.name} className="about-card overflow-hidden text-center">
+              <Image src={m.photo} alt={`${m.name}, ${m.role} at Mathura Vrindavan Trips`} width={600} height={750} className="aspect-4/5 h-auto w-full object-cover" />
+              <p className="mt-3 font-semibold">{m.name}</p>
+              <p className="mb-4 text-sm text-stone">{m.role}</p>
+            </li>
+          ))}
+        </ul>
+      */}
     </LetterSection>
   );
 }
 
 /* 7. Contact / sign-off ------------------------------------------------------ */
 export function AboutContact() {
-  const img = aboutImages.contact;
   const s = aboutContact;
   const wa = whatsappLink(s.whatsappMessage);
   const mail = mailtoHref("Braj yatra enquiry");
+  const credited = Object.values(aboutImages).filter((i): i is AboutImage & { credit: NonNullable<AboutImage["credit"]> } => "credit" in i && !!i.credit);
   return (
-    <LetterSection id={s.id} cream>
-      <div className="mx-auto max-w-3xl">
-        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} />
-      </div>
-
-      <div className="surface mx-auto mt-10 grid max-w-5xl overflow-hidden lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="relative aspect-[4/3] bg-sand lg:aspect-auto">
-          <Image src={img.src} alt={img.alt} fill sizes="(min-width: 1024px) 26rem, 100vw" className="object-cover" />
-        </div>
-        <div className="p-6 sm:p-9">
-          <Paragraphs items={s.paragraphs} />
-          <ul className="mt-7 space-y-2.5 text-base font-semibold text-ink">
-            <li>
-              <span aria-hidden="true">{s.lines.phone.emoji} </span>
-              {s.lines.phone.label}{" "}
-              {tel ? (
-                <a href={tel} className={letterLink}>
-                  {site.contact.phone}
-                </a>
-              ) : (
-                site.contact.phone
-              )}
-            </li>
-            <li>
-              <span aria-hidden="true">{s.lines.email.emoji} </span>
-              {s.lines.email.label}{" "}
-              <a href={mail} className={`${letterLink} break-all`}>
-                {site.contact.email}
+    <LetterSection id={s.id}>
+      <Split img={aboutImages.contact}>
+        <LetterHeading id={s.id} eyebrow={s.eyebrow} title={s.title} align="left" />
+        <Paragraphs items={s.paragraphs} className="mt-5" />
+        <ul className="mt-5 space-y-2 rounded-xl border border-gray-200 bg-[#f7f8fa] p-4 text-[0.9375rem] font-semibold text-gray-900 sm:p-5">
+          <li>
+            <span aria-hidden="true">{s.lines.phone.emoji} </span>
+            {s.lines.phone.label}{" "}
+            {tel ? (
+              <a href={tel} className={letterLink}>
+                {site.contact.phone}
               </a>
-            </li>
-            <li>
-              <span aria-hidden="true">{s.lines.website.emoji} </span>
-              {s.lines.website.label} <span className="break-all font-normal text-gray-700">{s.lines.website.value}</span>
-            </li>
-          </ul>
-          <div className="mt-7 flex flex-wrap gap-3">
-            {tel && (
-              <a href={tel} className="btn btn-primary">
-                <Phone size={18} aria-hidden="true" /> Call
-              </a>
+            ) : (
+              site.contact.phone
             )}
-            {wa && (
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
-                <WhatsappIcon size={20} /> WhatsApp
-                <span className="sr-only"> (opens WhatsApp)</span>
-              </a>
-            )}
-            <a href={mail} className="btn btn-outline">
-              <Mail size={18} aria-hidden="true" /> Email
+          </li>
+          <li>
+            <span aria-hidden="true">{s.lines.email.emoji} </span>
+            {s.lines.email.label}{" "}
+            <a href={mail} className={`${letterLink} break-all`}>
+              {site.contact.email}
             </a>
+          </li>
+          <li>
+            <span aria-hidden="true">{s.lines.website.emoji} </span>
+            {s.lines.website.label} <span className="break-all font-normal text-gray-600">{s.lines.website.value}</span>
+          </li>
+        </ul>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {tel && (
+            <a href={tel} className="btn btn-primary">
+              <Phone size={18} aria-hidden="true" /> Call
+            </a>
+          )}
+          {wa && (
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+              <WhatsappIcon size={20} /> WhatsApp
+              <span className="sr-only"> (opens WhatsApp)</span>
+            </a>
+          )}
+          <a href={mail} className="btn btn-outline">
+            <Mail size={18} aria-hidden="true" /> Email
+          </a>
+        </div>
+
+        <div className="mt-6">
+          <p className="text-sm font-semibold text-gray-900">{s.statsLabel}:</p>
+          <ul className="mt-2.5 flex flex-wrap gap-2">
+            {s.stats.map((t) => (
+              <li key={t} className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-[0.8125rem] font-medium text-gray-900">
+                <CircleCheck size={14} aria-hidden="true" className="text-orange-500" />
+                {t}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Split>
+
+      <div className="mx-auto mt-10 grid max-w-6xl items-start gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="reveal lg:col-span-7">
+          <div className="text-center lg:text-left">
+            <Eyebrow className={eyebrowChip}>Send an enquiry</Eyebrow>
+          </div>
+          <div className="mt-4">
+            <EnquiryForm title="Tell Harsh about your yatra" />
           </div>
         </div>
-      </div>
 
-      <div className="mx-auto mt-8 max-w-5xl text-center sm:text-left">
-        <p className="text-sm font-semibold text-ink">{s.statsLabel}:</p>
-        <ul className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
-          {s.stats.map((t) => (
-            <li key={t} className="chip border-orange-200">
-              {t}
-            </li>
-          ))}
-        </ul>
-      </div>
+        <div className="reveal rounded-2xl border border-gray-200 bg-[#f7f8fa] p-6 lg:sticky lg:top-28 lg:col-span-5">
+          <p className={`${letterFont.className} text-lg leading-snug ${accent} sm:text-xl`}>{s.closing}</p>
+          <p className={`${letterFont.className} mt-4 text-lg text-gray-900`}>
+            <Rich text={s.farewell} />
+          </p>
+          <p className={`${letterFont.className} mt-4 text-right text-lg italic text-gray-700`}>{s.signature}</p>
 
-      <div className="mx-auto mt-12 max-w-3xl">
-        <Eyebrow>Send an enquiry</Eyebrow>
-        <div className="mt-4">
-          <EnquiryForm title="Tell Harsh about your yatra" />
+          <nav aria-label="Keep exploring" className="mt-6 flex flex-wrap gap-3 border-t border-gray-200 pt-5">
+            <Link href={PACKAGES_PATH} className="btn btn-primary">
+              Explore our tour packages <ArrowRight size={18} aria-hidden="true" className="btn-arrow" />
+            </Link>
+            <Link href="/" className="btn btn-outline">
+              <House size={18} aria-hidden="true" /> Back to Home
+            </Link>
+          </nav>
         </div>
       </div>
 
-      <div className="mx-auto mt-14 max-w-3xl">
-        <p className={`${letterFont.className} text-2xl leading-snug text-[#8b2510] sm:text-3xl`}>{s.closing}</p>
-        <p className={`${letterFont.className} mt-6 text-2xl text-ink`}>
-          <Rich text={s.farewell} />
-        </p>
-        <p className={`${letterFont.className} mt-6 text-right text-xl italic text-ink-soft sm:text-2xl`}>{s.signature}</p>
-
-        <nav aria-label="Keep exploring" className="mt-12 flex flex-wrap justify-center gap-3 sm:justify-start">
-          <Link href={PACKAGES_PATH} className="btn btn-primary">
-            Explore our tour packages <ArrowRight size={18} aria-hidden="true" className="btn-arrow" />
-          </Link>
-          <Link href="/" className="btn btn-outline">
-            <House size={18} aria-hidden="true" /> Back to Home
-          </Link>
-        </nav>
-      </div>
+      {credited.length > 0 && (
+        <div className="mx-auto mt-10 max-w-6xl border-t border-gray-200 pt-5 text-xs leading-6 text-gray-500">
+          <p className="font-semibold text-gray-700">Photo credits</p>
+          <ul className="mt-1">
+            {credited.map((i) => (
+              <li key={i.src}>
+                <a href={i.credit.sourceUrl} className="underline underline-offset-2 hover:text-gray-900" target="_blank" rel="noopener noreferrer">
+                  {i.alt}
+                </a>{" "}
+                by {i.credit.author}, licensed under{" "}
+                <a href={i.credit.licenseUrl} className="underline underline-offset-2 hover:text-gray-900" target="_blank" rel="noopener noreferrer">
+                  {i.credit.license}
+                </a>
+                , via Wikimedia Commons (cropped and resized).
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </LetterSection>
   );
 }

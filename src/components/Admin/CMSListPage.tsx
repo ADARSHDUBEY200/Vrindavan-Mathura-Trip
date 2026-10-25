@@ -13,6 +13,10 @@ import { CMSLoading } from "./CMSLoading";
 import { DeleteConfirmModal } from "./DeleteConfirmModal";
 import { inputClass } from "./CMS/ui";
 
+// Filter controls size to their content (inputClass is full-width) so the toolbar stays on one row.
+const filterClass =
+  "h-10 shrink-0 rounded-lg border border-white/10 bg-white/5 pl-3 pr-8 text-sm text-white outline-none transition hover:border-white/20 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/30 [&>option]:bg-[#0f172a]";
+
 type Row = {
   id: string;
   title: string | null;
@@ -154,29 +158,31 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold md:text-3xl">{cfg.title}</h1>
-          <p className="mt-1 text-sm text-white/55">{cfg.subtitle}</p>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full bg-white/5 px-3 py-1 text-white/70">Total {rows.length}</span>
-            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-300">Published {published}</span>
-            <span className="rounded-full bg-amber-500/10 px-3 py-1 text-amber-300">Drafts {rows.length - published}</span>
+    <div className="mx-auto max-w-[1600px] space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h1 className="text-xl font-semibold tracking-tight md:text-2xl">{cfg.title}</h1>
+            <div className="flex flex-wrap gap-1.5 text-xs font-medium">
+              <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-slate-200">Total {rows.length}</span>
+              <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-emerald-300">Published {published}</span>
+              <span className="rounded-full bg-amber-500/15 px-2.5 py-0.5 text-amber-300">Drafts {rows.length - published}</span>
+            </div>
           </div>
+          <p className="mt-1 text-sm text-slate-400">{cfg.subtitle}</p>
         </div>
-        <Link href={`${base}/create`} className="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold hover:bg-sky-500">
+        <Link href={`${base}/create`} className="inline-flex h-10 items-center gap-2 rounded-lg bg-sky-600 px-4 text-sm font-semibold hover:bg-sky-500">
           <Plus size={16} /> Create New
         </Link>
       </div>
 
-      <div className="flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-[#0f172a]/60 p-4">
-        <label className="relative min-w-56 flex-1">
+      <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-white/10 bg-[#0b1220]/90 p-3">
+        <label className="relative min-w-60 flex-1">
           <span className="sr-only">Search by title</span>
-          <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/35" />
-          <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by title…" className={`${inputClass} pl-10`} />
+          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by title…" className={`${inputClass} h-10 pl-9`} />
         </label>
-        <select aria-label={categoryLabel} value={category} onChange={(e) => setCategory(e.target.value)} className={`${inputClass} w-auto`}>
+        <select aria-label={categoryLabel} value={category} onChange={(e) => setCategory(e.target.value)} className={filterClass}>
           <option value="">All {categoryLabel === "Location" ? "locations" : "categories"}</option>
           {CATEGORY_OPTIONS[editorType].map((c) => (
             <option key={c} value={c}>
@@ -185,7 +191,7 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
           ))}
         </select>
         {cfg.showAuthor && (
-          <select aria-label="Author" value={author} onChange={(e) => setAuthor(e.target.value)} className={`${inputClass} w-auto`}>
+          <select aria-label="Author" value={author} onChange={(e) => setAuthor(e.target.value)} className={filterClass}>
             <option value="">All authors</option>
             {authors.map((a) => (
               <option key={a} value={a}>
@@ -194,21 +200,21 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
             ))}
           </select>
         )}
-        <select aria-label="Status" value={status} onChange={(e) => setStatus(e.target.value as typeof status)} className={`${inputClass} w-auto`}>
-          <option value="">All</option>
+        <select aria-label="Status" value={status} onChange={(e) => setStatus(e.target.value as typeof status)} className={filterClass}>
+          <option value="">All statuses</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
         </select>
-        <select aria-label="Sort" value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className={`${inputClass} w-auto`}>
+        <select aria-label="Sort" value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className={filterClass}>
           <option value="latest">Latest first</option>
           <option value="oldest">Oldest first</option>
         </select>
-        <div className="flex overflow-hidden rounded-xl border border-white/10" role="group" aria-label="View">
-          <button type="button" aria-pressed={view === "cards"} onClick={() => setView("cards")} className={`px-3 ${view === "cards" ? "bg-sky-600" : "hover:bg-white/5"}`} title="Cards view">
-            <LayoutGrid size={18} />
+        <div className="flex h-10 shrink-0 overflow-hidden rounded-lg border border-white/10" role="group" aria-label="View">
+          <button type="button" aria-pressed={view === "cards"} aria-label="Cards view" onClick={() => setView("cards")} className={`grid w-10 place-items-center transition ${view === "cards" ? "bg-sky-600 text-white" : "text-slate-300 hover:bg-white/5"}`} title="Cards view">
+            <LayoutGrid size={17} />
           </button>
-          <button type="button" aria-pressed={view === "table"} onClick={() => setView("table")} className={`px-3 ${view === "table" ? "bg-sky-600" : "hover:bg-white/5"}`} title="Table view">
-            <List size={18} />
+          <button type="button" aria-pressed={view === "table"} aria-label="Table view" onClick={() => setView("table")} className={`grid w-10 place-items-center border-l border-white/10 transition ${view === "table" ? "bg-sky-600 text-white" : "text-slate-300 hover:bg-white/5"}`} title="Table view">
+            <List size={17} />
           </button>
         </div>
       </div>
@@ -216,11 +222,11 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
       {loading ? (
         <CMSLoading />
       ) : visible.length === 0 ? (
-        <p className="rounded-2xl border border-white/10 py-16 text-center text-white/50">{rows.length ? "No items match these filters." : "Nothing here yet. Create the first one."}</p>
+        <p className="rounded-xl border border-white/10 py-16 text-center text-slate-400">{rows.length ? "No items match these filters." : "Nothing here yet. Create the first one."}</p>
       ) : view === "cards" ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {visible.map((r) => (
-            <article key={r.id} className="overflow-hidden rounded-2xl border border-white/10 bg-[#0f172a]/70">
+            <article key={r.id} className="overflow-hidden rounded-xl border border-white/10 bg-[#0b1220]/90">
               <div className="relative aspect-video bg-white/5">
                 {r.image ? (
                   // eslint-disable-next-line @next/next/no-img-element -- Supabase storage URL; not in next/image remotePatterns
@@ -234,10 +240,10 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
                   <StatusBadge status={r.status} />
                 </span>
               </div>
-              <div className="space-y-2 p-4">
-                <p className="text-xs text-white/45">{r.category || "Uncategorised"}</p>
+              <div className="space-y-1.5 p-3.5">
+                <p className="text-xs text-slate-400">{r.category || "Uncategorised"}</p>
                 <h2 className="line-clamp-2 font-semibold">{r.title || "Untitled"}</h2>
-                <p className="text-xs text-white/45">
+                <p className="text-xs text-slate-400">
                   {[cfg.showAuthor && r.author, cfg.showPrice && formatPrice(r.price), formatDate(r.created_at)].filter(Boolean).join(" · ")}
                 </p>
                 <div className="flex gap-2 pt-2">
@@ -253,9 +259,9 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
           ))}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#0f172a]/70">
+        <div className="overflow-x-auto rounded-xl border border-white/10 bg-[#0b1220]/90">
           <table className="w-full min-w-[720px] text-sm">
-            <thead className="bg-white/5 text-left text-white/55">
+            <thead className="bg-white/5 text-left text-slate-300">
               <tr>
                 <th className="px-4 py-3 font-medium">Title</th>
                 <th className="px-4 py-3 font-medium">{categoryLabel}</th>
@@ -270,13 +276,13 @@ export function CMSListPage({ editorType }: { editorType: EditorType }) {
               {visible.map((r) => (
                 <tr key={r.id} className="border-t border-white/5 hover:bg-white/[0.03]">
                   <td className="max-w-xs truncate px-4 py-3 font-medium">{r.title || "Untitled"}</td>
-                  <td className="px-4 py-3 text-white/60">{r.category || "—"}</td>
-                  {cfg.showAuthor && <td className="px-4 py-3 text-white/60">{r.author || "—"}</td>}
-                  {cfg.showPrice && <td className="px-4 py-3 text-white/60">{formatPrice(r.price)}</td>}
+                  <td className="px-4 py-3 text-slate-300">{r.category || "—"}</td>
+                  {cfg.showAuthor && <td className="px-4 py-3 text-slate-300">{r.author || "—"}</td>}
+                  {cfg.showPrice && <td className="px-4 py-3 text-slate-300">{formatPrice(r.price)}</td>}
                   <td className="px-4 py-3">
                     <StatusBadge status={r.status} />
                   </td>
-                  <td className="px-4 py-3 text-white/60">{formatDate(r.created_at)}</td>
+                  <td className="px-4 py-3 text-slate-300">{formatDate(r.created_at)}</td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
                       <Link href={`${base}/edit/${r.id}`} aria-label={`Edit ${r.title}`} className="rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white">

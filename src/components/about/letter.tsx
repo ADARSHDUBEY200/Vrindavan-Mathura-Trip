@@ -1,21 +1,23 @@
 import Link from "next/link";
 import { Tiro_Devanagari_Hindi } from "next/font/google";
 import { Fragment, type ReactNode } from "react";
-import { OrnamentDivider } from "@/components/svg/Ornaments";
 import { Eyebrow } from "@/components/ui/SectionHeading";
 
 /** Devanagari-friendly serif — only for greetings, pull quotes and the signature. */
 export const letterFont = Tiro_Devanagari_Hindi({ weight: "400", style: ["normal", "italic"], subsets: ["latin"], display: "swap" });
 
 /** Body copy of the letter. */
-export const letterText = "text-lg leading-8 text-gray-700";
+export const letterText = "text-[0.9375rem] leading-7 text-gray-600 sm:text-base";
+
+/** Accent for small serif text (names, closing line): one step deeper than the orange-500 headings so it stays readable. */
+export const accent = "text-orange-600";
+
+/** Eyebrow rendered as a small outlined chip. */
+export const eyebrowChip = "eyebrow-chip rounded-full border border-orange-200 bg-orange-50 px-3 py-1";
 
 /** Inline links inside the letter. */
 export const letterLink =
   "font-semibold text-ember-deep underline decoration-orange-300 decoration-2 underline-offset-4 transition-colors hover:decoration-orange-600";
-
-/** Crimson highlight panel (white text is ≥ 12:1 on every stop). */
-export const crimson = "bg-[linear-gradient(135deg,#6b1a0a,#8b2510_50%,#7a2008)]";
 
 const TOKEN = /(\[(?:[^\]]+)\]\((?:[^)]+)\)|\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*)/g;
 
@@ -65,32 +67,45 @@ export function Paragraphs({ items, className = "" }: { items: string[]; classNa
   );
 }
 
-/** Small orange lotus ornament that replaces the PDF's horizontal rules. */
-export function LetterDivider() {
-  return <OrnamentDivider className="mx-auto mb-10 max-w-xs sm:mb-12" />;
+/**
+ * Splits a title into a dark lead and an orange-500 accent, like "My Story: **The Boy from Mathura**".
+ * Splits after the first ": " or ". ", otherwise accents the last word.
+ */
+function TwoTone({ title }: { title: string }) {
+  const m = title.match(/^(.+?[:.])\s(.+)$/);
+  const [lead, tail] = m ? [`${m[1]} `, m[2]] : [title.slice(0, title.lastIndexOf(" ") + 1), title.slice(title.lastIndexOf(" ") + 1)];
+  return (
+    <>
+      {lead}
+      <span className="text-orange-500">{tail}</span>
+    </>
+  );
 }
 
-/** Eyebrow + H2 (with a stable id) + short gradient underline. */
-export function LetterHeading({ id, eyebrow, title }: { id: string; eyebrow: string; title: string }) {
+/** Eyebrow chip + two-tone H2 (with a stable id). Left-aligned headings centre on small screens. */
+export function LetterHeading({ id, eyebrow, title, align = "center" }: { id: string; eyebrow: string; title: string; align?: "center" | "left" }) {
   return (
-    <div className="text-center sm:text-left">
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 id={id} className="display-2 mt-2.5">
-        {title}
+    <div className={`reveal ${align === "center" ? "text-center" : "text-center lg:text-left"}`}>
+      <Eyebrow className={eyebrowChip}>{eyebrow}</Eyebrow>
+      <h2 id={id} className="mt-3 text-[clamp(1.375rem,1.15rem+0.8vw,1.75rem)] font-bold leading-tight tracking-[-0.02em] text-gray-900">
+        <TwoTone title={title} />
       </h2>
-      <span aria-hidden="true" className="mx-auto mt-4 block h-1 w-16 rounded-full bg-linear-to-r from-orange-500 to-amber-500 sm:mx-0" />
     </div>
   );
 }
 
-/** Section shell: alternating white / cream background, lotus divider on top. */
-export function LetterSection({ id, cream = false, children }: { id: string; cream?: boolean; children: ReactNode }) {
+type Tone = "white" | "grey" | "dark";
+const tones: Record<Tone, string> = {
+  white: "bg-white",
+  grey: "bg-[#f7f8fa]",
+  dark: "about-dark",
+};
+
+/** Section shell: white, light grey or the single dark section. */
+export function LetterSection({ id, tone = "white", children }: { id: string; tone?: Tone; children: ReactNode }) {
   return (
-    <section aria-labelledby={id} className={`${cream ? "bg-saffron-wash" : "bg-white"} py-16 sm:py-20 lg:py-24`}>
-      <div className="container-x">
-        <LetterDivider />
-        {children}
-      </div>
+    <section aria-labelledby={id} className={`relative py-10 sm:py-12 lg:py-14 ${tones[tone]}`}>
+      <div className="container-x relative">{children}</div>
     </section>
   );
 }

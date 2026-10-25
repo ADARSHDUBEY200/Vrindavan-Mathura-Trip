@@ -188,7 +188,7 @@ export function HeroSlider({ slides }: { slides: HeroSlideData[] }) {
                     <Link
                       href={s.cta.href}
                       draggable={false}
-                      className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-orange-700 shadow-lift transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-50"
+                      className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-orange-600 shadow-lift transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-50"
                     >
                       {s.cta.label}
                       <ArrowRight size={15} aria-hidden="true" className="btn-arrow" />
@@ -218,14 +218,14 @@ export function HeroSlider({ slides }: { slides: HeroSlideData[] }) {
             <button
               type="button"
               onClick={() => setUserPaused((p) => !p)}
-              className="ml-2 grid size-7 place-items-center rounded-full border border-orange-200 bg-white text-orange-700 transition-colors hover:bg-orange-50"
+              className="ml-2 grid size-7 place-items-center rounded-full border border-orange-200 bg-white text-orange-600 transition-colors hover:bg-orange-50"
               aria-label={userPaused ? "Play slideshow" : "Pause slideshow"}
             >
               {userPaused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={prev} className="grid size-10 place-items-center rounded-full border border-orange-200 bg-white text-ink shadow-soft transition-all hover:-translate-x-0.5 hover:border-orange-400 hover:text-orange-700" aria-label="Previous slide">
+            <button type="button" onClick={prev} className="grid size-10 place-items-center rounded-full border border-orange-200 bg-white text-ink shadow-soft transition-all hover:-translate-x-0.5 hover:border-orange-400 hover:text-orange-600" aria-label="Previous slide">
               <ChevronLeft size={19} aria-hidden="true" />
             </button>
             <button type="button" onClick={next} className="grid size-10 place-items-center rounded-full bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-glow transition-transform hover:translate-x-0.5" aria-label="Next slide">

@@ -19,11 +19,11 @@ type Props = {
 export function StatsCard({ title, value, subtitle, icon: Icon, variant = "blue", loading = false }: Props) {
   const v = VARIANTS[variant];
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br ${v.card} p-5`}>
+    <div className={`relative overflow-hidden rounded-xl border border-white/10 bg-linear-to-br ${v.card} p-5`}>
       <span aria-hidden="true" className={`pointer-events-none absolute -right-8 -top-8 size-32 rounded-full blur-3xl ${v.orb}`} />
       <div className="relative flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-white/60">{title}</p>
+          <p className="text-sm text-slate-300">{title}</p>
           {loading ? (
             <span className="mt-2 block h-8 w-16 animate-pulse rounded-lg bg-white/10" />
           ) : (
@@ -32,7 +32,7 @@ export function StatsCard({ title, value, subtitle, icon: Icon, variant = "blue"
           {loading ? (
             <span className="mt-2 block h-3 w-24 animate-pulse rounded bg-white/10" />
           ) : (
-            subtitle && <p className="mt-1 text-xs text-white/45">{subtitle}</p>
+            subtitle && <p className="mt-1 text-xs text-slate-400">{subtitle}</p>
           )}
         </div>
         <span className={`grid size-11 place-items-center rounded-xl ${v.icon}`}>

@@ -305,11 +305,17 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
       <CMSHeader editorType="Package" mode={mode} backHref={ADMIN_ROUTES.Package} lastSaved={c.lastSaved} />
       {c.showRestoreBanner && <RestoreBanner onRestore={c.restoreDraft} onDismiss={c.discardDraft} />}
 
-      <form ref={formRef} onSubmit={c.onSubmit} noValidate className="space-y-6">
-        <CMSMetaSection editorType="Package" title={form.title} category={form.category} slug={form.slug} onChange={patch} autoSlug={mode === "create"} />
+      <form ref={formRef} onSubmit={c.onSubmit} noValidate className="space-y-4">
+        <CMSMetaSection editorType="Package" title={form.title} category={form.category} slug={form.slug} onChange={patch} autoSlug={mode === "create"}>
+          <div className="md:col-span-2">
+            <Field label="Destination" required hint={<span className="text-slate-400">Main destination(s) covered</span>}>
+              <TextInput required value={form.destination} placeholder="Vrindavan, Mathura, Govardhan" onChange={(destination) => patch({ destination })} />
+            </Field>
+          </div>
+        </CMSMetaSection>
 
         <Section title="Package Details" helper="Price, duration label, review count, rating and group pricing.">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <Field label="Price (₹)" required>
               <TextInput required inputMode="numeric" value={form.price} placeholder="4999" onChange={(price) => patch({ price })} />
             </Field>
@@ -323,7 +329,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
               <TextInput type="number" min={0} max={5} step={0.1} value={form.rating} placeholder="4.8" onChange={(rating) => patch({ rating })} />
             </Field>
           </div>
-          <div className="grid gap-5 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-3">
             {(["group2", "group4", "group6"] as const).map((g) => (
               <Field key={g} label={`Group of ${g.slice(5)} (₹ per person)`}>
                 <TextInput inputMode="numeric" value={form.seo.groupPricing[g]} onChange={(v) => setSeo({ groupPricing: { ...form.seo.groupPricing, [g]: v } })} />
@@ -353,7 +359,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
                   type="button"
                   aria-pressed={on}
                   onClick={() => toggleCity(city)}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm transition ${on ? "border-sky-500 bg-sky-500/20 text-sky-200" : "border-white/15 text-white/60 hover:bg-white/5"}`}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm transition ${on ? "border-sky-500 bg-sky-500/20 text-sky-200" : "border-white/15 text-slate-300 hover:bg-white/5"}`}
                 >
                   {on && <Check size={14} />}
                   {city}
@@ -363,17 +369,13 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
           </div>
         </Section>
 
-        <Section title="Destination" helper="Main destination(s) covered.">
-          <Field label="Destination" required>
-            <TextInput required value={form.destination} placeholder="Vrindavan, Mathura, Govardhan" onChange={(destination) => patch({ destination })} />
-          </Field>
-        </Section>
-
-        <CMSSeoSection editorType="Package" value={form.meta} onChange={(meta) => patch({ meta })} />
-        <CMSSchema editorType="Package" value={form.schema} onChange={(schema) => patch({ schema })} />
+        <div className="grid items-start gap-4 xl:grid-cols-2">
+          <CMSSeoSection editorType="Package" value={form.meta} onChange={(meta) => patch({ meta })} />
+          <CMSSchema editorType="Package" value={form.schema} onChange={(schema) => patch({ schema })} />
+        </div>
 
         <Section title="Inclusions at a glance" helper="Icons shown on the package card.">
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <Toggle label="Breakfast included" checked={form.breakfast_included} onChange={(breakfast_included) => patch({ breakfast_included })} />
             <Toggle label="Stay included" checked={form.stay_included} onChange={(stay_included) => patch({ stay_included })} />
             <Toggle label="Transfers included" checked={form.transfer_included} onChange={(transfer_included) => patch({ transfer_included })} />
@@ -382,7 +384,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
         </Section>
 
         <Section title="Duration" helper="Days and nights, plus how many days are spent where.">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Field label="Days" required>
               <TextInput required type="number" min={1} value={form.day} onChange={(day) => patch({ day })} />
             </Field>
@@ -410,7 +412,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
         </Section>
 
         <Section title="Destination Route" helper="Start and end points, and each leg of the route.">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Field label="Source">
               <TextInput value={form.destroutes.source} placeholder="Delhi" onChange={(source) => setRoutes({ source })} />
             </Field>
@@ -530,7 +532,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
               const setSlot = (p: Partial<ChildImage>) => patch({ childImage: form.childImage.map((x) => (x.id === slot.id ? { ...x, ...p } : x)) });
               return (
                 <div key={slot.id} className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-white/40">Image {i + 1}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Image {i + 1}</p>
                   <ImageDropzone editorType="Package" compact value={slot.image} onChange={(image) => setSlot({ image })} label="Add .webp" />
                   <TextInput value={slot.alt} placeholder="Alt text" aria-label={`Image ${i + 1} alt text`} onChange={(alt) => setSlot({ alt })} />
                 </div>
@@ -540,7 +542,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
         </Section>
 
         <Section title="Temple Timings" helper="Paste a timings table from Word or Sheets." defaultOpen={false}>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Field label="Title">
               <TextInput value={form.seo.templeTitle} placeholder="Temple timings in Vrindavan" onChange={(templeTitle) => setSeo({ templeTitle })} />
             </Field>
@@ -638,7 +640,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
         </Section>
 
         <Section title="YouTube Video & Guide" helper="Video details for VideoObject schema, plus the guide bio." defaultOpen={false}>
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             <Field label="YouTube video ID">
               <TextInput value={form.seo.videoId} placeholder="dQw4w9WgXcQ" onChange={(videoId) => setSeo({ videoId })} />
             </Field>

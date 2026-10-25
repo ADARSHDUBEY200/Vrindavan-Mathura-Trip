@@ -19,13 +19,13 @@ export function HtmlTablePaste({ value, onChange }: { value: string; onChange: (
 
   return (
     <div className="space-y-3">
-      <span className="flex items-center gap-2 text-sm text-white/60">
+      <span className="flex items-center gap-2 text-[0.8rem] text-slate-300">
         <ClipboardPaste size={16} /> Paste a table from Word or Google Sheets, or edit the HTML directly.
       </span>
-      <textarea rows={5} value={value} onPaste={onPaste} onChange={(e) => onChange(e.target.value)} placeholder="<table>…</table>" className={`${inputClass} font-mono text-xs`} />
+      <textarea rows={4} value={value} onPaste={onPaste} onChange={(e) => onChange(e.target.value)} placeholder="<table>…</table>" className={`${inputClass} font-mono text-xs`} />
       {value.trim() && (
-        <div className="cms-table-preview overflow-x-auto rounded-xl border border-white/10 p-3 text-white/80">
-          <p className="mb-2 text-xs uppercase tracking-wider text-white/40">Preview</p>
+        <div className="cms-table-preview overflow-x-auto rounded-lg border border-white/10 p-3 text-slate-200">
+          <p className="mb-2 text-xs uppercase tracking-wider text-slate-400">Preview</p>
           {/* Admin-only preview of admin-authored HTML. */}
           <div dangerouslySetInnerHTML={{ __html: value }} />
         </div>

@@ -1,3 +1,4 @@
+import { EnquiryPopupProvider } from "@/components/forms/EnquiryPopup";
 import { FloatingContact } from "@/components/layout/FloatingContact";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -7,7 +8,8 @@ import { sharedGraph } from "@/lib/schema/nodes";
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    // The enquiry popup lives here, so it covers every public page but never the admin CMS.
+    <EnquiryPopupProvider>
       <a
         href="#main-content"
         className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white shadow-lift transition-transform focus:translate-y-0"
@@ -24,7 +26,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <Suspense fallback={null}>
         <SiteSchema graph={sharedGraph()} />
       </Suspense>
-    </>
+    </EnquiryPopupProvider>
   );
 }
 

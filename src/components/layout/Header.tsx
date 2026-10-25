@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useEffectEvent, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { ArrowRight, ChevronDown, Menu, Phone, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, Phone, Send, X } from "lucide-react";
+import { useEnquiryPopup } from "@/components/forms/EnquiryPopup";
 import { Logo } from "@/components/layout/Logo";
 import { WhatsappIcon } from "@/components/svg/TravelIcons";
 import { mainNav, phoneHref, type NavItem } from "@/config/site";
@@ -27,6 +28,7 @@ export function Header() {
   const baseId = useId();
   const wa = whatsappLink();
   const tel = phoneHref();
+  const openEnquiry = useEnquiryPopup();
 
   function openNow(i: number) {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -60,8 +62,8 @@ export function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4">
-        <div className="header-pill relative mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 rounded-full border border-line/80 bg-white/95 pl-3 pr-1.5 backdrop-blur-md sm:h-16 sm:pl-5 sm:pr-2">
-          <Logo className="shrink-0" />
+        <div className="header-pill relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 rounded-full border border-line/80 bg-white/95 pl-4 pr-2 backdrop-blur-md sm:h-[4.5rem] sm:pl-6 sm:pr-2.5">
+          <Logo eager />
 
           <nav aria-label="Main" className="hidden xl:block" data-mega-root>
             <ul className="flex items-center gap-0.5 whitespace-nowrap">
@@ -151,21 +153,20 @@ export function Header() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
-            {wa ? (
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-sm hidden sm:inline-flex">
-                <WhatsappIcon size={18} />
-                <span>WhatsApp</span>
-                <span className="sr-only"> (opens WhatsApp)</span>
+            {/* Icon-only beside the nav where width is tight; the floating button covers WhatsApp there. */}
+            {wa && (
+              <a href={wa} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp (opens WhatsApp)" className="btn btn-whatsapp hidden size-10 min-h-0 p-0 sm:inline-flex xl:hidden 2xl:inline-flex">
+                <WhatsappIcon size={20} />
               </a>
-            ) : (
-              <Link href="/contact" className="btn btn-primary btn-sm hidden sm:inline-flex">
-                Plan my trip
-              </Link>
             )}
+            <button type="button" onClick={openEnquiry} className="btn btn-primary btn-sm px-3.5 sm:px-4">
+              <Send size={15} aria-hidden="true" className="hidden min-[400px]:block" />
+              Enquire<span className="hidden min-[360px]:inline"> Now</span>
+            </button>
             <button
               ref={mobileToggleRef}
               type="button"
-              className="grid size-11 place-items-center rounded-full bg-ink text-white xl:hidden"
+              className="grid size-11 place-items-center rounded-full bg-linear-to-br from-orange-500 to-orange-600 text-white shadow-glow transition-[filter] hover:brightness-110 xl:hidden"
               aria-expanded={mobileOpen}
               aria-controls={`${baseId}-mobile`}
               aria-label="Open menu"
@@ -187,13 +188,19 @@ export function Header() {
             setMobileOpen(false);
             mobileToggleRef.current?.focus();
           }}
+          onEnquire={() => {
+            setMobileOpen(false);
+            // Focus the toggle first so closing the popup returns focus there.
+            mobileToggleRef.current?.focus();
+            openEnquiry();
+          }}
         />
       )}
     </>
   );
 }
 
-function MobileMenu({ id, pathname, wa, tel, onClose }: { id: string; pathname: string; wa?: string; tel?: string; onClose: () => void }) {
+function MobileMenu({ id, pathname, wa, tel, onClose, onEnquire }: { id: string; pathname: string; wa?: string; tel?: string; onClose: () => void; onEnquire: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -242,8 +249,8 @@ function MobileMenu({ id, pathname, wa, tel, onClose }: { id: string; pathname: 
       className="animate-slide-in fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-ivory xl:hidden"
     >
       <div className="flex items-center justify-between px-5 pt-5">
-        <Logo />
-        <button ref={closeRef} type="button" onClick={onClose} className="grid size-11 place-items-center rounded-full bg-ink text-white" aria-label="Close menu">
+        <Logo eager />
+        <button ref={closeRef} type="button" onClick={onClose} className="grid size-11 place-items-center rounded-full bg-linear-to-br from-orange-500 to-orange-600 text-white shadow-glow" aria-label="Close menu">
           <X size={20} aria-hidden="true" />
         </button>
       </div>
@@ -305,6 +312,9 @@ function MobileMenu({ id, pathname, wa, tel, onClose }: { id: string; pathname: 
       </nav>
 
       <div className="grid gap-3 px-5 pb-8 pt-6">
+        <button type="button" onClick={onEnquire} className="btn btn-primary w-full">
+          <Send size={18} aria-hidden="true" /> Enquire Now
+        </button>
         {wa && (
           <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp w-full">
             <WhatsappIcon size={20} /> Enquire on WhatsApp
@@ -314,11 +324,6 @@ function MobileMenu({ id, pathname, wa, tel, onClose }: { id: string; pathname: 
           <a href={tel} className="btn btn-outline w-full">
             <Phone size={18} aria-hidden="true" /> Call us
           </a>
-        )}
-        {!wa && !tel && (
-          <Link href="/contact" onClick={onClose} className="btn btn-primary w-full">
-            Plan my trip
-          </Link>
         )}
       </div>
     </div>

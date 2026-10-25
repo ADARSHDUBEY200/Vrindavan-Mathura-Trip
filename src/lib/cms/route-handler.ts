@@ -3,6 +3,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { decodeBody } from "./body-codec";
+import { BLOGS_PATH, CMS_BLOGS_TAG } from "./blogs";
 import { CMS_PACKAGES_TAG } from "./packages";
 import { verifyAdmin } from "./verify-admin";
 
@@ -93,9 +94,11 @@ export function createCrudHandlers(table: string, revalidate: (slug?: string) =>
 /** Public routes fed by each CMS table. Route patterns include the (site) group. */
 export const revalidators = {
   blogs(slug?: string) {
-    revalidatePath("/travel-guide");
-    revalidatePath("/(site)/travel-guide/[slug]", "page");
-    if (slug) revalidatePath(`/travel-guide/${slug}`);
+    revalidateTag(CMS_BLOGS_TAG, "max");
+    revalidatePath(BLOGS_PATH);
+    revalidatePath(`/(site)${BLOGS_PATH}/[slug]`, "page");
+    revalidatePath("/sitemap.xml");
+    if (slug) revalidatePath(`${BLOGS_PATH}/${slug}`);
   },
   packages(slug?: string) {
     revalidateTag(CMS_PACKAGES_TAG, "max");

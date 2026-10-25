@@ -186,8 +186,9 @@ export const mainNav: NavItem[] = [
       links: [
         { label: "Best time to visit", href: "/travel-guide/best-time-to-visit-vrindavan-mathura", note: "Season by season", image: "holi-vrindavan" },
         { label: "How to reach Braj", href: "/travel-guide/how-to-reach-vrindavan-mathura", note: "From Delhi, Agra & beyond", image: "yamuna-vrindavan" },
-        { label: "Temple timings", href: "/travel-guide/temple-timings-and-darshan", note: "The rhythm of darshan", image: "phool-bangla" },
+        { label: "Temple timings", href: "/mathura-vrindavan-temple-timings", note: "Darshan & aarti for 32 temples", image: "phool-bangla" },
         { label: "First-visit tips", href: "/travel-guide/first-visit-tips-vrindavan", note: "Small things that help", image: "vrindavan-street" },
+        { label: "Blog", href: "/blogs", note: "Temple stories, yatra tips & news", image: "keshi-ghat" },
       ],
       footer: { label: "All travel guides", href: "/travel-guide" },
     },

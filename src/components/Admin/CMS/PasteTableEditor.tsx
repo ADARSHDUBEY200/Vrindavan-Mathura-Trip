@@ -60,9 +60,9 @@ export function PasteTableEditor<T extends { id: string }>({
   const update = (id: string, key: string, value: string) => emit(typedRows.map((r) => (r.id === id ? { ...r, [key]: value } : r)));
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <label className="block">
-        <span className="mb-2 flex items-center gap-2 text-sm text-white/60">
+        <span className="mb-1.5 flex items-center gap-2 text-[0.8rem] text-slate-300">
           <ClipboardPaste size={16} /> Paste rows from Word or Google Sheets (columns: {columns.map((c) => c.label).join(" | ")})
         </span>
         <textarea
@@ -76,9 +76,9 @@ export function PasteTableEditor<T extends { id: string }>({
       </label>
 
       {typedRows.length > 0 && (
-        <div className="overflow-x-auto rounded-xl border border-white/10">
+        <div className="overflow-x-auto rounded-lg border border-white/10">
           <table className="w-full min-w-[640px] text-sm">
-            <thead className="bg-white/5 text-left text-white/60">
+            <thead className="bg-white/5 text-left text-slate-300">
               <tr>
                 {columns.map((c) => (
                   <th key={c.key} className="px-3 py-2 font-medium">
@@ -94,17 +94,17 @@ export function PasteTableEditor<T extends { id: string }>({
               {typedRows.map((row) => (
                 <tr key={row.id} className="border-t border-white/10">
                   {columns.map((c) => (
-                    <td key={c.key} className="p-2">
+                    <td key={c.key} className="p-1.5">
                       <input
                         aria-label={c.label}
                         value={row[c.key] ?? ""}
                         placeholder={c.placeholder}
                         onChange={(e) => update(row.id, c.key, e.target.value)}
-                        className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white outline-none placeholder:text-white/30 focus:ring-2 focus:ring-sky-500"
+                        className="w-full rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/30"
                       />
                     </td>
                   ))}
-                  <td className="p-2">
+                  <td className="p-1.5">
                     <IconButton label="Remove row" tone="danger" onClick={() => emit(typedRows.filter((r) => r.id !== row.id))}>
                       <Trash2 size={15} />
                     </IconButton>
@@ -119,7 +119,7 @@ export function PasteTableEditor<T extends { id: string }>({
       <div className="flex flex-wrap gap-3">
         <AddButton onClick={() => emit([...typedRows, blankRow()])}>{addLabel}</AddButton>
         {typedRows.length > 0 && (
-          <button type="button" onClick={() => emit([])} className="rounded-xl px-4 py-2 text-sm text-white/50 hover:bg-white/5 hover:text-white">
+          <button type="button" onClick={() => emit([])} className="rounded-lg px-3 py-1.5 text-sm text-slate-400 hover:bg-white/5 hover:text-white">
             Clear all
           </button>
         )}

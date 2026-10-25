@@ -23,10 +23,12 @@ export function CMSMediaSection({
 }) {
   return (
     <Section title={title} helper={helper}>
-      <ImageDropzone editorType={editorType} value={image} onChange={onImageChange} />
-      <Field label="Alt text" required>
-        <TextInput required value={alt} placeholder="Describe the image for screen readers and search" onChange={onAltChange} />
-      </Field>
+      <div className="grid gap-4 md:grid-cols-2 md:items-start">
+        <ImageDropzone editorType={editorType} value={image} onChange={onImageChange} />
+        <Field label="Alt text" required>
+          <TextInput required value={alt} placeholder="Describe the image for screen readers and search" onChange={onAltChange} />
+        </Field>
+      </div>
     </Section>
   );
 }

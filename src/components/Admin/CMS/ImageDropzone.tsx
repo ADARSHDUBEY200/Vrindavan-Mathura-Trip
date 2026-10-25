@@ -58,7 +58,7 @@ export function ImageDropzone({
         setDragging(false);
         handleFile(e.dataTransfer.files[0]);
       }}
-      className={`relative overflow-hidden rounded-xl border-2 border-dashed transition ${dragging ? "border-sky-400 bg-sky-500/10" : "border-white/15 bg-white/[0.03]"} ${compact ? "aspect-[4/3]" : "min-h-56"}`}
+      className={`relative overflow-hidden rounded-lg border-2 border-dashed transition ${dragging ? "border-sky-400 bg-sky-500/10" : "border-white/15 bg-white/[0.03]"} ${compact ? "aspect-[4/3]" : "min-h-48"}`}
     >
       {value ? (
         <>
@@ -77,11 +77,11 @@ export function ImageDropzone({
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-sm text-white/55 hover:text-white"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center text-sm text-slate-300 transition hover:text-white"
         >
           {uploading ? <Loader2 size={26} className="animate-spin" /> : <ImageUp size={26} />}
           <span>{uploading ? "Uploading…" : label}</span>
-          {!compact && <span className="text-xs text-white/35">WebP only · max 2 MB</span>}
+          {!compact && <span className="text-xs text-slate-400">WebP only · max 2 MB</span>}
         </button>
       )}
       {uploading && value && (

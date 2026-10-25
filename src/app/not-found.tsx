@@ -10,6 +10,7 @@ const suggestions = [
   { label: "Temples of Braj", href: "/temples" },
   { label: "Vrindavan guide", href: "/vrindavan" },
   { label: "Travel guide", href: "/travel-guide" },
+  { label: "Blog", href: "/blogs" },
 ];
 
 export default function NotFound() {

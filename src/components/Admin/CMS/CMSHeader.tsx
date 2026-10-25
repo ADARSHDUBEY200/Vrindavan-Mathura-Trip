@@ -18,15 +18,15 @@ export function CMSHeader({
   lastSaved: Date | null;
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4">
+    <div className="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <Link href={backHref} className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white">
+        <Link href={backHref} className="inline-flex items-center gap-1.5 text-sm text-slate-400 transition hover:text-white">
           <ArrowLeft size={15} /> Back to list
         </Link>
-        <h1 className="mt-2 text-2xl font-bold md:text-3xl">
+        <h1 className="mt-1 text-xl font-semibold tracking-tight md:text-2xl">
           {mode === "create" ? "Create" : "Edit"} {NOUN[editorType]}
         </h1>
-        <p className="mt-1 text-sm text-white/50">Fields marked * are required to publish.</p>
+        <p className="mt-0.5 text-sm text-slate-400">Fields marked * are required to publish.</p>
       </div>
       {lastSaved && (
         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
@@ -40,7 +40,7 @@ export function CMSHeader({
 
 export function RestoreBanner({ onRestore, onDismiss }: { onRestore: () => void; onDismiss: () => void }) {
   return (
-    <div role="status" className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+    <div role="status" className="flex flex-wrap items-center gap-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-2.5 text-sm text-amber-200">
       <History size={18} className="shrink-0" />
       <span className="flex-1">You have an unsaved draft from your last session.</span>
       <button type="button" onClick={onRestore} className="rounded-lg bg-amber-500 px-3 py-1.5 font-semibold text-[#1f1300] hover:bg-amber-400">

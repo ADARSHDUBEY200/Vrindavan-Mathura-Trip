@@ -3,7 +3,7 @@ export function CMSLoading({ label = "Loading…", fullScreen = false }: { label
     <div className={`grid place-items-center ${fullScreen ? "min-h-dvh bg-[#040421]" : "py-24"}`} role="status">
       <div className="flex flex-col items-center gap-4">
         <span className="size-10 animate-spin rounded-full border-4 border-white/10 border-t-sky-500" />
-        <span className="text-sm text-white/60">{label}</span>
+        <span className="text-sm text-slate-300">{label}</span>
       </div>
     </div>
   );

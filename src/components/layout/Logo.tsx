@@ -1,6 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 import { site } from "@/config/site";
+import logo from "@/assets/brand/mathura-vrindavan-trip-logo.png";
 
+/** Brand logo image. Meant for light surfaces: the dark-brown lettering disappears on dark ones. */
+export const LOGO_SRC = logo;
+
+/** Compact lotus mark, kept for small spaces on dark surfaces (admin sidebar). */
 export function LogoMark({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true" focusable="false">
@@ -19,16 +25,18 @@ export function LogoMark({ className = "" }: { className?: string }) {
   );
 }
 
-export function Logo({ light = false, className = "" }: { light?: boolean; className?: string }) {
+type LogoProps = {
+  className?: string;
+  /** Size classes for the image. Widths are 1.2× the natural aspect ratio (a deliberate horizontal stretch). */
+  imageClassName?: string;
+  /** Load straight away (the header logo is always above the fold). */
+  eager?: boolean;
+};
+
+export function Logo({ className = "", imageClassName = "h-[3.25rem] w-[5.25rem] sm:h-[3.75rem] sm:w-[6rem]", eager = false }: LogoProps) {
   return (
-    <Link href="/" className={`inline-flex items-center gap-2.5 rounded-full ${className}`} aria-label={`${site.name} — home`}>
-      <LogoMark className="size-9 shrink-0 sm:size-10" />
-      <span className="flex flex-col whitespace-nowrap leading-none">
-        <span className={`text-[0.98rem] font-bold tracking-tight sm:text-lg xl:text-[1.05rem] ${light ? "text-white" : "text-ink"}`}>{site.name}</span>
-        <span className={`mt-1 text-[0.62rem] font-semibold uppercase tracking-[0.2em] ${light ? "text-saffron-soft" : "text-ember-deep"}`}>
-          Vrindavan · Mathura
-        </span>
-      </span>
+    <Link href="/" className={`inline-flex shrink-0 items-center rounded-xl ${className}`} aria-label={`${site.name} — home`}>
+      <Image src={logo} alt="" sizes="(min-width: 640px) 96px, 84px" loading={eager ? "eager" : "lazy"} className={`object-fill ${imageClassName}`} />
     </Link>
   );
 }

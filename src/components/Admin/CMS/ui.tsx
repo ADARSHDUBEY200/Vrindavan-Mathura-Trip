@@ -3,11 +3,10 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowDown, ArrowUp, ChevronDown, Plus, Trash2 } from "lucide-react";
 
-export const cardClass =
-  "rounded-2xl bg-linear-to-br from-[#0b1220]/80 via-[#0e1a2f]/80 to-[#0a1020]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_60px_-15px_rgba(56,189,248,0.25)]";
+export const cardClass = "rounded-xl border border-white/10 bg-[#0b1220]/90 shadow-lg shadow-black/20";
 
 export const inputClass =
-  "w-full px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/35 outline-none focus:ring-2 focus:ring-sky-500 [&>option]:bg-[#0f172a]";
+  "w-full px-3.5 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-slate-500 outline-none transition hover:border-white/20 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/30 [&>option]:bg-[#0f172a]";
 
 /** Collapsible editor card with a heading and a short helper line. */
 export function Section({
@@ -42,16 +41,16 @@ export function Section({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls={id}
-        className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left"
+        className="flex w-full items-center justify-between gap-4 rounded-xl px-4 py-3 text-left transition hover:bg-white/[0.02] sm:px-5"
       >
         <span>
-          <span className="block text-lg font-semibold text-white">{title}</span>
-          {helper && <span className="mt-0.5 block text-sm text-white/50">{helper}</span>}
+          <span className="block text-[0.95rem] font-semibold text-white">{title}</span>
+          {helper && <span className="mt-0.5 block text-xs text-slate-400">{helper}</span>}
         </span>
-        <ChevronDown size={20} className={`mt-1 shrink-0 text-white/50 transition-transform ${open ? "rotate-180" : ""}`} />
+        <ChevronDown size={18} className={`shrink-0 text-slate-400 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {/* Hidden (not unmounted) so required fields still take part in validation. */}
-      <div id={id} hidden={!open} className="space-y-5 border-t border-white/10 px-6 py-6">
+      <div id={id} hidden={!open} className="space-y-4 border-t border-white/10 px-4 py-4 sm:px-5">
         {children}
       </div>
     </section>
@@ -61,7 +60,7 @@ export function Section({
 /** Label for a control that is not a native input (e.g. the rich-text editor). */
 export function FieldLabel({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <p className="text-sm font-medium text-white/80">
+    <p className="text-[0.8rem] font-medium text-slate-200">
       {children}
       {required && <span className="ml-0.5 text-rose-400">*</span>}
     </p>
@@ -71,7 +70,7 @@ export function FieldLabel({ children, required }: { children: React.ReactNode; 
 export function Field({ label, hint, required, children }: { label: string; hint?: React.ReactNode; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-2 flex items-baseline justify-between gap-3 text-sm font-medium text-white/80">
+      <span className="mb-1.5 flex items-baseline justify-between gap-3 text-[0.8rem] font-medium text-slate-200">
         <span>
           {label}
           {required && <span className="ml-0.5 text-rose-400">*</span>}
@@ -132,7 +131,7 @@ export function AddButton({ onClick, children }: { onClick: () => void; children
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-2 rounded-xl border border-dashed border-sky-500/40 px-4 py-2 text-sm text-sky-300 transition hover:bg-sky-500/10"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-sky-500/40 px-3 py-1.5 text-sm text-sky-300 transition hover:bg-sky-500/10"
     >
       <Plus size={16} />
       {children}
@@ -148,7 +147,7 @@ export function IconButton({ label, onClick, children, tone = "default", disable
       title={label}
       onClick={onClick}
       disabled={disabled}
-      className={`grid size-9 shrink-0 place-items-center rounded-lg border border-white/10 transition disabled:opacity-30 ${
+      className={`grid size-8 shrink-0 place-items-center rounded-lg border border-white/10 transition disabled:opacity-30 ${
         tone === "danger" ? "text-rose-300 hover:bg-rose-500/15" : "text-white/60 hover:bg-white/10 hover:text-white"
       }`}
     >
@@ -192,11 +191,11 @@ export function ListEditor<T extends { id: string }>({
 
   return (
     <div className="space-y-3">
-      {items.length === 0 && <p className="text-sm text-white/40">{emptyText}</p>}
+      {items.length === 0 && <p className="text-sm text-slate-400">{emptyText}</p>}
       {items.map((item, index) => (
-        <div key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
+        <div key={item.id} className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               {itemLabel} {index + 1}
             </span>
             <div className="flex gap-1.5">
@@ -225,8 +224,8 @@ export function ListEditor<T extends { id: string }>({
 
 export function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (checked: boolean) => void }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/5 px-5 py-3">
-      <span className="text-sm text-white/80">{label}</span>
+    <label className="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/5 px-3.5 py-2">
+      <span className="text-sm text-slate-200">{label}</span>
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
       <span className="relative h-6 w-11 rounded-full bg-white/15 transition peer-checked:bg-sky-500 after:absolute after:left-0.5 after:top-0.5 after:size-5 after:rounded-full after:bg-white after:transition peer-checked:after:translate-x-5 peer-focus-visible:ring-2 peer-focus-visible:ring-sky-500" />
     </label>

@@ -16,6 +16,18 @@ export const hero = {
   ],
 };
 
+/** Packages grid straight under the hero. The cards themselves come from the CMS (lib/cms/packages.ts). */
+export const packagesGrid = {
+  eyebrow: "Mathura Vrindavan tour packages",
+  titleBefore: "Pick the yatra that fits",
+  /** Rendered in the orange-500 accent, like the About page's two-tone headings. */
+  highlight: "your days",
+  lede: "From a single day of darshan to the full 84 Kos parikrama — every trip is private, with your own AC car and a driver who knows the lanes of Braj.",
+  /** Shown on every card; each one is promised in packagesSection.includes (content/home.ts). */
+  perks: ["AC car", "Hotel pickup", "Darshan planning"],
+  note: "Prices depend on your dates, group size and vehicle — we confirm an itemised quote on WhatsApp before you book.",
+};
+
 /** Hero carousel cards. Keep titles short — they're set in large uppercase type. */
 export const heroSlides: { eyebrow: string; title: string; text: string; image: PhotoKey; cta: { label: string; href: string } }[] = [
   {

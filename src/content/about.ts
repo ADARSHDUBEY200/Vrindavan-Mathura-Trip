@@ -11,7 +11,14 @@ import { getTemple } from "./temples";
 /** Inline-markup string (see above). */
 export type Rich = string;
 
-export type AboutImage = { src: string; width: number; height: number; alt: string };
+/** Licence attribution for photos we did not take ourselves (shown in the page's photo credits). */
+export type ImageCredit = { author: string; license: string; licenseUrl: string; sourceUrl: string };
+
+export type AboutImage = { src: string; width: number; height: number; alt: string; credit?: ImageCredit };
+
+const BY_SA_4 = { license: "CC BY-SA 4.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/" };
+const BY_SA_3 = { license: "CC BY-SA 3.0", licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/" };
+const commons = (file: string) => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replaceAll(" ", "_"))}`;
 
 const price = formatInr(STARTING_PRICE);
 const tel = phoneHref() ?? "/contact";
@@ -49,35 +56,52 @@ export const aboutImages = {
     height: 630,
     alt: "Harsh Sharma, founder of Mathura Vrindavan Trips, standing in a Mathura lane near a temple",
   },
+  /*
+   * Location photos from Wikimedia Commons (CC BY-SA, credited on the page). Alt text describes what each
+   * photo actually shows. Swap in your own photos of real tours and the team when you have them.
+   */
+  /** Hero visual (4:5). */
+  hero: {
+    src: "/images/about/rangnath-ji-temple-vrindavan.webp",
+    width: 960,
+    height: 1200,
+    alt: "Shri Rangnath Ji Temple in Vrindavan lit up at night",
+    credit: { author: "Kridha20", ...BY_SA_4, sourceUrl: commons("Rangnathji Temple Vrindavan.jpg") },
+  },
   lane: {
-    src: "/images/about/mathura-old-city-lane-vishram-ghat.webp",
+    src: "/images/about/vishram-ghat-mathura-dusk.webp",
     width: 1600,
     height: 900,
-    alt: "Narrow old-city lane in Mathura near Vishram Ghat at sunrise",
+    alt: "Vishram Ghat in Mathura at dusk, with boats on the Yamuna and old temples along the river",
+    credit: { author: "Umang108", ...BY_SA_4, sourceUrl: commons("Vishram Ghat.jpg") },
   },
   elders: {
-    src: "/images/about/elderly-pilgrims-darshan-vrindavan.webp",
+    src: "/images/about/diya-offering-keshi-ghat-vrindavan.webp",
     width: 1200,
     height: 900,
-    alt: "Elderly pilgrim couple receiving darshan guidance in Vrindavan from a local Mathura guide",
+    alt: "A devotee offering a lit diya to the Yamuna at Keshi Ghat, Vrindavan",
+    credit: { author: "Aliva Sahoo", ...BY_SA_3, sourceUrl: commons("Keshi Ghat (31762).jpg") },
   },
   milestone: {
-    src: "/images/about/pilgrim-family-prem-mandir.webp",
+    src: "/images/about/prem-mandir-vrindavan-morning.webp",
     width: 1600,
     height: 900,
-    alt: "Happy pilgrim family outside Prem Mandir Vrindavan after a Mathura Vrindavan Trips tour",
+    alt: "Prem Mandir in Vrindavan on a clear morning",
+    credit: { author: "Ketandelhiwala", ...BY_SA_4, sourceUrl: commons("Krishna temple vrindavan morning.jpg") },
   },
   team: {
-    src: "/images/about/team-local-brijwasis.webp",
+    src: "/images/about/devotees-yamuna-bank-vrindavan.webp",
     width: 1600,
     height: 900,
-    alt: "Mathura Vrindavan Trips team of local drivers and guides with pilgrims in Braj",
+    alt: "Brijwasis and pilgrims on the bank of the Yamuna in Vrindavan",
+    credit: { author: "Goutam1962", ...BY_SA_4, sourceUrl: commons("Yamuna river and devotees of Vrindavan 12.jpg") },
   },
   contact: {
-    src: "/images/about/contact-braj-tour-packages.webp",
+    src: "/images/about/temple-shrine-vrindavan.webp",
     width: 1200,
     height: 900,
-    alt: `Contact Mathura Vrindavan Trips for authentic Braj tour packages from ${price}`,
+    alt: "Decorated deity shrine of Radha Sneh Bihari in a Vrindavan temple",
+    credit: { author: "Kridha20", ...BY_SA_4, sourceUrl: commons("Banke Bihari Vrindavan.jpg") },
   },
 } satisfies Record<string, AboutImage>;
 

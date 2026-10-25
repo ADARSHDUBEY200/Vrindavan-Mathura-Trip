@@ -6,7 +6,7 @@ import { Field, Section, TextArea, TextInput } from "./ui";
 export type MetaValue = { title: string; description: string };
 
 function Counter({ length, target }: { length: number; target: number }) {
-  return <span className={length > target ? "text-amber-400" : "text-white/40"}>{length} / {target}</span>;
+  return <span className={length > target ? "text-amber-400" : "text-slate-400"}>{length} / {target}</span>;
 }
 
 export function CMSSeoSection({ editorType, value, onChange }: { editorType: EditorType; value: MetaValue; onChange: (value: MetaValue) => void }) {

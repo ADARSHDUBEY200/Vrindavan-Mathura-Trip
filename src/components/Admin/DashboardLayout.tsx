@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { BookOpen, Landmark, LayoutDashboard, LogOut, Menu, Package, Search, X } from "lucide-react";
-import { Logo } from "@/components/layout/Logo";
+import { useEffect, useState } from "react";
+import { BookOpen, Landmark, LayoutDashboard, LogOut, Menu, Package, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { LogoMark } from "@/components/layout/Logo";
 import { ADMIN_BASE, ADMIN_LOGIN } from "@/lib/cms/config";
 import { createClient } from "@/lib/supabase/client";
 
@@ -21,9 +21,29 @@ function isActive(pathname: string, href: string) {
 }
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
+  // `open` drives the mobile drawer; `collapsed` the icon-only desktop rail.
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const current = NAV.find((n) => isActive(pathname, n.href));
+
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    // The drawer is mobile-only; growing to the desktop rail closes it (and releases the scroll lock).
+    const desktop = window.matchMedia("(min-width: 64rem)");
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", close);
+    return () => {
+      document.body.style.overflow = overflow;
+      window.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", close);
+    };
+  }, [open]);
 
   async function logout() {
     await createClient().auth.signOut();
@@ -31,52 +51,43 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     router.refresh();
   }
 
-  return (
-    <div className="min-h-dvh bg-[#040421] text-white">
-      {/* Topbar */}
-      <header className="fixed inset-x-0 top-0 z-40 flex h-16 items-center gap-3 border-b border-white/10 bg-[#0f172a] px-4 shadow-lg shadow-indigo-300/10 md:px-8">
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          className="grid size-10 place-items-center rounded-xl text-white/70 transition hover:bg-white/10 hover:text-white"
-        >
-          <Menu size={22} />
-        </button>
-        <label className="relative hidden max-w-md flex-1 sm:block">
-          <span className="sr-only">Search</span>
-          <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/35" />
-          <input
-            type="search"
-            placeholder="Search…"
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-10 pr-4 text-sm text-white outline-none placeholder:text-white/35 focus:ring-2 focus:ring-sky-500"
-          />
-        </label>
-        <div className="ml-auto flex items-center gap-3">
-          <span className="hidden text-sm text-white/70 sm:inline">Admin</span>
-          <span className="grid size-9 place-items-center rounded-full bg-linear-to-br from-sky-500 to-indigo-600 text-sm font-semibold">A</span>
-        </div>
-      </header>
+  const railWidth = collapsed ? "lg:w-[4.5rem]" : "lg:w-60";
+  const contentOffset = collapsed ? "lg:pl-[4.5rem]" : "lg:pl-60";
+  const hideWhenCollapsed = collapsed ? "lg:sr-only" : "";
 
-      {/* Sidebar overlay */}
+  return (
+    <div className="cms-admin min-h-dvh bg-[#040421] text-white">
+      {/* Mobile drawer overlay */}
       <div
         aria-hidden="true"
         onClick={() => setOpen(false)}
-        className={`fixed inset-0 z-40 bg-black/50 transition-opacity ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity lg:hidden ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
       />
 
-      {/* Sidebar */}
+      {/* Sidebar: drawer below lg, fixed rail from lg up */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#0f172a] shadow-xl shadow-indigo-300/10 transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/10 bg-[#0b1220] transition-[transform,width] duration-300 lg:translate-x-0 ${railWidth} ${open ? "translate-x-0 shadow-2xl" : "-translate-x-full"}`}
         aria-label="Admin navigation"
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-          <Logo light className="[&_span]:text-sm" />
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close menu" className="rounded-lg p-1 text-white/60 hover:bg-white/10 hover:text-white">
+        <div className="flex h-14 shrink-0 items-center gap-2 border-b border-white/10 px-3">
+          <Link href={ADMIN_BASE} onClick={() => setOpen(false)} className={`flex min-w-0 flex-1 items-center gap-2.5 rounded-lg p-1 ${collapsed ? "lg:justify-center" : ""}`}>
+            <LogoMark className="size-8 shrink-0" />
+            <span className={`min-w-0 leading-tight ${hideWhenCollapsed}`}>
+              <span className="block truncate text-sm font-semibold text-white">Mathura Vrindavan</span>
+              <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-amber-300">Admin CMS</span>
+            </span>
+          </Link>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            className="grid size-8 shrink-0 place-items-center rounded-lg text-slate-300 hover:bg-white/10 hover:text-white lg:hidden"
+          >
             <X size={18} />
           </button>
         </div>
-        <nav className="flex-1 space-y-1 p-3">
+
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           {NAV.map(({ label, href, icon: Icon }) => {
             const active = isActive(pathname, href);
             return (
@@ -85,23 +96,62 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 href={href}
                 onClick={() => setOpen(false)}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${active ? "bg-sky-500/15 text-sky-300 ring-1 ring-sky-500/30" : "text-white/70 hover:bg-white/5 hover:text-white"}`}
+                title={collapsed ? label : undefined}
+                className={`flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition ${collapsed ? "lg:justify-center lg:px-0" : ""} ${
+                  active ? "bg-sky-500/15 text-sky-200 ring-1 ring-inset ring-sky-500/30" : "text-slate-300 hover:bg-white/5 hover:text-white"
+                }`}
               >
-                <Icon size={18} />
-                {label}
+                <Icon size={18} className="shrink-0" />
+                <span className={`truncate ${hideWhenCollapsed}`}>{label}</span>
               </Link>
             );
           })}
         </nav>
-        <div className="border-t border-white/10 p-3">
-          <button type="button" onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-rose-300 transition hover:bg-rose-500/10">
-            <LogOut size={18} />
-            Logout
+
+        {/* Extra bottom room in development keeps Logout clear of the Next.js dev indicator. */}
+        <div className={`shrink-0 border-t border-white/10 p-3 ${process.env.NODE_ENV === "development" ? "pb-16" : ""}`}>
+          <button
+            type="button"
+            onClick={logout}
+            title={collapsed ? "Logout" : undefined}
+            className={`flex h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-rose-300 transition hover:bg-rose-500/10 hover:text-rose-200 ${collapsed ? "lg:justify-center lg:px-0" : ""}`}
+          >
+            <LogOut size={18} className="shrink-0" />
+            <span className={hideWhenCollapsed}>Logout</span>
           </button>
         </div>
       </aside>
 
-      <main className="px-4 pb-16 pt-20 md:px-8">{children}</main>
+      <div className={`transition-[padding] duration-300 ${contentOffset}`}>
+        {/* Topbar */}
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-white/10 bg-[#0b1220]/95 px-4 backdrop-blur sm:px-6">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={open}
+            className="grid size-9 place-items-center rounded-lg text-slate-300 transition hover:bg-white/10 hover:text-white lg:hidden"
+          >
+            <Menu size={20} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setCollapsed((c) => !c)}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-pressed={collapsed}
+            className="hidden size-9 place-items-center rounded-lg text-slate-300 transition hover:bg-white/10 hover:text-white lg:grid"
+          >
+            {collapsed ? <PanelLeftOpen size={19} /> : <PanelLeftClose size={19} />}
+          </button>
+          <span className="truncate text-sm font-semibold text-white">{current?.label ?? "Admin"}</span>
+          <div className="ml-auto flex items-center gap-2.5">
+            <span className="hidden text-sm text-slate-300 sm:inline">Admin</span>
+            <span className="grid size-8 place-items-center rounded-full bg-linear-to-br from-sky-500 to-indigo-600 text-sm font-semibold">A</span>
+          </div>
+        </header>
+
+        <main className="px-4 pb-12 pt-5 sm:px-6 lg:px-8">{children}</main>
+      </div>
     </div>
   );
 }

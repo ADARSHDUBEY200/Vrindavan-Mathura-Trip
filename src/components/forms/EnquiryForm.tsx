@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect, useId, useRef } from "react";
+import { useActionState, useEffect, useId, useRef, type Ref } from "react";
 import { CheckCircle2, Loader2, Mail, Phone, Send } from "lucide-react";
 import { submitEnquiry, type EnquiryField, type EnquiryState } from "@/app/actions/enquiry";
 import { WhatsappIcon } from "@/components/svg/TravelIcons";
@@ -34,42 +34,7 @@ export function EnquiryForm({ defaultPackage, title = "Plan your yatra", compact
   }, [state]);
 
   if (state.status === "success") {
-    const wa = state.whatsappText ? whatsappLink(state.whatsappText) : undefined;
-    const tel = phoneHref();
-    const mail = site.contact.email
-      ? `mailto:${site.contact.email}?subject=${encodeURIComponent("Trip enquiry")}&body=${encodeURIComponent(state.whatsappText ?? "")}`
-      : undefined;
-    return (
-      <div ref={statusRef} tabIndex={-1} role="status" className="surface p-6 text-center outline-none sm:p-9">
-        <CheckCircle2 size={44} aria-hidden="true" className="mx-auto text-peacock-teal" />
-        <h3 className="mt-4 text-xl font-semibold">Radhe Radhe!</h3>
-        <p className="mx-auto mt-2 max-w-md leading-relaxed text-stone">{state.message}</p>
-        {!state.delivered && (
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {wa && (
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
-                <WhatsappIcon size={20} /> Send on WhatsApp
-              </a>
-            )}
-            {mail && (
-              <a href={mail} className="btn btn-outline">
-                <Mail size={18} aria-hidden="true" /> Send by email
-              </a>
-            )}
-            {tel && (
-              <a href={tel} className="btn btn-outline">
-                <Phone size={18} aria-hidden="true" /> Call {site.contact.phone}
-              </a>
-            )}
-            {!wa && !mail && !tel && (
-              <p className="text-sm text-stone">
-                Our contact details are being set up. Please check back shortly.
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-    );
+    return <EnquirySuccess ref={statusRef} state={state} className="surface p-6 sm:p-9" />;
   }
 
   const fieldCls = "field";
@@ -169,5 +134,45 @@ export function EnquiryForm({ defaultPackage, title = "Plan your yatra", compact
         .
       </p>
     </form>
+  );
+}
+
+/** Thank-you panel after an enquiry; offers WhatsApp, email or a call when the webhook did not take it. */
+export function EnquirySuccess({ state, className = "", ref }: { state: EnquiryState; className?: string; ref?: Ref<HTMLDivElement> }) {
+  const wa = state.whatsappText ? whatsappLink(state.whatsappText) : undefined;
+  const tel = phoneHref();
+  const mail = site.contact.email
+    ? `mailto:${site.contact.email}?subject=${encodeURIComponent("Trip enquiry")}&body=${encodeURIComponent(state.whatsappText ?? "")}`
+    : undefined;
+  return (
+    <div ref={ref} tabIndex={-1} role="status" className={`text-center outline-none ${className}`}>
+      <CheckCircle2 size={44} aria-hidden="true" className="mx-auto text-peacock-teal" />
+      <h3 className="mt-4 text-xl font-semibold">Radhe Radhe!</h3>
+      <p className="mx-auto mt-2 max-w-md leading-relaxed text-stone">{state.message}</p>
+      {!state.delivered && (
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          {wa && (
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+              <WhatsappIcon size={20} /> Send on WhatsApp
+            </a>
+          )}
+          {mail && (
+            <a href={mail} className="btn btn-outline">
+              <Mail size={18} aria-hidden="true" /> Send by email
+            </a>
+          )}
+          {tel && (
+            <a href={tel} className="btn btn-outline">
+              <Phone size={18} aria-hidden="true" /> Call {site.contact.phone}
+            </a>
+          )}
+          {!wa && !mail && !tel && (
+            <p className="text-sm text-stone">
+              Our contact details are being set up. Please check back shortly.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

@@ -14,7 +14,9 @@ const quickLinks = [
   { label: "Govardhan & Barsana", href: "/govardhan-barsana" },
   { label: "Full Braj Yatra", href: "/braj-yatra" },
   { label: "Temples", href: "/temples" },
+  { label: "Temple Timings", href: "/mathura-vrindavan-temple-timings" },
   { label: "Festivals", href: "/festivals" },
+  { label: "Blog", href: "/blogs" },
   { label: "About Us", href: "/about" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
@@ -57,7 +59,7 @@ export function Footer() {
       <div className="container-x relative pb-8 pt-12 sm:pt-14">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr] lg:gap-14">
           <div>
-            <Logo />
+            <Logo imageClassName="h-20 w-32 sm:h-24 sm:w-[9.6rem]" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-stone">{site.description}</p>
 
             {hasContact && (

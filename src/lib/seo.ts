@@ -8,7 +8,8 @@ type BuildMetadataInput = {
   description: string;
   /** Path beginning with `/`, used for the canonical URL. */
   path: string;
-  image?: StaticImageData | { src: string; width: number; height: number };
+  /** Remote (CMS) images may omit their dimensions. */
+  image?: StaticImageData | { src: string; width?: number; height?: number };
   imageAlt?: string;
   type?: "website" | "article" | "profile";
   /** For `type: "profile"`. */

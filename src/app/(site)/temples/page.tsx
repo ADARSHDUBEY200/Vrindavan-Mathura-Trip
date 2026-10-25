@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { TempleCard } from "@/components/cards/TempleCard";
 import { FinalCta } from "@/components/home/Sections";
 import { PageHero } from "@/components/layout/PageHero";
@@ -36,7 +37,10 @@ export default function TemplesPage() {
             All temples
           </h2>
           <p className="mb-8 max-w-3xl rounded-2xl border border-saffron-soft bg-saffron-wash px-5 py-4 text-sm leading-relaxed text-ink-soft">
-            <strong className="text-ink">Please note:</strong> {TIMING_DISCLAIMER}
+            <strong className="text-ink">Please note:</strong> {TIMING_DISCLAIMER}{" "}
+            <Link href="/mathura-vrindavan-temple-timings" className="font-semibold text-ember-deep underline underline-offset-4 hover:no-underline">
+              See all darshan and aarti timings
+            </Link>
           </p>
           <FilterRoot>
             <FilterChips name="town" legend="Filter temples by town" options={usedTowns.map((t) => ({ value: t, label: t }))} allLabel="All towns" />

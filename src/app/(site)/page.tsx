@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Destinations } from "@/components/home/Destinations";
 import { Gallery } from "@/components/home/Gallery";
 import { Hero } from "@/components/home/Hero";
+import { PackagesGrid } from "@/components/home/PackagesGrid";
 import {
   AboutHighlights,
   Circuits,
@@ -28,7 +29,7 @@ import { homeFaqs } from "@/content/faqs";
 import { homeMeta, images, signaturePackages } from "@/content/home";
 import { photos } from "@/content/images";
 import { galleryItems } from "@/content/sections";
-import { getPublishedPackages, matchSignaturePackage, type CmsPackage } from "@/lib/cms/packages";
+import { brajCatalog, getPublishedPackages, matchSignaturePackage, toCatalog, type CmsPackage } from "@/lib/cms/packages";
 import { buildHomeSchema } from "@/lib/schema/home";
 
 const ogImage = { url: images.hero.src, width: images.hero.width, height: images.hero.height, alt: images.hero.alt };
@@ -80,8 +81,10 @@ export default async function HomePage() {
   });
 
   return (
-    <>
+    // Text in the About page's palette (gray-900 / gray-600, orange-600 accents) — see .about-palette in globals.css.
+    <div className="about-palette">
       <Hero />
+      <PackagesGrid catalog={brajCatalog(toCatalog(cms))} />
       <IntroSection />
       <Destinations />
       <FounderSection />
@@ -115,6 +118,6 @@ export default async function HomePage() {
       <BookSection />
       <FinalCta />
       <JsonLd data={[graph, faq]} />
-    </>
+    </div>
   );
 }

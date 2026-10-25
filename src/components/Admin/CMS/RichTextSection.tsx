@@ -34,7 +34,7 @@ export function RichTextSection({
       {ready ? (
         <RichTextEditor key={editorKey} editorType={editorType} defaultValue={value} onChange={onChange} height={height} />
       ) : (
-        <div className="h-40 animate-pulse rounded-xl bg-white/5" />
+        <div className="h-40 animate-pulse rounded-lg bg-white/5" />
       )}
     </Section>
   );
@@ -57,5 +57,5 @@ export function EditorShell({
       </div>
     );
   }
-  return <div className={`mx-auto max-w-5xl space-y-6 ${ready ? "" : "opacity-80"}`}>{children}</div>;
+  return <div className={`mx-auto max-w-7xl space-y-4 ${ready ? "" : "opacity-80"}`}>{children}</div>;
 }

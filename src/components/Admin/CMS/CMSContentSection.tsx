@@ -32,7 +32,7 @@ export function CMSContentSection({
       <Field label="Sub Content">
         <TextArea rows={3} value={subcontent} placeholder="A short summary or intro paragraph" onChange={onSubcontentChange} />
       </Field>
-      <div className="flex items-baseline justify-between gap-3 text-sm font-medium text-white/80">
+      <div className="-mb-2 flex items-baseline justify-between gap-3 text-[0.8rem] font-medium text-slate-200">
         <span>
           Content{minLength ? <span className="ml-0.5 text-rose-400">*</span> : null}
         </span>
@@ -45,7 +45,7 @@ export function CMSContentSection({
       {ready ? (
         <RichTextEditor key={editorKey} editorType={editorType} defaultValue={content} onChange={onContentChange} height="480px" placeholder="Write the main content…" />
       ) : (
-        <div className="h-48 animate-pulse rounded-xl bg-white/5" />
+        <div className="h-48 animate-pulse rounded-lg bg-white/5" />
       )}
     </Section>
   );

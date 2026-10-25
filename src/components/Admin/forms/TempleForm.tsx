@@ -159,7 +159,7 @@ export default function TempleForm({ mode, id }: { mode: "create" | "edit"; id?:
       <CMSHeader editorType="Temple" mode={mode} backHref={ADMIN_ROUTES.Temple} lastSaved={c.lastSaved} />
       {c.showRestoreBanner && <RestoreBanner onRestore={c.restoreDraft} onDismiss={c.discardDraft} />}
 
-      <form ref={formRef} onSubmit={c.onSubmit} noValidate className="space-y-6">
+      <form ref={formRef} onSubmit={c.onSubmit} noValidate className="space-y-4">
         <CMSMetaSection editorType="Temple" title={form.title} category={form.category} slug={form.slug} onChange={patch} autoSlug={mode === "create"} />
 
         <Section title="History" helper="Plain-text history of the temple.">
@@ -168,8 +168,10 @@ export default function TempleForm({ mode, id }: { mode: "create" | "edit"; id?:
           </Field>
         </Section>
 
-        <CMSSeoSection editorType="Temple" value={form.meta} onChange={(meta) => patch({ meta })} />
-        <CMSSchema editorType="Temple" value={form.schema} onChange={(schema) => patch({ schema })} />
+        <div className="grid items-start gap-4 xl:grid-cols-2">
+          <CMSSeoSection editorType="Temple" value={form.meta} onChange={(meta) => patch({ meta })} />
+          <CMSSchema editorType="Temple" value={form.schema} onChange={(schema) => patch({ schema })} />
+        </div>
 
         <RichTextSection {...rich} title="Quick Answer" helper="A short, direct answer shown at the top of the page." value={form.quickanswer} onChange={(quickanswer) => patch({ quickanswer })} height="180px" />
 
