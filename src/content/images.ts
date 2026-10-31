@@ -40,6 +40,27 @@ import imgRishikesh from "@/assets/photos/rishikesh.jpg";
 import imgKartikLamps from "@/assets/photos/kartik-lamps.jpg";
 import imgVrindavanStreet from "@/assets/photos/vrindavan-street.jpg";
 import imgPeacockFeather from "@/assets/photos/peacock-feather.jpg";
+import imgMathuraVishramDusk from "@/assets/photos/mathura-vishram-ghat-dusk.jpg";
+import imgMathuraJanmasthan from "@/assets/photos/mathura-janmasthan-street.jpg";
+import imgMathuraKansQila from "@/assets/photos/mathura-kans-qila.jpg";
+import imgMathuraPotaraKund from "@/assets/photos/mathura-potara-kund.jpg";
+import imgMathuraMuseum from "@/assets/photos/mathura-museum.jpg";
+import imgMathuraBuddha from "@/assets/photos/mathura-museum-buddha.jpg";
+import imgMathuraJamaMasjid from "@/assets/photos/mathura-jama-masjid-daniell.jpg";
+import imgMathuraVishramDay from "@/assets/photos/mathura-vishram-ghat-day.jpg";
+import imgMathuraWeeks from "@/assets/photos/mathura-ghats-weeks.jpg";
+import imgMathuraBoats from "@/assets/photos/mathura-yamuna-boats.jpg";
+import imgMathuraYamunaGhat from "@/assets/photos/mathura-yamuna-ghat.jpg";
+import imgMathuraPeda from "@/assets/photos/mathura-peda.jpg";
+import imgKulhadLassi from "@/assets/photos/kulhad-lassi.jpg";
+import imgKachoriSabzi from "@/assets/photos/kachori-sabzi.jpg";
+import imgJalebiRabri from "@/assets/photos/jalebi-rabri.jpg";
+import imgBrajHaveli from "@/assets/photos/braj-haveli.jpg";
+import imgVaishnoDeviDham from "@/assets/photos/vaishno-devi-dham.jpg";
+import imgBankeBihariLane from "@/assets/photos/banke-bihari-lane.jpg";
+import imgKulhadLassiMalai from "@/assets/photos/kulhad-lassi-malai.jpg";
+import imgJalebiRabriPlate from "@/assets/photos/jalebi-rabri-plate.jpg";
+import imgParikramaPichhavai from "@/assets/photos/vraj-parikrama-pichhavai.jpg";
 
 export type Credit = { title: string; author: string; license: string; licenseUrl?: string; sourceUrl: string };
 export type Photo = { src: StaticImageData; alt: string; credit: Credit };
@@ -239,6 +260,111 @@ export const photos = {
     src: imgPeacockFeather,
     alt: "Close-up of a male Indian peacock feather in blue and green",
     credit: {"title": "Feather of male Pavo cristatus (Indian peafowl)", "author": "MichaelMaggs", "license": "CC BY-SA 3.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Feather_of_male_Pavo_cristatus_(Indian_peafowl).jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"},
+  },
+  "vaishno-devi-dham": {
+    src: imgVaishnoDeviDham,
+    alt: "The giant statue of Maa Vaishno Devi riding a lion at Vaishno Devi Dham, Vrindavan",
+    credit: {"title": "Maa Vaishno Devi Dham", "author": "Aliva Sahoo", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Maa_Vaishno_Devi_Dham.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "banke-bihari-lane": {
+    src: imgBankeBihariLane,
+    alt: "A narrow old lane in the Banke Bihari Temple area of Vrindavan, lit by a single lamp",
+    credit: {"title": "Local Lane - Banke Bihari Mandir Area - Vrindavan - 2013-02-22 4794", "author": "Biswarup Ganguly", "license": "CC BY 3.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Local_Lane_-_Banke_Bihari_Mandir_Area_-_Vrindavan_-_2013-02-22_4794.JPG", "licenseUrl": "https://creativecommons.org/licenses/by/3.0"},
+  },
+  "kulhad-lassi-malai": {
+    src: imgKulhadLassiMalai,
+    alt: "Thick white lassi filled to the brim of a clay kulhad",
+    credit: {"title": "Kulhad lassi 1", "author": "Lillottama", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kulhad_lassi_1.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "jalebi-rabri-plate": {
+    src: imgJalebiRabriPlate,
+    alt: "A plate of hot orange jalebis beside a small bowl of rabri",
+    credit: {"title": "Jalebi with Rabri", "author": "Aarushi Nandini Dhruv", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jalebi_with_Rabri.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "vraj-parikrama-pichhavai": {
+    src: imgParikramaPichhavai,
+    alt: "A 19th-century pichhvai painting of the Vraj Parikrama: green groves and pilgrim shrines around Krishna as Shrinathji, with the Yamuna running alongside",
+    credit: {"title": "A Pichhavai of the Vraj Parikrama Jatra, Rajasthan, 19th century", "author": "Unknown Rajasthan painter", "license": "Public domain", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Indian_School_-_A_Pichhavai_of_the_Vraj_Parikrama_Jatra_India_Rajasthan.jpg"},
+  },
+  "mathura-vishram-ghat-dusk": {
+    src: imgMathuraVishramDusk,
+    alt: "Boats and lit temples along Vishram Ghat on the Yamuna in Mathura at dusk, just before the evening aarti",
+    credit: {"title":"Vishram Ghat","author":"Umang108","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Vishram_Ghat.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "mathura-janmasthan-street": {
+    src: imgMathuraJanmasthan,
+    alt: "Entrance area of Shri Krishna Janmasthan Mathura temple complex, seen from the busy street leading to it",
+    credit: {"title":"Mathura Temple-Mathura-India0001","author":"Diego Delso","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mathura_Temple-Mathura-India0001.JPG","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "mathura-kans-qila": {
+    src: imgMathuraKansQila,
+    alt: "Old fort ruins of Kansa Qila on the Yamuna bank in Mathura, with the sun behind its massive stone bastions",
+    credit: {"title":"Kans Quila, Mathura","author":"Prashant6001","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kans_Quila,_Mathura.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "mathura-potara-kund": {
+    src: imgMathuraPotaraKund,
+    alt: "The stepped stone sides and still water of Potara Kund near the Janmasthan complex in Mathura",
+    credit: {"title":"Potra Kund","author":"Nikhil.sharma123","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Potra_Kund.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/3.0"},
+  },
+  "mathura-museum": {
+    src: imgMathuraMuseum,
+    alt: "Red sandstone building of the Government Museum, Mathura, set in a green lawn",
+    credit: {"title":"Government Museum - Mathura 2013-02-23 5016","author":"Biswarup Ganguly","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Government_Museum_-_Mathura_2013-02-23_5016.JPG","licenseUrl":"https://creativecommons.org/licenses/by/3.0"},
+  },
+  "mathura-museum-buddha": {
+    src: imgMathuraBuddha,
+    alt: "Standing Buddha in red sandstone from around the 5th century CE, Government Museum, Mathura",
+    credit: {"title":"Standing Buddha on inscribed pedestal, Jamalpur Mound, Mathura, circa 5th century CE, Government Museum, Mathura","author":"SpeakingArch","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Standing_Buddha_on_inscribed_pedestal,_Jamalpur_Mound,_Mathura,_circa_5th_century_CE,_Government_Museum,_Mathura.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "mathura-jama-masjid-daniell": {
+    src: imgMathuraJamaMasjid,
+    alt: "Jama Masjid Mathura minarets and courtyard, in an 1827 painting by Thomas Daniell",
+    credit: {"title":"Indian Temple, Said to Be the Mosque of Abo-ul-Nabi, Muttra","author":"Thomas Daniell","license":"Public domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:Thomas_Daniell_-_Indian_Temple,_Said_to_Be_the_Mosque_of_Abo-ul-Nabi,_Muttra_-_Google_Art_Project.jpg"},
+  },
+  "mathura-vishram-ghat-day": {
+    src: imgMathuraVishramDay,
+    alt: "A small domed shrine on the chequered marble floor at Vishram Ghat, beside the Yamuna in Mathura",
+    credit: {"title":"Vishram Ghat (53814)","author":"Aliva Sahoo","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Vishram_Ghat_(53814).jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/3.0"},
+  },
+  "mathura-ghats-weeks": {
+    src: imgMathuraWeeks,
+    alt: "Painting of pilgrims bathing at a domed pavilion on the ghats of Mathura, by Edwin Lord Weeks",
+    credit: {"title":"Along the Ghats, Mathura","author":"Edwin Lord Weeks","license":"Public domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:Edwin_Lord_Weeks_-_Along_the_Ghats,_Mathura.jpg"},
+  },
+  "mathura-yamuna-boats": {
+    src: imgMathuraBoats,
+    alt: "Wooden boats moored on the bank of the Yamuna at Mathura under a grey sky",
+    credit: {"title":"The beauty of Yamuna river","author":"Sanidhya Singh","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:The_beauty_of_Yamuna_river.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "mathura-yamuna-ghat": {
+    src: imgMathuraYamunaGhat,
+    alt: "Carved stone pavilions and steps of a Yamuna ghat in Mathura on a clear day",
+    credit: {"title":"Madhura Yamuna Ghat","author":"B.K.Viswanadh","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Madhura_Yamuna_Ghat.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "mathura-peda": {
+    src: imgMathuraPeda,
+    alt: "A heap of brown, grainy pedas made from slow-cooked khoa, photographed in Braj",
+    credit: {"title":"Pera - Sweet - Banke Bihari Mandir Area - Vrindavan - 2013-02-22 4784","author":"Biswarup Ganguly","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Pera_-_Sweet_-_Banke_Bihari_Mandir_Area_-_Vrindavan_-_2013-02-22_4784.JPG","licenseUrl":"https://creativecommons.org/licenses/by/3.0"},
+  },
+  "kulhad-lassi": {
+    src: imgKulhadLassi,
+    alt: "Lassi served in a clay kulhad with a spoon, on a red table",
+    credit: {"title":"Kulhad lassi","author":"Dollyastha","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kulhad_lassi.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "kachori-sabzi": {
+    src: imgKachoriSabzi,
+    alt: "Kachori on a steel plate with a bowl of spicy aloo sabzi",
+    credit: {"title":"Aloo ki sabji with Kachori","author":"Shobhit Dwivedi","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Aloo_ki_sabji_with_Kachori.JPG","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "jalebi-rabri": {
+    src: imgJalebiRabri,
+    alt: "Fresh golden jalebi with creamy rabri in a small bowl",
+    credit: {"title":"Jalebi with Rabri - Mohali 2016-08-06 8229","author":"Biswarup Ganguly","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Jalebi_with_Rabri_-_Mohali_2016-08-06_8229.JPG","licenseUrl":"https://creativecommons.org/licenses/by/3.0"},
+  },
+  "braj-haveli": {
+    src: imgBrajHaveli,
+    alt: "Carved sandstone balconies and jharokhas on an old haveli in a Braj town",
+    credit: {"title":"Street Scenes and Temples of Mathura & Vrindavan 037","author":"Shoot stufz","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Street_Scenes_and_Temples_of_Mathura_%26_Vrindavan_037.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
   },
 } satisfies Record<string, Photo>;
 

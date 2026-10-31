@@ -23,11 +23,13 @@ export default function ContactPage() {
   const wa = whatsappLink();
   const tel = phoneHref();
   const address = formatAddress();
+  const [mailbox, mailDomain] = site.contact.email.split("@");
   const channels = [
     wa && { icon: <WhatsappIcon size={22} />, label: "WhatsApp", value: "Chat with us", href: wa, external: true },
     tel && { icon: <Phone size={22} aria-hidden="true" />, label: "Phone", value: site.contact.phone!, href: tel, external: false },
-    site.contact.email && { icon: <Mail size={22} aria-hidden="true" />, label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}`, external: false },
-  ].filter(Boolean) as { icon: React.ReactNode; label: string; value: string; href: string; external: boolean }[];
+    // <wbr> lets the address wrap before the @ on phones instead of widening the page.
+    site.contact.email && { icon: <Mail size={22} aria-hidden="true" />, label: "Email", value: <>{mailbox}<wbr />@{mailDomain}</>, href: `mailto:${site.contact.email}`, external: false },
+  ].filter(Boolean) as { icon: React.ReactNode; label: string; value: React.ReactNode; href: string; external: boolean }[];
 
   return (
     <>
@@ -50,7 +52,7 @@ export default function ContactPage() {
                     className="surface card-hover flex items-center gap-4 p-5"
                   >
                     <span className={`grid size-12 shrink-0 place-items-center rounded-2xl ${c.label === "WhatsApp" ? "bg-whatsapp text-[#062b14]" : "bg-saffron-wash text-ember-deep"}`}>{c.icon}</span>
-                    <span>
+                    <span className="min-w-0">
                       <span className="block text-sm text-stone">{c.label}</span>
                       <span className="block font-semibold text-ink">{c.value}</span>
                     </span>

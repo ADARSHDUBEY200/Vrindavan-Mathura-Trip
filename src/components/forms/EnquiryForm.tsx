@@ -106,6 +106,7 @@ export function EnquiryForm({ defaultPackage, title = "Plan your yatra", compact
           </label>
           <select id={id("package")} name="package" defaultValue={val("package") ?? defaultPackage ?? ""} className={fieldCls}>
             <option value="">Not sure yet — help me plan</option>
+            {defaultPackage && !packages.some((p) => p.title === defaultPackage) && <option value={defaultPackage}>{defaultPackage}</option>}
             {packages.map((p) => (
               <option key={p.slug} value={p.title}>
                 {p.title}

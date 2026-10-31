@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { createContext, use, useActionState, useCallback, useEffect, useEffectEvent, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { createContext, Suspense, use, useActionState, useCallback, useEffect, useEffectEvent, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, CalendarDays, ChevronDown, Loader2, Mail, MapPin, Minus, Package, PencilLine, Plus, Send, ShieldCheck, User, Users, X } from "lucide-react";
 import { submitEnquiry, type EnquiryState } from "@/app/actions/enquiry";
 import { EnquirySuccess } from "@/components/forms/EnquiryForm";
@@ -44,8 +44,27 @@ function markSeen() {
   }
 }
 
-export function EnquiryPopupProvider({ children }: { children: ReactNode }) {
+/**
+ * Separate from the provider, which wraps every public page: usePathname suspends on routes whose
+ * params are not known at build time, and without its own Suspense that makes those pages fail.
+ */
+function AutoOpenTimer({ open }: { open: () => void }) {
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (NO_AUTO_OPEN.includes(pathname) || seen()) return;
+    const t = setTimeout(() => {
+      // Don't interrupt someone already in a dialog (e.g. the mobile menu).
+      if (seen() || document.querySelector('[aria-modal="true"], dialog[open]')) return;
+      open();
+    }, AUTO_OPEN_MS);
+    return () => clearTimeout(t);
+  }, [pathname, open]);
+
+  return null;
+}
+
+export function EnquiryPopupProvider({ children }: { children: ReactNode }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const resetOnClose = useRef(false);
   const [formKey, setFormKey] = useState(0);
@@ -59,19 +78,12 @@ export function EnquiryPopupProvider({ children }: { children: ReactNode }) {
     d.querySelector<HTMLElement>("[data-autofocus]")?.focus();
   }, []);
 
-  useEffect(() => {
-    if (NO_AUTO_OPEN.includes(pathname) || seen()) return;
-    const t = setTimeout(() => {
-      // Don't interrupt someone already in a dialog (e.g. the mobile menu).
-      if (seen() || document.querySelector('[aria-modal="true"], dialog[open]')) return;
-      open();
-    }, AUTO_OPEN_MS);
-    return () => clearTimeout(t);
-  }, [pathname, open]);
-
   return (
     <EnquiryPopupContext value={open}>
       {children}
+      <Suspense fallback={null}>
+        <AutoOpenTimer open={open} />
+      </Suspense>
       <dialog
         ref={dialogRef}
         aria-label="Trip enquiry"

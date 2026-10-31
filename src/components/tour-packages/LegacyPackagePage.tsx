@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { CalendarDays, Check, Info, MapPin, Minus, Sparkles, Users, Wallet } from "lucide-react";
 import { PackageCard } from "@/components/cards/PackageCard";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
@@ -8,32 +7,12 @@ import { Lotus } from "@/components/svg/Ornaments";
 import { EnquiryButtons } from "@/components/ui/EnquiryButtons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { photos } from "@/content/images";
-import { formatPrice, getPackage, getPackages, packages } from "@/content/packages";
-import { buildMetadata } from "@/lib/seo";
+import { formatPrice, getPackages, type TourPackage } from "@/content/packages";
 import { breadcrumbSchema, tripSchema, webPageSchema } from "@/lib/schema";
 import { packageWhatsappMessage } from "@/lib/whatsapp";
 
-export function generateStaticParams() {
-  return packages.map((p) => ({ slug: p.slug }));
-}
-
-export async function generateMetadata({ params }: PageProps<"/tour-packages/[slug]">) {
-  const { slug } = await params;
-  const p = getPackage(slug);
-  if (!p) return {};
-  return buildMetadata({
-    title: `${p.title} — Itinerary`,
-    description: `${p.duration} private trip: ${p.summary}`.slice(0, 300),
-    path: `/tour-packages/${p.slug}`,
-    image: photos[p.image].src,
-  });
-}
-
-export default async function PackagePage({ params }: PageProps<"/tour-packages/[slug]">) {
-  const { slug } = await params;
-  const p = getPackage(slug);
-  if (!p) notFound();
-
+/** The hardcoded packages in content/packages.ts, still linked from the menu, footer and guides. */
+export function LegacyPackagePage({ p }: { p: TourPackage }) {
   const path = `/tour-packages/${p.slug}`;
   const img = photos[p.image];
   const crumbs = [

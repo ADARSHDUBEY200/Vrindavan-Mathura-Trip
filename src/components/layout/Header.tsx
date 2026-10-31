@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useEffectEvent, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { Suspense, useEffect, useEffectEvent, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { ArrowRight, ChevronDown, Menu, Phone, Send, X } from "lucide-react";
 import { useEnquiryPopup } from "@/components/forms/EnquiryPopup";
 import { Logo } from "@/components/layout/Logo";
@@ -18,8 +18,23 @@ function isActive(pathname: string, item: NavItem): boolean {
   return Boolean(item.menu?.links.some((l) => pathname === l.href || pathname.startsWith(`${l.href}/`)));
 }
 
+function CurrentPathHeader() {
+  return <HeaderContent pathname={usePathname()} />;
+}
+
+/**
+ * usePathname suspends on routes whose params are not known at build time, and without a Suspense
+ * those pages fail. The fallback is the full header with nothing highlighted, so it stays in the HTML.
+ */
 export function Header() {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<HeaderContent pathname="" />}>
+      <CurrentPathHeader />
+    </Suspense>
+  );
+}
+
+function HeaderContent({ pathname }: { pathname: string }) {
   const [openMenu, setOpenMenu] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

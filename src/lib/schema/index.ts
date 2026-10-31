@@ -5,8 +5,9 @@ import type { Destination } from "@/content/destinations";
 import type { Guide } from "@/content/guides";
 import type { Photo } from "@/content/images";
 import type { TourPackage } from "@/content/packages";
-import type { Temple } from "@/content/temples";
 import type { Faq } from "@/content/types";
+import type { PackageDetail } from "@/lib/cms/package-detail";
+import type { TempleView } from "@/lib/cms/temples";
 
 type Json = Record<string, unknown>;
 
@@ -72,18 +73,31 @@ export function destinationSchema(d: Destination, photo: Photo, path: string): J
   };
 }
 
-export function templeSchema(t: Temple, photo: Photo, path: string): Json {
-  return {
+/** A temple as a place. Opening hours are left out: they are approximate text, not a schedule search engines should repeat. */
+export function templePlaceSchema(t: TempleView): Json {
+  const url = absoluteUrl(t.path);
+  const fullUrl = (src: string) => (src.startsWith("/") ? absoluteUrl(src) : src);
+  const images = [t.image?.url, ...t.gallery.map((g) => g.picture.url)].filter((src): src is string => Boolean(src));
+  return compact({
     "@context": "https://schema.org",
     "@type": ["HinduTemple", "PlaceOfWorship", "TouristAttraction"],
-    name: t.name,
-    description: t.summary,
-    url: absoluteUrl(path),
-    image: imageUrl(photo),
-    address: { "@type": "PostalAddress", addressLocality: t.town, addressRegion: "Uttar Pradesh", addressCountry: "IN" },
-    hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.mapQuery)}`,
-    isAccessibleForFree: true,
-  };
+    "@id": `${url}#temple`,
+    name: t.schemaTitle,
+    description: t.schemaDescription,
+    url,
+    image: images.map(fullUrl),
+    address: compact({
+      "@type": "PostalAddress",
+      streetAddress: t.address.street || undefined,
+      addressLocality: t.address.city || t.town,
+      addressRegion: t.address.state || "Uttar Pradesh",
+      postalCode: t.address.postalCode || undefined,
+      addressCountry: "IN",
+    }),
+    geo: t.geo ? { "@type": "GeoCoordinates", ...t.geo } : undefined,
+    hasMap: t.mapUrl,
+    containedInPlace: t.town ? { "@type": "City", name: t.town } : undefined,
+  });
 }
 
 export function tripSchema(p: TourPackage, photo: Photo, path: string): Json {
@@ -115,6 +129,43 @@ export function tripSchema(p: TourPackage, photo: Photo, path: string): Json {
           availability: "https://schema.org/InStock",
         }
       : undefined,
+  });
+}
+
+/** TouristTrip for a CMS package. No aggregateRating: row ratings are display-only (see lib/cms/packages.ts). */
+export function packageTripSchema(p: PackageDetail): Json {
+  const url = absoluteUrl(p.path);
+  return compact({
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    "@id": `${url}#trip`,
+    name: p.schemaTitle,
+    description: p.schemaDescription,
+    url,
+    image: [p.hero?.src, ...p.gallery.map((g) => g.src)].filter(Boolean),
+    provider: { "@id": ORG_ID },
+    itinerary: p.itinerary.length
+      ? {
+          "@type": "ItemList",
+          itemListElement: p.itinerary.map((d, i) => ({ "@type": "ListItem", position: i + 1, name: `Day ${d.day}: ${d.title}` })),
+        }
+      : undefined,
+    offers: p.price ? { "@type": "Offer", price: p.price, priceCurrency: "INR", description: "Starting price per person", url, availability: "https://schema.org/InStock" } : undefined,
+  });
+}
+
+/** VideoObject needs an upload date to be valid, so a package without one publishes no video node. */
+export function packageVideoSchema(p: PackageDetail): Json | undefined {
+  if (!p.video?.uploadDate) return undefined;
+  return compact({
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: p.video.title || p.title,
+    description: p.schemaDescription,
+    thumbnailUrl: `https://i.ytimg.com/vi/${p.video.id}/hqdefault.jpg`,
+    uploadDate: p.video.uploadDate,
+    duration: p.video.minutes ? `PT${Math.round(p.video.minutes * 60)}S` : undefined,
+    embedUrl: `https://www.youtube.com/embed/${p.video.id}`,
   });
 }
 

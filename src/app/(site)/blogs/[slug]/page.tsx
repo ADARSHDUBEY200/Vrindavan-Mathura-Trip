@@ -24,6 +24,7 @@ import {
   type TocItem,
 } from "@/components/blog/BlogArticle";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { BLOG_AUTHOR } from "@/config/site";
 import { prepareArticleHtml, prepareTableHtml } from "@/lib/cms/article-html";
 import { htmlToText } from "@/lib/cms/blog-fields";
 import { BLOGS_PATH, blogCategories, blogPath, getPublishedBlog, getPublishedBlogs, relatedBlogs } from "@/lib/cms/blogs";
@@ -31,6 +32,12 @@ import { BLOG_CATEGORIES } from "@/lib/cms/constants";
 import { isBlankHtml } from "@/lib/cms/utils";
 import { buildMetadata } from "@/lib/seo";
 import { blogPostingSchema, breadcrumbSchema, faqSchema } from "@/lib/schema";
+
+/**
+ * Blogs published after a build have no prerendered page. Rendering them on request (instead of streaming
+ * behind Suspense) keeps full SEO tags in the HTML and a real 404 status for unpublished or deleted slugs.
+ */
+export const instant = false;
 
 /** Placeholder used when no blog is published yet: Cache Components needs at least one param at build time. */
 const PLACEHOLDER = "__no-published-blogs__";
@@ -54,7 +61,7 @@ export async function generateMetadata({ params }: PageProps<"/blogs/[slug]">) {
       type: "article",
       largeImagePreview: true,
     }),
-    authors: blog.author ? [{ name: blog.author }] : undefined,
+    authors: [{ name: blog.author || BLOG_AUTHOR }],
     category: blog.category,
   };
 }

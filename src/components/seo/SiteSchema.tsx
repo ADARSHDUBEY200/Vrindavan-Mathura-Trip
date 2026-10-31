@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 /** Pages that render their own complete @graph (which already includes the shared nodes). */
-export const OWN_GRAPH_PATHS = ["/", "/about"];
+export const OWN_GRAPH_PATHS = ["/", "/about", "/vrindavan"];
 
 /**
  * Site-wide JSON-LD (shared entities). The data is built on the server and passed in;

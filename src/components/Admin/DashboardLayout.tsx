@@ -3,16 +3,18 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BookOpen, Landmark, LayoutDashboard, LogOut, Menu, Package, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { BookOpen, Church, FileText, Landmark, LayoutDashboard, LogOut, Menu, Package, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { LogoMark } from "@/components/layout/Logo";
-import { ADMIN_BASE, ADMIN_LOGIN } from "@/lib/cms/config";
+import { ADMIN_BASE, ADMIN_LOGIN, ADMIN_TEMPLES_PAGE, ADMIN_TOUR_PACKAGES_PAGE } from "@/lib/cms/config";
 import { createClient } from "@/lib/supabase/client";
 
 const NAV = [
   { label: "Dashboard", href: ADMIN_BASE, icon: LayoutDashboard },
   { label: "Blog Editor", href: `${ADMIN_BASE}/blogs`, icon: BookOpen },
   { label: "Product Editor", href: `${ADMIN_BASE}/products`, icon: Package },
+  { label: "Tour Packages Page", href: ADMIN_TOUR_PACKAGES_PAGE, icon: FileText },
   { label: "Temple Editor", href: `${ADMIN_BASE}/temples`, icon: Landmark },
+  { label: "Temples Page", href: ADMIN_TEMPLES_PAGE, icon: Church },
 ];
 
 function isActive(pathname: string, href: string) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Check } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 import { CMSActions } from "@/components/Admin/CMS/CMSActions";
 import { CMSHeader, RestoreBanner } from "@/components/Admin/CMS/CMSHeader";
 import { CMSMediaSection } from "@/components/Admin/CMS/CMSMediaSection";
@@ -10,20 +10,21 @@ import { CMSSchema } from "@/components/Admin/CMS/CMSSchema";
 import { CMSSeoSection, type MetaValue } from "@/components/Admin/CMS/CMSSeoSection";
 import { FaqHandler, type Faq } from "@/components/Admin/CMS/FaqHandler";
 import { ImageDropzone } from "@/components/Admin/CMS/ImageDropzone";
+import { ItineraryEditor, type ItineraryDay } from "@/components/Admin/CMS/ItineraryEditor";
 import { PasteTableEditor } from "@/components/Admin/CMS/PasteTableEditor";
 import { EditorShell, RichTextSection } from "@/components/Admin/CMS/RichTextSection";
-import { Field, ListEditor, Section, TextArea, TextInput, Toggle } from "@/components/Admin/CMS/ui";
+import { AddButton, Field, IconButton, ListEditor, Section, TextArea, TextInput, Toggle } from "@/components/Admin/CMS/ui";
 import { useEditorController } from "@/components/Admin/CMS/useEditorController";
 import { CMSLoading } from "@/components/Admin/CMSLoading";
 import { ADMIN_ROUTES } from "@/lib/cms/config";
 import { SOURCE_CITIES } from "@/lib/cms/constants";
+import { durationLabel, packagePath, segmentOf } from "@/lib/cms/package-fields";
 import { asArray, asObject, asString, isBlankHtml, stripEmpty, uid, withIds } from "@/lib/cms/utils";
 
 type DescItem = { id: string; description: string };
 type Policy = { id: string; title: string; description: string };
 type ChildImage = { id: string; image: string; alt: string };
 type Testimonial = { id: string; name: string; description: string; rating: string };
-type ItineraryDay = { id: string; day: string; title: string; description: string };
 type Breakdown = { id: string; days: string; place: string };
 type Segment = { id: string; from: string; to: string };
 type TempleTiming = { id: string; temple: string; morningOpens: string; afternoonCloses: string; eveningOpens: string; entry: string };
@@ -33,6 +34,7 @@ type GroundTruth = { id: string; heading: string; points: string[] };
 type Recommendation = { id: string; condition: string; recommendation: string; linkLabel: string; linkHref: string };
 
 type PackageSeo = {
+  heroBadge: string;
   shortDescription: string;
   templeTitle: string;
   templeNote: string;
@@ -91,6 +93,7 @@ const emptyPolicies = (): Policy[] => POLICY_TITLES.map((title) => ({ id: uid(),
 const emptyChildImages = (): ChildImage[] => Array.from({ length: CHILD_SLOTS }, () => ({ id: uid(), image: "", alt: "" }));
 
 const EMPTY_SEO: PackageSeo = {
+  heroBadge: "",
   shortDescription: "",
   templeTitle: "",
   templeNote: "",
@@ -166,14 +169,15 @@ function fromRow(row: Record<string, unknown>): PackageFormState {
     schema: asObject(row.schema, { title: "", description: "" }),
     // Always four policies, in order, matched by title when possible.
     policies: emptyPolicies().map((p, i) => policies.find((x) => x.title === p.title) ?? policies[i] ?? p),
-    childImage: emptyChildImages().map((slot, i) => children[i] ?? slot),
+    // At least four slots; any extra gallery images are kept.
+    childImage: [...children, ...emptyChildImages().slice(children.length)],
     faqs: withIds<Faq>(row.faqs),
     testimonials: withIds<Testimonial>(row.testimonials).map((t) => ({ ...t, rating: asString(t.rating) })),
     highlights: withIds<DescItem>(row.highlights),
     inclusions: withIds<DescItem>(row.inclusions),
     exclusions: withIds<DescItem>(row.exclusions),
     documents: withIds<DescItem>(row.documents),
-    itinerary: withIds<ItineraryDay>(row.itinerary).map((d) => ({ ...d, day: asString(d.day) })),
+    itinerary: withIds<ItineraryDay>(row.itinerary).map((d) => ({ ...d, day: asString(d.day), activities: withIds(d.activities) })),
     durationbreakdown: withIds<Breakdown>(row.durationbreakdown).map((d) => ({ ...d, days: asString(d.days) })),
     destroutes: { source: asString(routes.source), destination: asString(routes.destination), segments: withIds<Segment>(routes.segments) },
     breakfast_included: Boolean(row.breakfast_included),
@@ -182,6 +186,7 @@ function fromRow(row: Record<string, unknown>): PackageFormState {
     sightseeing_included: Boolean(row.sightseeing_included),
     available_src: asArray<string>(row.available_src),
     seo: {
+      heroBadge: asString(seo.heroBadge),
       shortDescription: asString(seo.shortDescription),
       templeTitle: asString(seo.templeTitle),
       templeNote: asString(seo.templeNote),
@@ -217,7 +222,8 @@ function toRow(f: PackageFormState, status: "draft" | "published") {
     price: f.price.trim(),
     day: f.day.trim(),
     night: f.night.trim(),
-    duration: f.duration.trim(),
+    // The first URL segment, e.g. "five-days". Follows the day count.
+    duration: segmentOf(null, Number(f.day)),
     destination: f.destination.trim(),
     reviews: f.reviews.trim(),
     rating: f.rating.trim(),
@@ -228,15 +234,19 @@ function toRow(f: PackageFormState, status: "draft" | "published") {
     policies: f.policies,
     childImage: f.childImage.filter((c) => c.image),
     faqs: f.faqs.filter((q) => q.question.trim() || q.answer.trim()),
-    testimonials: f.testimonials
-      .filter((t) => t.name.trim() || t.description.trim())
-      .map((t) => ({ ...t, rating: t.rating === "" ? null : Number(t.rating) })),
+    // Numbers stay in the text form the rows already use (rating "5.0", days 2), so saving changes only what was edited.
+    testimonials: f.testimonials.filter((t) => t.name.trim() || t.description.trim()),
     highlights: filled(f.highlights),
     inclusions: filled(f.inclusions),
     exclusions: filled(f.exclusions),
     documents: filled(f.documents),
-    itinerary: f.itinerary.map((d, i) => ({ ...d, day: i + 1 })),
-    durationbreakdown: f.durationbreakdown.filter((d) => d.place.trim() || d.days.trim()),
+    itinerary: f.itinerary.map(({ activities, ...d }, i) => {
+      const steps = (activities ?? []).filter((a) => a.text.trim());
+      return { ...d, day: i + 1, ...(steps.length ? { activities: steps } : {}) };
+    }),
+    durationbreakdown: f.durationbreakdown
+      .filter((d) => d.place.trim() || d.days.trim())
+      .map((d) => ({ ...d, days: d.days.trim() !== "" && Number.isFinite(Number(d.days)) ? Number(d.days) : d.days })),
     destroutes: { ...f.destroutes, segments: f.destroutes.segments.filter((s) => s.from.trim() || s.to.trim()) },
     breakfast_included: f.breakfast_included,
     stay_included: f.stay_included,
@@ -252,7 +262,7 @@ function validatePublish(f: PackageFormState) {
   if (!f.category) return "Choose a category";
   if (!f.heroimage.image) return "Upload a hero image";
   const missing = f.childImage.filter((c) => !c.image).length;
-  if (missing) return `Upload all ${CHILD_SLOTS} child images (${missing} missing)`;
+  if (f.childImage.length - missing < CHILD_SLOTS) return `Upload at least ${CHILD_SLOTS} gallery images (${CHILD_SLOTS - (f.childImage.length - missing)} missing)`;
   return null;
 }
 
@@ -297,8 +307,11 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
 
   if (!ready && !c.loadError) return <CMSLoading label="Loading package…" />;
 
+  // Imported rows store lowercase names ("delhi"), and some cities aren't in SOURCE_CITIES: show those too.
+  const hasCity = (city: string) => form.available_src.some((x) => x.toLowerCase() === city.toLowerCase());
+  const cities = [...SOURCE_CITIES, ...form.available_src.filter((x) => !SOURCE_CITIES.some((c) => c.toLowerCase() === x.toLowerCase()))];
   const toggleCity = (city: string) =>
-    patch({ available_src: form.available_src.includes(city) ? form.available_src.filter((x) => x !== city) : [...form.available_src, city] });
+    patch({ available_src: hasCity(city) ? form.available_src.filter((x) => x.toLowerCase() !== city.toLowerCase()) : [...form.available_src, city] });
 
   return (
     <EditorShell loadError={c.loadError} ready={ready}>
@@ -319,8 +332,8 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
             <Field label="Price (₹)" required>
               <TextInput required inputMode="numeric" value={form.price} placeholder="4999" onChange={(price) => patch({ price })} />
             </Field>
-            <Field label="Duration" required>
-              <TextInput required value={form.duration} placeholder="2 Days / 1 Night" onChange={(duration) => patch({ duration })} />
+            <Field label="Hero badge" hint={<span className="text-slate-400">Optional</span>}>
+              <TextInput value={form.seo.heroBadge} placeholder="Premium Experience" onChange={(heroBadge) => setSeo({ heroBadge })} />
             </Field>
             <Field label="Reviews">
               <TextInput inputMode="numeric" value={form.reviews} placeholder="320" onChange={(reviews) => patch({ reviews })} />
@@ -351,8 +364,8 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
 
         <Section title="Source Cities" helper="Cities this package can start from.">
           <div className="flex flex-wrap gap-2" role="group" aria-label="Source cities">
-            {SOURCE_CITIES.map((city) => {
-              const on = form.available_src.includes(city);
+            {cities.map((city) => {
+              const on = hasCity(city);
               return (
                 <button
                   key={city}
@@ -383,7 +396,7 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
           </div>
         </Section>
 
-        <Section title="Duration" helper="Days and nights, plus how many days are spent where.">
+        <Section title="Duration" helper="Days and nights, plus how many days are spent where. The day count sets the page URL.">
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Days" required>
               <TextInput required type="number" min={1} value={form.day} onChange={(day) => patch({ day })} />
@@ -392,6 +405,12 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
               <TextInput required type="number" min={0} value={form.night} onChange={(night) => patch({ night })} />
             </Field>
           </div>
+          {Number(form.day) > 0 && (
+            <p className="text-sm text-slate-400">
+              Shown as <span className="text-white">{durationLabel(Number(form.day), Number(form.night))}</span>. Public URL:{" "}
+              <code className="break-all text-sky-300">{packagePath(segmentOf(null, Number(form.day)), form.slug || "your-slug")}</code>
+            </p>
+          )}
           <ListEditor
             items={form.durationbreakdown}
             onChange={(durationbreakdown) => patch({ durationbreakdown })}
@@ -440,31 +459,18 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
           />
         </Section>
 
-        <Section title="Overview" helper="A paragraph or two describing the trip.">
-          <Field label="Overview" required>
-            <TextArea required rows={6} value={form.overview} onChange={(overview) => patch({ overview })} />
-          </Field>
-        </Section>
+        <RichTextSection
+          title="Overview"
+          helper="A paragraph or two describing the trip."
+          editorType="Package"
+          value={form.overview}
+          onChange={(overview) => patch({ overview })}
+          ready={ready}
+          editorKey={editorKey}
+        />
 
-        <Section title="Itinerary" helper="Day-by-day plan. Days renumber automatically." defaultOpen={false}>
-          <ListEditor
-            items={form.itinerary}
-            onChange={(itinerary) => patch({ itinerary: itinerary.map((d, i) => ({ ...d, day: String(i + 1) })) })}
-            create={() => ({ id: uid(), day: String(form.itinerary.length + 1), title: "", description: "" })}
-            addLabel="Add day"
-            itemLabel="Day"
-            reorder
-            renderItem={(d, update) => (
-              <>
-                <Field label="Title">
-                  <TextInput value={d.title} placeholder="Arrival & Banke Bihari darshan" onChange={(title) => update({ title })} />
-                </Field>
-                <Field label="Description">
-                  <TextArea rows={3} value={d.description} onChange={(description) => update({ description })} />
-                </Field>
-              </>
-            )}
-          />
+        <Section title="Itinerary" helper="Day-by-day plan. Open a day to edit it; days renumber automatically." defaultOpen={false}>
+          <ItineraryEditor key={editorKey} days={form.itinerary} onChange={(itinerary) => patch({ itinerary })} />
         </Section>
 
         <FaqHandler editorType="Package" faqs={form.faqs} onChange={(faqs) => patch({ faqs })} />
@@ -504,8 +510,8 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
           />
         </Section>
 
-        <Section title="Documents" helper="Documents guests should carry." defaultOpen={false}>
-          <DescriptionList items={form.documents} onChange={(documents) => patch({ documents })} label="Document" placeholder="Government photo ID" />
+        <Section title="Know Before You Go" helper="Practical notes shown near the end of the package page." defaultOpen={false}>
+          <DescriptionList items={form.documents} onChange={(documents) => patch({ documents })} label="Note" placeholder="Carry a government photo ID" />
         </Section>
 
         <Section title="Policies" helper="Refund, cancellation, confirmation and payment terms." defaultOpen={false}>
@@ -526,19 +532,27 @@ export default function PackageForm({ mode, id }: { mode: "create" | "edit"; id?
           onAltChange={(alt) => patch({ heroimage: { ...form.heroimage, alt } })}
         />
 
-        <Section title="Child Images" helper={`Exactly ${CHILD_SLOTS} gallery images are required to publish.`}>
+        <Section title="Gallery" helper={`At least ${CHILD_SLOTS} images are required to publish. The first four appear beside the hero.`}>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {form.childImage.map((slot, i) => {
               const setSlot = (p: Partial<ChildImage>) => patch({ childImage: form.childImage.map((x) => (x.id === slot.id ? { ...x, ...p } : x)) });
               return (
                 <div key={slot.id} className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Image {i + 1}</p>
+                  <div className="flex h-8 items-center justify-between">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Image {i + 1}</p>
+                    {form.childImage.length > CHILD_SLOTS && (
+                      <IconButton label={`Remove image ${i + 1}`} tone="danger" onClick={() => patch({ childImage: form.childImage.filter((x) => x.id !== slot.id) })}>
+                        <Trash2 size={14} />
+                      </IconButton>
+                    )}
+                  </div>
                   <ImageDropzone editorType="Package" compact value={slot.image} onChange={(image) => setSlot({ image })} label="Add .webp" />
                   <TextInput value={slot.alt} placeholder="Alt text" aria-label={`Image ${i + 1} alt text`} onChange={(alt) => setSlot({ alt })} />
                 </div>
               );
             })}
           </div>
+          <AddButton onClick={() => patch({ childImage: [...form.childImage, { id: uid(), image: "", alt: "" }] })}>Add image</AddButton>
         </Section>
 
         <Section title="Temple Timings" helper="Paste a timings table from Word or Sheets." defaultOpen={false}>

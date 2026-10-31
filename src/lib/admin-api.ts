@@ -20,7 +20,7 @@ async function request(method: "POST" | "PUT" | "DELETE", resource: string, id?:
   }
 }
 
-function resource(name: "blogs" | "packages" | "temples") {
+function resource(name: "blogs" | "packages" | "temples" | "pages") {
   return {
     insert: (row: Row) => request("POST", name, undefined, row),
     update: (id: string, row: Row) => request("PUT", name, id, row),
@@ -33,4 +33,5 @@ export const adminApi = {
   blogs: resource("blogs"),
   packages: resource("packages"),
   temples: resource("temples"),
+  pages: resource("pages"),
 };

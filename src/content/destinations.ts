@@ -28,6 +28,7 @@ const standardSeasons = [
 ];
 
 export const destinations: Destination[] = [
+  // /vrindavan renders from content/vrindavan.ts; this entry now only feeds the sitemap.
   {
     slug: "vrindavan",
     name: "Vrindavan",
@@ -72,6 +73,7 @@ export const destinations: Destination[] = [
       { q: "Is Vrindavan suitable for senior citizens?", a: "Yes, with the right pacing. Avoid festival days at Banke Bihari, plan rest in the afternoon, and use e-rickshaws for the lanes." },
     ],
   },
+  // /mathura renders from content/mathura.ts; this entry only keeps the route in the sitemap.
   {
     slug: "mathura",
     name: "Mathura",

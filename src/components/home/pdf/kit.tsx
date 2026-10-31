@@ -86,7 +86,7 @@ export function Ticks({ items, columns = 1, className = "" }: { items: string[];
   );
 }
 
-/** "Harsh's tip" / "Harsh's advice" — the site's orange callout with a 🙏 badge. */
+/** "Harsh Sharma's tip" / "Harsh Sharma's advice" — the site's orange callout with a 🙏 badge. */
 export function GuideTip({ label, text }: { label: string; text: string }) {
   return (
     <aside aria-label={label} className="flex max-w-3xl gap-4 rounded-card border border-saffron-soft bg-saffron-wash p-4 sm:p-5">

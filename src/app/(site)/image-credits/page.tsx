@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PageHero } from "@/components/layout/PageHero";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { photos } from "@/content/images";
+import { photos, type Photo } from "@/content/images";
 import { buildMetadata } from "@/lib/seo";
 import { breadcrumbSchema, webPageSchema } from "@/lib/schema";
 
@@ -15,7 +15,7 @@ const crumbs = [
 export const metadata = buildMetadata({ title, description, path: "/image-credits" });
 
 export default function CreditsPage() {
-  const entries = Object.entries(photos);
+  const entries: [string, Photo][] = Object.entries(photos);
   return (
     <>
       <PageHero

@@ -1,5 +1,5 @@
 /**
- * /tour-packages copy, verbatim from TourPackagesContent.pdf (Harsh Sharma's first-person voice).
+ * /tour-packages copy, verbatim from TourPackagesContent.pdf (founder's first-person voice).
  *
  * Inline markup in any string: `**bold**` → <strong>, `*italic*` → <em>.
  * The phone number, email and website are linked automatically wherever they appear (components/home/landing/Rich.tsx).
@@ -20,6 +20,7 @@ import {
   YEARS,
   formatInr,
 } from "@/config/site";
+import { photos, type PhotoKey } from "./images";
 import type { ContentImage, GuideBlock } from "./types";
 
 export const TOUR_PACKAGES_PATH = "/tour-packages";
@@ -29,74 +30,21 @@ const WEBSITE = `${SITE_URL}/`;
 /** "75,000" — the intro says "more than 75,000 pilgrims". */
 const PILGRIM_COUNT = PILGRIMS.replace(/\+$/, "");
 
-/** Placeholders — drop the real photos into /public/images/tour-packages/ with these exact names. */
+/** A site photo as a plain, JSON-safe image. Alt text is the photo's own unless the subject matches the PDF's suggestion. */
+function photo(key: PhotoKey, alt: string = photos[key].alt): ContentImage {
+  const { src, width, height } = photos[key].src;
+  return { src, alt, width, height };
+}
+
+/* Defaults: each can be replaced with a real team, vehicle or guest photo in the CMS page editor. */
 export const images = {
-  hero: {
-    src: "/images/tour-packages/banke-bihari-sunrise-devotees.webp",
-    alt: `Devotees walking toward Banke Bihari Temple in Vrindavan at sunrise, Vrindavan tour packages by ${BRAND_NAME}`,
-    width: 1200,
-    height: 630,
-  },
-  founder: {
-    src: "/images/tour-packages/harsh-sharma-vrindavan-gali.webp",
-    alt: `${FOUNDER.name}, local Braj guide, in a narrow Vrindavan gali near Seva Kunj`,
-    width: 960,
-    height: 1200,
-  },
-  packages: {
-    src: "/images/tour-packages/ac-cab-near-prem-mandir.webp",
-    alt: "Comfortable AC cab for Vrindavan trip packages waiting near Prem Mandir",
-    width: 1200,
-    height: 800,
-  },
-  bankeBihari: {
-    src: "/images/tour-packages/banke-bihari-lane-flower-sellers.webp",
-    alt: "Banke Bihari Temple Vrindavan lane with devotees and flower sellers",
-    width: 1200,
-    height: 800,
-  },
-  premMandir: {
-    src: "/images/tour-packages/prem-mandir-evening-light-show.webp",
-    alt: "Prem Mandir Vrindavan lit in colourful lights at night for the evening light show",
-    width: 1200,
-    height: 800,
-  },
-  nidhivan: {
-    src: "/images/tour-packages/nidhivan-twisted-tulsi-trees.webp",
-    alt: "Twisted tulsi trees in Nidhivan Vrindavan, a sacred grove linked to the Raas leela",
-    width: 1200,
-    height: 800,
-  },
-  parikrama: {
-    src: "/images/tour-packages/parikrama-marg-barefoot-dawn.webp",
-    alt: "Pilgrims walking barefoot on Vrindavan Parikrama Marg at dawn",
-    width: 1200,
-    height: 800,
-  },
-  hotel: {
-    src: "/images/tour-packages/premium-hotel-room-vrindavan.webp",
-    alt: "Premium 4 star hotel room in Vrindavan for pilgrims on Vrindavan tour packages",
-    width: 1200,
-    height: 800,
-  },
-  food: {
-    src: "/images/tour-packages/kachori-sabzi-kulhad-lassi.webp",
-    alt: "Hot kachori sabzi and kulhad lassi at a street stall in Vrindavan",
-    width: 1200,
-    height: 800,
-  },
-  transport: {
-    src: "/images/tour-packages/e-rickshaw-vrindavan-road.webp",
-    alt: "E-rickshaw on a Vrindavan road near temples, helpful for Vrindavan trip planning",
-    width: 1200,
-    height: 800,
-  },
-  book: {
-    src: "/images/tour-packages/contact-mathura-vrindavan-trips.webp",
-    alt: `Contact ${BRAND_NAME} for Vrindavan tour packages from ${PRICE}`,
-    width: 1200,
-    height: 800,
-  },
+  hero: photo("prem-mandir", `Prem Mandir in Vrindavan, Vrindavan tour packages by ${BRAND_NAME}`),
+  bankeBihari: photo("banke-bihari"),
+  premMandir: photo("prem-mandir-night", "Prem Mandir Vrindavan lit in colourful lights at night for the evening light show"),
+  nidhivan: photo("nidhivan"),
+  parikrama: photo("yamuna-vrindavan"),
+  hotel: photo("keshi-ghat"),
+  book: photo("keshi-ghat-ritual"),
 } satisfies Record<string, ContentImage>;
 
 /* ------------------------------------------------------------------ */
@@ -153,6 +101,22 @@ export const hero = {
     "I wrote this page as the guide I wish every first-time visitor had in their pocket. It covers my favourite temples, honest darshan timings, the mystery of Nidhivan, the evening light show at Prem Mandir, the Parikrama, where to eat in the narrow lanes, and answers to the questions pilgrims ask me every week. Take your time with it.",
   priceBadge: `Packages from ${PRICE}`,
   whatsappMessage: "Radhe Radhe! I'd like to plan a Vrindavan trip.",
+};
+
+/** Every value is a fact stated elsewhere in the PDF. */
+export const quickFacts = {
+  title: "Vrindavan tour package: quick facts",
+  items: [
+    { icon: "price", label: "Starting price", value: `Customised packages from ${PRICE}` },
+    { icon: "duration", label: "Duration options", value: "One day, two days or a weekend, with add-ons for a full Braj yatra" },
+    { icon: "temples", label: "Core temples", value: "Banke Bihari, Prem Mandir, ISKCON, Nidhivan, Radha Raman, Rangji Mandir" },
+    { icon: "route", label: "Distance from Delhi", value: "About 135–150 km, usually 3 to 3.5 hours by road" },
+    { icon: "airport", label: "Nearest major airport", value: "Delhi's Indira Gandhi International Airport, three to three and a half hours by cab" },
+    { icon: "pickup", label: "Pick-up points", value: "Delhi, Agra, Mathura Junction, Vrindavan station or your hotel" },
+    { icon: "included", label: "Included", value: "Clean AC vehicle, experienced driver, local guidance and darshan planning" },
+    { icon: "suits", label: "Suits", value: "Seniors, families, first-time visitors, groups of friends and satsang groups" },
+    { icon: "best", label: "Best time", value: "October to March. Holi in February to March, Janmashtami in the monsoon" },
+  ],
 };
 
 /* ------------------------------------------------------------------ */
@@ -242,10 +206,13 @@ export const packagesSection = {
     "Optional hotel booking, from simple stays to 4 and 5-star properties",
   ],
   ctaLabel: "Plan this on WhatsApp",
-  /* UI labels for the CMS catalogue below the four packages. */
+  /* UI labels for the CMS catalogue. */
   catalogTitle: "All Vrindavan and Braj tour packages",
-  catalogFilterLegend: "Filter packages by duration",
-  mathuraLink: { label: "Planning Mathura too? See our Mathura Vrindavan tour packages →", href: "/#tour-packages" },
+  catalogIntro: "Every package below can be customised. Filter by the number of days you have.",
+  idealFor: "Ideal for Families & Elders",
+  perks: ["AC Cab", "Local Guide", "Temple Darshan", "Pickup & Drop"],
+  byDurationTitle: "Vrindavan tour packages by duration",
+  nextStep: "tell me your dates, how many people are travelling and anything that matters, and I will reply with a clear plan.",
 };
 
 export const tpPackages: TpPackage[] = [
@@ -268,7 +235,7 @@ export const tpPackages: TpPackage[] = [
       { time: "Night:", text: "Drop-off at your station, airport or hotel." },
     ],
     tip: {
-      label: "Harsh's tip",
+      label: `${FOUNDER.name}'s tip`,
       text: "One day gives you the highlights, but Vrindavan always leaves you wanting more. Most of our one-day guests come back within a year.",
     },
     stops: [
@@ -917,11 +884,75 @@ export const book = {
   whatsappMessage: "Radhe Radhe! I'd like to book a Vrindavan trip. Here are my dates and group size:",
 };
 
+/* ------------------------------------------------------------------ */
+/* Blocks shared by every individual package page                      */
+/* ------------------------------------------------------------------ */
+
+export const packageDefaults = {
+  /** Used when a package has no How to Reach rows of its own. From the PDF's travel logistics. */
+  howToReach: [
+    { city: "Delhi", mode: "Road via the Yamuna Expressway or NH-19", travelTime: "About 135–150 km, usually 3 to 3.5 hours", service: "Pick-up from Delhi airport, railway stations or your hotel" },
+    { city: "Agra", mode: "Road", travelTime: "About 70 km, roughly 1.5 to 2 hours", service: "Pick-up from your hotel or station" },
+    { city: "Mathura", mode: "Mathura Junction railhead", travelTime: "11–15 km, usually 30 to 45 minutes", service: "Pick-up from Mathura Junction or Vrindavan station" },
+    { city: "Other cities", mode: "Flight to Delhi, or train to Mathura Junction", travelTime: "Three to three and a half hours by cab from Delhi airport", service: "Tell us your arrival and we will meet you" },
+  ],
+  guideBio: `${FOUNDER.name} was born in Braj and has spent ${YEARS} years guiding pilgrims through the lanes of Vrindavan and Mathura, from the hour a temple courtyard goes quiet to the shortcuts around a jam.`,
+  timingsTitle: "Vrindavan and Mathura temple timings",
+  timingsNote: "Timings change with the season and during festivals, and we reconfirm with the temple the day before your visit.",
+  bookingTags: ["No hidden charges", "Free itinerary customisation", "Written quote before you pay"],
+  bookingText: `${BRAND_NAME} handles the planning: darshan timing, AC vehicle, stays and local guidance. Your only job is to arrive.`,
+  trustTitle: "Why pilgrims travel with us",
+  trustIntro: `${FOUNDER.name} and a team of local Brijwasis have guided ${PILGRIMS} pilgrims since ${FOUNDED}.`,
+  trust: [
+    { title: "Braj-born guidance", text: "A local team who know the hidden lanes, the quiet hours and the shortcuts around a jam." },
+    { title: "Planned around darshan", text: "Temple timings are reconfirmed the day before, and your day is built around crowd patterns." },
+    { title: "Transparent pricing", text: "A written quote that spells out what is included and what is not, with no hidden charges." },
+    { title: "Clean AC vehicles", text: "Experienced drivers who know Braj roads and arrange drop-off points in advance." },
+    { title: "Senior-friendly pace", text: "Gentler routes, rest stops, e-rickshaws and wheelchair help for elderly pilgrims." },
+    { title: "A pujari who serves", text: "We know the difference between a pujari who serves and a tout who sells, and we keep you with the first." },
+  ],
+};
+
 /** Internal links the PDF's notes ask for (homepage, About, Mathura and Braj pages). UI labels only. */
 export const relatedLinks = [
   { label: "Mathura Vrindavan tour packages", href: "/" },
+  { label: "Temple timings", href: "/mathura-vrindavan-temple-timings" },
   { label: `About ${FOUNDER.name}`, href: "/about" },
   { label: "Mathura", href: "/mathura" },
   { label: "Govardhan & Barsana", href: "/govardhan-barsana" },
   { label: "Full Braj Yatra", href: "/braj-yatra" },
 ];
+
+/* ------------------------------------------------------------------ */
+/* The whole page as one JSON document                                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * What the CMS page editor edits, and what a saved `SitePage` row is merged over (lib/cms/site-pages.ts).
+ * Must stay JSON-safe, so `matchWords` (a RegExp used only to link CMS packages) is left out.
+ */
+export const tourPackagesPage = {
+  meta: tpMeta,
+  images: { hero: images.hero, parikrama: images.parikrama, hotel: images.hotel, book: images.book },
+  hero,
+  quickFacts,
+  connection,
+  packagesSection,
+  packages: tpPackages.map(({ matchWords: _matchWords, ...p }) => p),
+  darshanGuide,
+  templeEntries,
+  otherTemples,
+  parikrama,
+  stays,
+  food,
+  travel,
+  faqSection,
+  faqs,
+  book,
+  relatedLinks,
+  packageDefaults,
+  /** Keys of the sections switched off in the editor. */
+  hidden: [] as string[],
+};
+
+export type TourPackagesPage = typeof tourPackagesPage;

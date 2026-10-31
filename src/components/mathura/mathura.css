@@ -1,0 +1,488 @@
+/*
+ * /mathura only. Colours and the serif live in globals.css (@theme); everything here is scoped to
+ * .mathura-page so it reaches no other route. Layout stays in Tailwind utilities in the components.
+ */
+
+@layer components {
+  /* Re-pointing the site's text tokens recolours shared components along with this page. */
+  .mathura-page {
+    /* Declared in @theme inline in globals.css, which only inlines it into utilities: this file needs the real variable. */
+    --font-editorial: var(--font-cormorant), Georgia, serif;
+    --color-ink: #231a12;
+    --color-ink-soft: #463a2e;
+    --color-stone: #65584b;
+    --color-ember-deep: #9a4a2c;
+    --color-line: #e3d6c1;
+    color: var(--color-ink-soft);
+    background: var(--color-parchment);
+  }
+  /* Adds to html's 6.5rem scroll-padding: anchors land just under the header and the guide bar. */
+  .mathura-page [id] {
+    scroll-margin-top: 2.5rem;
+  }
+  .mathura-page :focus-visible {
+    outline-color: var(--color-sandstone);
+  }
+
+  .mt-dark {
+    --color-ink: #fff7ea;
+    --color-ink-soft: #ece2d2;
+    --color-stone: #c9bfb1;
+    --color-ember-deep: #f0b252;
+    --color-line: rgb(255 255 255 / 0.15);
+    color: var(--color-ink-soft);
+    background-color: var(--color-dusk);
+  }
+  .mt-dark.mt-brick {
+    background-color: var(--color-brick);
+  }
+  .mt-dark .mt-kicker,
+  .mt-dark .mt-label {
+    color: var(--color-marigold);
+  }
+  .mt-dark .mt-kicker::before {
+    background: var(--color-marigold);
+  }
+  .mt-dark :focus-visible {
+    outline-color: var(--color-marigold);
+  }
+  .mt-light {
+    --color-ink: #231a12;
+    --color-ink-soft: #463a2e;
+    --color-stone: #65584b;
+    --color-ember-deep: #9a4a2c;
+    --color-line: #e3d6c1;
+    color: var(--color-ink-soft);
+  }
+
+  /* In this layer, so a frame's `absolute` utility can still override it. */
+  .mt-media {
+    position: relative;
+  }
+
+  /* Type */
+  .mt-h2,
+  .mt-h3,
+  .mt-hero-word,
+  .mt-scene,
+  .mt-scene-sm,
+  .mt-closing {
+    font-family: var(--font-editorial);
+    font-weight: 500;
+  }
+  .mt-h2 {
+    font-size: clamp(2.5rem, 1.85rem + 2.9vw, 4.25rem);
+    line-height: 1.04;
+    letter-spacing: -0.012em;
+  }
+  .mt-h3 {
+    font-size: clamp(2.05rem, 1.75rem + 1.3vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.008em;
+  }
+  .mt-scene {
+    font-size: clamp(1.55rem, 1.3rem + 1.15vw, 2.35rem);
+    line-height: 1.32;
+    color: #fff7ea;
+  }
+  .mt-scene strong {
+    color: var(--color-marigold);
+    font-weight: 600;
+  }
+  .mt-scene-sm {
+    font-size: clamp(1.5rem, 1.35rem + 0.6vw, 1.9rem);
+    line-height: 1.28;
+    color: var(--color-ink);
+  }
+  .mt-closing {
+    font-size: clamp(2rem, 1.5rem + 2.4vw, 3.5rem);
+    font-style: italic;
+    line-height: 1.12;
+    color: #fff;
+  }
+  .mt-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-sandstone);
+  }
+  .mt-kicker::before {
+    content: "";
+    width: 2rem;
+    height: 1px;
+    flex: none;
+    background: var(--color-sandstone);
+  }
+  .mt-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-sandstone);
+  }
+  .mt-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .mt-prose {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-ink-soft);
+  }
+  .mt-prose > * + * {
+    margin-top: 1rem;
+  }
+  .mt-dropcap::first-letter {
+    float: left;
+    padding: 0.3rem 0.65rem 0 0;
+    font-family: var(--font-editorial);
+    font-size: 4.9rem;
+    font-weight: 500;
+    line-height: 0.74;
+    color: var(--color-sandstone);
+  }
+  .mt-link {
+    color: var(--color-ember-deep);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.3s var(--ease-braj);
+  }
+  .mt-link:hover {
+    text-decoration-color: currentColor;
+  }
+  .mt-point {
+    position: relative;
+    padding-left: 1.15rem;
+  }
+  .mt-point::before {
+    content: "";
+    position: absolute;
+    left: 0.1rem;
+    top: 0.72em;
+    width: 0.4rem;
+    height: 0.4rem;
+    rotate: 45deg;
+    background: var(--color-sandstone);
+  }
+  .mt-dark .mt-point::before {
+    background: var(--color-marigold);
+  }
+
+  /* Hero */
+  .mt-hero-veil {
+    background:
+      linear-gradient(to top, rgb(11 19 33 / 0.96) 0%, rgb(11 19 33 / 0.78) 34%, rgb(11 19 33 / 0.22) 64%, rgb(11 19 33 / 0.5) 100%),
+      linear-gradient(to right, rgb(11 19 33 / 0.55), transparent 62%);
+  }
+  .mt-hero-word {
+    display: block;
+    margin-left: -0.03em;
+    font-size: clamp(5.25rem, 22.5vw, 16.5rem);
+    font-style: italic;
+    line-height: 0.86;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .mt-hero-rest {
+    display: block;
+    max-width: 44rem;
+    margin-top: 0.6rem;
+    font-size: clamp(1.1rem, 1rem + 0.7vw, 1.6rem);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  /* Sticky guide bar: floats under the site header over whatever section is passing */
+  .mt-guide-nav {
+    position: sticky;
+    top: 4.85rem;
+    z-index: 30;
+    height: 0;
+    display: flex;
+    justify-content: center;
+    padding-inline: 0.75rem;
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .mt-guide-nav {
+      top: 5.5rem;
+    }
+  }
+  .mt-guide-list {
+    position: relative;
+    display: flex;
+    gap: 0.15rem;
+    height: fit-content;
+    max-width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.25rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-behavior: smooth;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 9999px;
+    background: rgb(15 27 45 / 0.92);
+    box-shadow: 0 10px 28px -14px rgb(15 27 45 / 0.6);
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
+  }
+  .mt-guide-link {
+    display: block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: rgb(255 255 255 / 0.8);
+    transition:
+      background-color 0.3s var(--ease-braj),
+      color 0.3s var(--ease-braj);
+  }
+  .mt-guide-link:hover {
+    color: #fff;
+  }
+  .mt-guide-link[aria-current="true"] {
+    color: var(--color-dusk);
+    background: var(--color-marigold);
+  }
+  .mt-guide-link:focus-visible {
+    outline: 2px solid var(--color-marigold);
+    outline-offset: -2px;
+  }
+
+  /* The walk: seven stops strung along one line */
+  .mt-route {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .mt-route {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .mt-route {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0;
+      background: linear-gradient(var(--color-sandstone), var(--color-sandstone)) 0 1rem / 100% 1px no-repeat;
+    }
+  }
+  .mt-route-link {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    padding-right: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--color-ink-soft);
+    transition: color 0.3s var(--ease-braj);
+  }
+  .mt-route-link:hover {
+    color: var(--color-sandstone);
+  }
+  @media (min-width: 1024px) {
+    .mt-route-link {
+      flex-direction: column;
+    }
+  }
+  .mt-route-dot {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--color-sandstone);
+    border-radius: 9999px;
+    font-family: var(--font-editorial);
+    font-size: 1.1rem;
+    color: var(--color-sandstone);
+    background: var(--color-parchment);
+    transition:
+      background-color 0.3s var(--ease-braj),
+      color 0.3s var(--ease-braj);
+  }
+  .mt-route-link:hover .mt-route-dot {
+    color: #fff;
+    background: var(--color-sandstone);
+  }
+
+  .mt-stop {
+    font-family: var(--font-editorial);
+    font-size: 1.5rem;
+    font-style: italic;
+    line-height: 1;
+    color: var(--color-sandstone);
+  }
+  .mt-dark .mt-stop {
+    color: var(--color-marigold);
+  }
+
+  .mt-tip {
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.65);
+  }
+  .mt-dark .mt-tip {
+    background: rgb(255 255 255 / 0.05);
+  }
+  .mt-tip-label {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-editorial);
+    font-size: 1.3rem;
+    font-style: italic;
+    line-height: 1.2;
+    color: var(--color-ink);
+  }
+  .mt-tip-label svg {
+    flex: none;
+    color: var(--color-sandstone);
+  }
+  .mt-dark .mt-tip-label svg {
+    color: var(--color-marigold);
+  }
+
+  .mt-fort-fade {
+    background: linear-gradient(to top, var(--color-brick) 2%, rgb(42 23 18 / 0.72) 26%, rgb(42 23 18 / 0.1) 60%, transparent);
+  }
+
+  /* A painting on a wall: pale mat, hairline edge */
+  .mt-mat {
+    padding: 0.85rem 0.85rem 0.75rem;
+    border: 1px solid #dfd0b7;
+    background: #fffdf8;
+    box-shadow: 0 24px 44px -30px rgb(35 26 18 / 0.5);
+  }
+  @media (min-width: 640px) {
+    .mt-mat {
+      padding: 1.25rem 1.25rem 1rem;
+    }
+  }
+
+  /* Photo tile with its text laid over a dark foot */
+  .mt-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: var(--color-dusk);
+    box-shadow: var(--shadow-soft);
+  }
+  .mt-tile .zoom-media {
+    height: 100%;
+  }
+  .mt-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, rgb(11 19 33 / 0.92) 0%, rgb(11 19 33 / 0.6) 34%, transparent 66%);
+  }
+  .mt-tile-body {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    padding: 1.15rem 1.25rem 1.25rem;
+  }
+
+  /* Aarti: dusk over the river, one lit horizon, lamps adrift */
+  .mt-aarti {
+    background:
+      radial-gradient(70% 34% at 50% 104%, rgb(226 124 43 / 0.75), transparent 72%),
+      linear-gradient(to bottom, var(--color-dusk), #141f36 60%, #2a2238);
+  }
+  .mt-diya {
+    position: absolute;
+    bottom: 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    opacity: 0;
+    background: #ffd98a;
+    box-shadow:
+      0 0 10px 3px rgb(255 190 92 / 0.85),
+      0 0 26px 8px rgb(240 138 52 / 0.4);
+    animation: mt-diya-drift 13s ease-out infinite;
+  }
+
+  /* Day-long timeline */
+  .mt-sunpath {
+    position: relative;
+    display: grid;
+    gap: 1.5rem;
+    padding-left: 1.75rem;
+  }
+  .mt-sunpath::before {
+    content: "";
+    position: absolute;
+    left: 0.3rem;
+    top: 0.4rem;
+    bottom: 0.4rem;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--color-marigold), var(--color-sandstone) 62%, var(--color-dusk));
+  }
+  .mt-sunpath > li {
+    position: relative;
+  }
+  .mt-sunpath > li::before {
+    content: "";
+    position: absolute;
+    left: -1.75rem;
+    top: 0.2rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-left: 0.01rem;
+    border: 2px solid var(--color-sandstone);
+    border-radius: 9999px;
+    background: var(--color-parchment);
+  }
+
+  .mt-book-veil {
+    background: linear-gradient(to bottom, rgb(11 19 33 / 0.94), rgb(11 19 33 / 0.86) 60%, rgb(11 19 33 / 0.94));
+  }
+
+  /* The shared FAQ rows hide the marker; the serif question needs no underline on focus */
+  .mathura-page .faq-item summary:hover h3 {
+    color: var(--color-sandstone);
+  }
+  .mathura-page .faq-item summary h3 {
+    transition: color 0.3s var(--ease-braj);
+  }
+}
+
+@keyframes mt-diya-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(1);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 1rem), -15rem) scale(0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-diya {
+    animation: none !important;
+    opacity: 0.85;
+  }
+  .mt-guide-list {
+    scroll-behavior: auto;
+  }
+}

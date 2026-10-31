@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
   largeImagePreview: true,
 });
 
-/** A letter from Harsh Sharma — copy from AboutUsContent.pdf, rendered from content/about.ts. */
+/** A letter from the founder — copy from AboutUsContent.pdf, rendered from content/about.ts. */
 export default function AboutPage() {
   return (
     <>

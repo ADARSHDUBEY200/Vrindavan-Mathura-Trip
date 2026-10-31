@@ -7,6 +7,7 @@ import { ImageOff, LayoutGrid, List, Pencil, Plus, Search, Trash2 } from "lucide
 import { adminApi } from "@/lib/admin-api";
 import { ADMIN_ROUTES, TABLES, type EditorType } from "@/lib/cms/config";
 import { CATEGORY_LABEL, CATEGORY_OPTIONS } from "@/lib/cms/constants";
+import { templeImageUrl } from "@/lib/cms/temple-image";
 import { formatDate, titleCase } from "@/lib/cms/utils";
 import { createClient } from "@/lib/supabase/client";
 import { CMSLoading } from "./CMSLoading";
@@ -64,7 +65,7 @@ const CONFIG: Record<EditorType, Config> = {
     subtitle: "Temple guides across Braj.",
     select: "id,title,slug,status,created_at,location,image",
     categoryColumn: "location",
-    imageOf: (r) => String(r.image ?? ""),
+    imageOf: (r) => templeImageUrl(String(r.image ?? "")),
     api: adminApi.temples,
   },
 };

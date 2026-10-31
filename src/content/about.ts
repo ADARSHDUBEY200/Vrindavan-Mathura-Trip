@@ -1,8 +1,8 @@
-import { BRAND_NAME, FOUNDED, FOUNDER, PILGRIMS, RATING, STARTING_PRICE, YEARS, formatInr, phoneHref } from "@/config/site";
+import { BRAND_NAME, FOUNDED, FOUNDER, PHONE_DISPLAY, PILGRIMS, RATING, STARTING_PRICE, YEARS, formatInr, phoneHref } from "@/config/site";
 import { getTemple } from "./temples";
 
 /*
- * About page copy — taken word for word from AboutUsContent.pdf (Harsh Sharma's letter).
+ * About page copy — taken word for word from AboutUsContent.pdf (the founder's letter).
  * Do not paraphrase. Inline markup understood by <RichText line>:
  *   ***bold italic***   **bold**   *italic*   [link text](href)
  * The PDF's "Quick Notes for Your Web Team" are not published; they are handled in config and schema.
@@ -35,7 +35,7 @@ export const aboutMeta = {
   /** ≤ 60 chars. The PDF's suggestion ("…Your Local Braj Guide Since 2015", ~79 chars) would be truncated in results. */
   title: `About ${BRAND_NAME} | ${FOUNDER.name}, Since ${FOUNDED}`,
   /** ≤ 160 chars. */
-  description: `Meet ${FOUNDER.name}, a Mathura-born guide with ${YEARS} years' experience. Braj tour packages from ${price}, ${RATING}★ rating, ${PILGRIMS} pilgrims. Call +91 99975 28849.`,
+  description: `Meet ${FOUNDER.name}, a Mathura-born guide with ${YEARS} years' experience. Braj tour packages from ${price}, ${RATING}★ rating, ${PILGRIMS} pilgrims. Call ${PHONE_DISPLAY}.`,
 };
 
 /* ------------------------------------------------------------------ */
@@ -47,14 +47,14 @@ export const aboutImages = {
     src: "/images/about/harsh-sharma-mathura-lane.webp",
     width: 960,
     height: 1200,
-    alt: "Harsh Sharma, founder of Mathura Vrindavan Trips, standing in a Mathura lane near a temple",
+    alt: `${FOUNDER.name}, founder of Mathura Vrindavan Trips, standing in a Mathura lane near a temple`,
   },
   /** Open Graph / social card (1200 × 630). JPEG, because several social networks still ignore WebP. */
   founderOg: {
     src: "/images/about/harsh-sharma-og.jpg",
     width: 1200,
     height: 630,
-    alt: "Harsh Sharma, founder of Mathura Vrindavan Trips, standing in a Mathura lane near a temple",
+    alt: `${FOUNDER.name}, founder of Mathura Vrindavan Trips, standing in a Mathura lane near a temple`,
   },
   /*
    * Location photos from Wikimedia Commons (CC BY-SA, credited on the page). Alt text describes what each
@@ -113,7 +113,7 @@ export const aboutHero = {
   title: "About Mathura Vrindavan Trips: Your Local Companions in Braj Bhoomi",
   greeting: "**Radhe Radhe, and welcome home.**",
   paragraphs: [
-    "I am Harsh Sharma, and I am glad you found this page. Before you book anything or compare any prices, I want you to know who is on the other side of the phone. **About Mathura Vrindavan Trips** is really a story about one family of Brijwasis who love this land, and who believe that bringing a pilgrim to Braj is not a job. It is Seva.",
+    `I am ${FOUNDER.name}, and I am glad you found this page. Before you book anything or compare any prices, I want you to know who is on the other side of the phone. **About Mathura Vrindavan Trips** is really a story about one family of Brijwasis who love this land, and who believe that bringing a pilgrim to Braj is not a job. It is Seva.`,
     "I was born in Mathura. I have spent more than eleven years guiding pilgrims through its lanes, ghats and temples, and since 2015 I have run Mathura Vrindavan Trips as a **local travel agency** with one purpose: that every devotee who comes to Braj goes home with a full heart, a light mind and no regrets.",
   ] as Rich[],
   leadOut: "Think of this page as a letter from me to you. Please read it slowly.",
@@ -137,7 +137,7 @@ export const aboutStory = {
     title: "My connection to Radha and Krishna",
     paragraphs: [
       `In Braj, we do not say "Krishna" alone. We say **Radhe Radhe**, because this is Radha Rani's kingdom, and Krishna is the Lord who waits at her door. I have stood at ${temple("Nidhivan", "nidhivan")} at dusk and at Radha Kund before dawn so many times that I have lost count, and each time I feel the same quiet wonder. Faith here is not something I had to find. It was in the air I breathed as a child.`,
-      `That is also why people who search for [**Harsh Sharma Mathura guide**](${tel}) usually find me answering my own phone. I would not want it any other way.`,
+      `That is also why people who search for [**${FOUNDER.name} Mathura guide**](${tel}) usually find me answering my own phone. I would not want it any other way.`,
     ] as Rich[],
   },
 };
@@ -250,14 +250,14 @@ export const aboutContact = {
     "Whether you are planning a quick one-day visit, a two-day Radha Krishna yatra, or a deeper journey through Govardhan, Barsana and Gokul, I would be honoured to help. Tell me your dates, how many people are travelling, and anything that matters to you, such as elderly parents, young children or a special festival. I will reply personally with a clear plan and a transparent quote.",
   ] as Rich[],
   lines: {
-    phone: { emoji: "📞", label: "Call or WhatsApp Harsh Sharma:" },
+    phone: { emoji: "📞", label: `Call or WhatsApp ${FOUNDER.name}:` },
     email: { emoji: "✉️", label: "Email:" },
     website: { emoji: "🌐", label: "Website:", value: "https://vrindavanmathuratrip.com/" },
   },
-  whatsappMessage: "Radhe Radhe Harsh ji! I read your letter on the About page and would like to plan a Braj yatra. Our dates: … Number of travellers: …",
+  whatsappMessage: `Radhe Radhe ${FOUNDER.name} ji! I read your letter on the About page and would like to plan a Braj yatra. Our dates: … Number of travellers: …`,
   statsLabel: "Mathura Vrindavan Trips",
   stats: [`serving pilgrims since ${FOUNDED}`, `⭐ ${RATING}-star rated`, `🙏 ${PILGRIMS} pilgrims guided`, `Packages from ${price}`],
   closing: "Braj does not ask you to be perfect. It only asks you to come. The rest is between you and Thakur ji.",
   farewell: "**Radhe Radhe.** 🙏",
-  signature: "— Harsh Sharma, Founder, Mathura Vrindavan Trips",
+  signature: `— ${FOUNDER.name}, Founder, Mathura Vrindavan Trips`,
 };

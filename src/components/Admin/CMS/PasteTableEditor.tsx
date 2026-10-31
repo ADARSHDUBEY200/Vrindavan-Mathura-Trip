@@ -76,7 +76,7 @@ export function PasteTableEditor<T extends { id: string }>({
       </label>
 
       {typedRows.length > 0 && (
-        <div className="overflow-x-auto rounded-lg border border-white/10">
+        <div className="relative overflow-x-auto rounded-lg border border-white/10">
           <table className="w-full min-w-[640px] text-sm">
             <thead className="bg-white/5 text-left text-slate-300">
               <tr>

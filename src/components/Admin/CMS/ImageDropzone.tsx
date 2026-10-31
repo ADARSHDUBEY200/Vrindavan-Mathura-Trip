@@ -6,6 +6,7 @@ import { ImageUp, Loader2, X } from "lucide-react";
 import type { EditorType } from "@/lib/cms/config";
 import { MAX_IMAGE_BYTES } from "@/lib/cms/constants";
 import { uploadImage } from "@/lib/cms/save";
+import { templeImageUrl } from "@/lib/cms/temple-image";
 
 /** Dashed drop zone: accepts one .webp up to 2 MB, uploads it, and reports the public URL. */
 export function ImageDropzone({
@@ -63,7 +64,7 @@ export function ImageDropzone({
       {value ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element -- preview of an arbitrary uploaded URL */}
-          <img src={value} alt="" className="absolute inset-0 size-full object-cover" />
+          <img src={templeImageUrl(value)} alt="" className="absolute inset-0 size-full object-cover" />
           <div className="absolute right-2 top-2 flex gap-2">
             <button type="button" onClick={() => inputRef.current?.click()} className="rounded-lg bg-black/60 px-3 py-1.5 text-xs text-white hover:bg-black/80">
               Replace

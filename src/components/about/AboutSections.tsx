@@ -531,7 +531,7 @@ export function AboutContact() {
             <Eyebrow className={eyebrowChip}>Send an enquiry</Eyebrow>
           </div>
           <div className="mt-4">
-            <EnquiryForm title="Tell Harsh about your yatra" />
+            <EnquiryForm title={`Tell ${FOUNDER.name} about your yatra`} />
           </div>
         </div>
 

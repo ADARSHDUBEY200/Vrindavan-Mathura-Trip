@@ -6,6 +6,7 @@ import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { FacebookIcon, WhatsappIcon, XIcon, YoutubeIcon } from "@/components/svg/TravelIcons";
 import {
   ADDRESS,
+  BLOG_AUTHOR,
   FOUNDED,
   FOUNDER,
   OPENING_HOURS,
@@ -70,9 +71,9 @@ export function blogBlocks(seo: BlogSeoContent) {
 
 export type AuthorInfo = { name: string; role: string; image?: string; bio?: string; isFounder: boolean };
 
-/** Author box data: CMS fields first, then the founder's own facts from the site config. */
+/** Author box data: CMS fields first, then the default blog author; founder facts only when the founder wrote it. */
 export function authorInfo(blog: BlogPost): AuthorInfo {
-  const name = blog.author || FOUNDER.name;
+  const name = blog.author || BLOG_AUTHOR;
   const isFounder = name.trim().toLowerCase() === FOUNDER.name.toLowerCase();
   const { seo } = blog;
   return {

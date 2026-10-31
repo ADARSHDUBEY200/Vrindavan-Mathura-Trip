@@ -26,7 +26,7 @@ export const images = {
   },
   founder: {
     src: "/images/home/founder-harsh-sharma.webp",
-    alt: "Harsh Sharma, founder of Mathura Vrindavan Trips, guiding pilgrims near Krishna Janmabhoomi",
+    alt: `${FOUNDER.name}, founder of Mathura Vrindavan Trips, guiding pilgrims near Krishna Janmabhoomi`,
     width: 960,
     height: 1200,
   },
@@ -60,7 +60,7 @@ export const images = {
   jalebi: { src: "/images/home/food-jalebi-rabri.webp", alt: "Hot jalebis served with a bowl of rabri", width: 800, height: 600 },
   book: {
     src: "/images/home/book-with-harsh-sharma.webp",
-    alt: "Contact Mathura Vrindavan Trips to book Mathura Vrindavan tour packages with Harsh Sharma",
+    alt: `Contact Mathura Vrindavan Trips to book Mathura Vrindavan tour packages with ${FOUNDER.name}`,
     width: 1200,
     height: 800,
   },
@@ -275,7 +275,7 @@ export const signaturePackages: SignaturePackage[] = [
       { time: "7:30 p.m.", stop: "Drop-off or onward travel." },
     ],
     tip: {
-      label: "Harsh's tip",
+      label: `${FOUNDER.name}'s tip`,
       text: "One day is enough to taste Braj, but you will not feel finished. Many of our one-day guests call me within a year to book a longer return trip. That is how Braj works; it pulls you back.",
     },
     stops: [
@@ -982,7 +982,7 @@ export const travel = {
     { name: "Gaura Purnima, Akshaya Tritiya and Ram Navami", text: "Lesser known but deeply meaningful." },
   ],
   advice: {
-    label: "Harsh's advice",
+    label: `${FOUNDER.name}'s advice`,
     text: "If you can, avoid the two or three most crowded days (like the main Holi day or Janmashtami night) unless you thrive on crowds. The days just before and after are often more spiritually rewarding.",
   },
   packingTitle: "Seasonal packing guide: what I tell every guest",
@@ -1138,7 +1138,7 @@ export const bookSection = {
   tell: `Tell me your dates, the number of travellers, and any special needs, such as elderly parents, small children, or a particular festival. I will reply personally with a clear plan and a transparent quote. Whether you are looking for **Mathura Vrindavan tour packages**, a family-friendly **Mathura Vrindavan travel package**, or a fully customised **Mathura Vrindavan tour**, we are ready to make it smooth, safe and spiritually rewarding.`,
   closing: "Radhe Radhe. 🙏 Come home to Braj.",
   signature: `— ${FOUNDER.name}, Founder, ${BRAND_NAME}`,
-  whatsappMessage: "Radhe Radhe Harsh ji! I'd like to book a Mathura Vrindavan tour package. My dates and group details are:",
+  whatsappMessage: `Radhe Radhe ${FOUNDER.name} ji! I'd like to book a Mathura Vrindavan tour package. My dates and group details are:`,
 };
 
 /** Services listed in the OfferCatalog — each one is stated on the page (packages, add-ons, customised tours). */

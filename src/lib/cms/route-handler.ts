@@ -5,6 +5,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { decodeBody } from "./body-codec";
 import { BLOGS_PATH, CMS_BLOGS_TAG } from "./blogs";
 import { CMS_PACKAGES_TAG } from "./packages";
+import { CMS_PAGES_TAG } from "./site-pages";
+import { TEMPLES_PATH } from "./temple-fields";
+import { CMS_TEMPLES_TAG } from "./temples";
 import { verifyAdmin } from "./verify-admin";
 
 type Row = Record<string, unknown>;
@@ -23,8 +26,9 @@ const errorMessage = (err: unknown) => (err instanceof Error ? err.message : "Un
 /**
  * Builds POST / PUT / DELETE handlers for one CMS table.
  * `revalidate` receives the affected slug (when known) and refreshes the public pages.
+ * `validate` rejects a body before it reaches the table: it returns an error message or null.
  */
-export function createCrudHandlers(table: string, revalidate: (slug?: string) => void) {
+export function createCrudHandlers(table: string, revalidate: (slug?: string) => void, validate?: (row: Row) => string | null) {
   const guard = async () => ((await verifyAdmin()) ? null : json({ error: "Unauthorized" }, 401));
 
   const safeRevalidate = (slug?: unknown) => {
@@ -41,6 +45,8 @@ export function createCrudHandlers(table: string, revalidate: (slug?: string) =>
     try {
       const body = await readBody(request);
       delete body.id;
+      const invalid = validate?.(body);
+      if (invalid) return json({ error: invalid }, 400);
       const { data, error } = await createAdminClient().from(table).insert(body).select().single();
       if (error) return json({ error: error.message }, 400);
       safeRevalidate(data?.slug);
@@ -59,6 +65,8 @@ export function createCrudHandlers(table: string, revalidate: (slug?: string) =>
       const body = await readBody(request);
       delete body.id;
       delete body.created_at;
+      const invalid = validate?.(body);
+      if (invalid) return json({ error: invalid }, 400);
       const supabase = createAdminClient();
       const { data: previous } = await supabase.from(table).select("slug").eq("id", id).maybeSingle();
       const { data, error } = await supabase.from(table).update(body).eq("id", id).select().single();
@@ -104,12 +112,25 @@ export const revalidators = {
     revalidateTag(CMS_PACKAGES_TAG, "max");
     revalidatePath("/");
     revalidatePath("/tour-packages");
-    revalidatePath("/(site)/tour-packages/[slug]", "page");
+    revalidatePath("/(site)/tour-packages/[duration]", "page");
+    revalidatePath("/(site)/tour-packages/[duration]/[slug]", "page");
+    revalidatePath("/sitemap.xml");
     if (slug) revalidatePath(`/tour-packages/${slug}`);
   },
+  /** Editable page copy. Package pages share its blocks, so they refresh too. */
+  pages() {
+    revalidateTag(CMS_PAGES_TAG, { expire: 0 });
+    revalidatePath(TEMPLES_PATH);
+    revalidatePath("/tour-packages");
+    revalidatePath("/(site)/tour-packages/[duration]", "page");
+    revalidatePath("/(site)/tour-packages/[duration]/[slug]", "page");
+  },
+  /** `expire: 0`: a temple moved to Draft or deleted must not be served stale to even one more visitor. */
   temples(slug?: string) {
-    revalidatePath("/temples");
-    revalidatePath("/(site)/temples/[slug]", "page");
-    if (slug) revalidatePath(`/temples/${slug}`);
+    revalidateTag(CMS_TEMPLES_TAG, { expire: 0 });
+    revalidatePath(TEMPLES_PATH);
+    revalidatePath(`/(site)${TEMPLES_PATH}/[slug]`, "page");
+    revalidatePath("/sitemap.xml");
+    if (slug) revalidatePath(`${TEMPLES_PATH}/${slug}`);
   },
 };

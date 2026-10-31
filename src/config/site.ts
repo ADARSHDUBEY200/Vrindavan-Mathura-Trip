@@ -12,6 +12,8 @@ export const BRAND_NAME = "Mathura Vrindavan Trips";
 export const SITE_URL = "https://vrindavanmathuratrip.com";
 
 export const FOUNDER = { name: "Harsh Sharma", jobTitle: "Founder & Local Guide", bornIn: "Mathura" } as const;
+/** Default byline for CMS blogs — prefilled in the admin form and used when a blog has no author. */
+export const BLOG_AUTHOR = FOUNDER.name;
 
 export const FOUNDED = "2015";
 export const RATING = 4.9;
@@ -21,7 +23,7 @@ export const YEARS = "11+";
 export const PHONE_DISPLAY = "+91 99975 28849";
 export const PHONE_E164 = "+919997528849";
 export const WHATSAPP = "919997528849";
-export const EMAIL = "vrindavanmathuratrip@gmail.com";
+export const EMAIL = "vrindavanmathuratrips@gmail.com";
 
 /**
  * TODO(owner): number of real, verifiable reviews behind the 4.9 rating (e.g. your Google Business Profile count).

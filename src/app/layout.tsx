@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
-import { site } from "@/config/site";
+import { FOUNDER, site } from "@/config/site";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  authors: [{ name: FOUNDER.name, url: `${site.url}/about` }],
+  creator: FOUNDER.name,
+  publisher: site.name,
   formatDetection: { telephone: false, email: false, address: false },
   openGraph: { siteName: site.name, locale: site.locale, type: "website" },
   twitter: { card: "summary_large_image" },

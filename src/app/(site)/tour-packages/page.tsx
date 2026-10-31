@@ -1,68 +1,59 @@
-import { PackageCard } from "@/components/cards/PackageCard";
-import { FinalCta, WhyUs } from "@/components/home/Sections";
-import { PageHero } from "@/components/layout/PageHero";
+import { ArchiveHero, BookSection, ByDuration, Connection, DarshanGuide, FaqAccordion, Food, PackageListing, Parikrama, QuickFacts, RelatedLinks, Stays, Travel } from "@/components/tour-packages/ArchiveSections";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { EnquiryButtons } from "@/components/ui/EnquiryButtons";
-import { FilterChips, FilterRoot } from "@/components/ui/FilterChips";
-import { photos } from "@/content/images";
-import { durationFilters, packages } from "@/content/packages";
+import { tpPackages } from "@/content/tour-packages";
+import { getPublishedPackages, matchCatalogPackage, toCatalog } from "@/lib/cms/packages";
+import { PACKAGES_PATH } from "@/lib/cms/package-fields";
+import { getTourPackagesContent } from "@/lib/cms/site-pages";
+import { plainText } from "@/lib/rich-text";
+import { breadcrumbSchema, faqSchema, itemListSchema, webPageSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
-import { breadcrumbSchema, itemListSchema, webPageSchema } from "@/lib/schema";
 
-const title = "Vrindavan & Mathura Tour Packages";
-const description =
-  "Private Vrindavan, Mathura and Braj tour packages — same-day darshan, 2-day trips, Govardhan–Barsana, 84 Kos yatra and combo circuits with Agra, Ayodhya, Varanasi, Haridwar and Rishikesh.";
 const crumbs = [
   { name: "Home", href: "/" },
-  { name: "Tour Packages", href: "/tour-packages" },
+  { name: "Tour Packages", href: PACKAGES_PATH },
 ];
 
-export const metadata = buildMetadata({ title, description, path: "/tour-packages", image: photos["dwarkadhish"].src });
+export async function generateMetadata() {
+  const c = await getTourPackagesContent();
+  return {
+    ...buildMetadata({ title: c.meta.title, description: c.meta.description, path: PACKAGES_PATH, image: { src: c.images.hero.src }, imageAlt: c.images.hero.alt, absoluteTitle: true, largeImagePreview: true }),
+    keywords: c.meta.keywords,
+  };
+}
 
-export default function PackagesPage() {
+export default async function TourPackagesPage() {
+  const [c, cms] = await Promise.all([getTourPackagesContent(), getPublishedPackages()]);
+  const catalog = toCatalog(cms);
+  const show = (section: string) => !c.hidden.includes(section);
+
+  // "View this package" on the summary cards, when a live package matches.
+  const links = Object.fromEntries(tpPackages.map((p) => [p.id, matchCatalogPackage(catalog, p.matchWords, p.days)?.path]));
+  const faqs = c.faqs.map((f) => ({ q: plainText(f.q), a: plainText(f.a) }));
+
   return (
-    <>
-      <PageHero
-        eyebrow="Tour packages"
-        title="Private tour packages for Vrindavan, Mathura & Braj"
-        lede="Choose a starting point and we’ll shape it around your dates, group and pace. Every trip is private, with your own car and driver."
-        crumbs={crumbs}
-        image={photos["prem-mandir"]}
-      >
-        <EnquiryButtons message="Radhe Radhe! Please help me choose a Vrindavan–Mathura tour package." />
-      </PageHero>
-
-      <section aria-labelledby="list-title" className="pb-20 pt-6 lg:pb-28">
-        <div className="container-x">
-          <h2 id="list-title" className="sr-only">
-            All tour packages
-          </h2>
-          <FilterRoot>
-            <FilterChips name="duration" legend="Filter packages by duration" options={durationFilters.map((f) => ({ value: f.id, label: f.label }))} allLabel="All trips" />
-            <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {packages.map((p) => (
-                <li key={p.slug} data-filters={p.filters.join(" ")}>
-                  <PackageCard pkg={p} />
-                </li>
-              ))}
-            </ul>
-          </FilterRoot>
-          <p className="mt-10 max-w-3xl text-sm leading-relaxed text-stone">
-            Prices depend on your starting city, dates, vehicle and hotels, so we share an itemised quote for each trip rather than a one-size-fits-all price.
-          </p>
-        </div>
-      </section>
-
-      <WhyUs />
-      <FinalCta title="Not sure which trip suits you?" text="Tell us how many days you have and who’s travelling — we’ll suggest the right plan." />
+    <div className="about-palette">
+      <ArchiveHero c={c} crumbs={crumbs} />
+      {show("quickFacts") && <QuickFacts c={c} />}
+      {show("connection") && <Connection c={c} />}
+      {show("listing") && <PackageListing c={c} catalog={catalog} />}
+      {show("byDuration") && <ByDuration c={c} links={links} />}
+      {show("darshanGuide") && <DarshanGuide c={c} />}
+      {show("parikrama") && <Parikrama c={c} />}
+      {show("stays") && <Stays c={c} />}
+      {show("food") && <Food c={c} />}
+      {show("travel") && <Travel c={c} />}
+      {show("faqs") && <FaqAccordion items={c.faqs} title={c.faqSection.title} eyebrow={c.faqSection.eyebrow} />}
+      {show("relatedLinks") && <RelatedLinks c={c} />}
+      <BookSection c={c} updatedOn={c.updatedOn} />
 
       <JsonLd
         data={[
-          webPageSchema({ path: "/tour-packages", name: title, description }),
+          webPageSchema({ path: PACKAGES_PATH, name: c.meta.title, description: c.meta.description }),
           breadcrumbSchema(crumbs),
-          itemListSchema(title, packages.map((p) => ({ name: p.title, href: `/tour-packages/${p.slug}` }))),
+          itemListSchema(c.packagesSection.catalogTitle, catalog.flatMap((p) => (p.path ? [{ name: p.title, href: p.path }] : []))),
+          show("faqs") ? faqSchema(faqs) : undefined,
         ]}
       />
-    </>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import { revalidators } from "@/lib/cms/route-handler";
 /**
  * Manual revalidation:
  *   /api/revalidate?secret=…                     every CMS-fed public page
- *   /api/revalidate?secret=…&type=blogs&slug=…   one resource (blogs | packages | temples)
+ *   /api/revalidate?secret=…&type=blogs&slug=…   one resource (blogs | packages | temples | pages)
  *   /api/revalidate?secret=…&path=/some/path     one literal path
  */
 async function handle(request: NextRequest) {
@@ -21,12 +21,13 @@ async function handle(request: NextRequest) {
 
   if (path) {
     revalidatePath(path);
-  } else if (type === "blogs" || type === "packages" || type === "temples") {
+  } else if (type === "blogs" || type === "packages" || type === "temples" || type === "pages") {
     revalidators[type](slug);
   } else {
     revalidators.blogs();
     revalidators.packages();
     revalidators.temples();
+    revalidators.pages();
   }
 
   return NextResponse.json({ revalidated: true, now: Date.now() });

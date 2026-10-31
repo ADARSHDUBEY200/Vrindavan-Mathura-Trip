@@ -32,6 +32,30 @@
   --color-cocoa: #1c0d05; /* deep brown-black paired with saffron on /blogs */
   --color-cocoa-soft: #2a1408;
 
+  /* /mathura: night on the Yamuna, parchment, marigold and fired brick */
+  --color-dusk: #0f1b2d;
+  --color-dusk-soft: #1a2940;
+  --color-brick: #2a1712;
+  --color-parchment: #fbf6ec;
+  --color-parchment-deep: #f3e9d8;
+  --color-marigold: #f0b252;
+  --color-sandstone: #9a4a2c;
+
+  /* Vrindavan page: the pichhvai palette (components/vrindavan/vrindavan.css) */
+  --color-shyam: #0f1433; /* Krishna's night blue */
+  --color-shyam-soft: #1c2452;
+  --color-kumkum: #7a1024; /* the jhanki curtain */
+  --color-kumkum-bright: #a31c33;
+  --color-tulsi: #12352b; /* the grove at Nidhivan */
+  --color-tulsi-soft: #2b6350;
+  --color-yamuna: #10354c; /* the river at dusk */
+  --color-haldi: #f4b942; /* turmeric gold: on dark grounds only */
+  --color-haldi-deep: #8a5800; /* gold for small text on chandan (AA) */
+  --color-chandan: #f8f1e5; /* sandalwood paper */
+  --color-chandan-deep: #efe3cf;
+  --color-mitti: #2a1a12; /* ink on chandan */
+  --color-mitti-soft: #5c4b3e;
+
   --radius-card: 1.25rem;
   --radius-media: 1rem;
 
@@ -47,6 +71,7 @@
 @theme inline {
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-editorial: var(--font-cormorant), Georgia, serif;
 }
 
 /* ------------------------------------------------------------------ */

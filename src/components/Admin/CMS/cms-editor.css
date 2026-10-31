@@ -31,6 +31,12 @@
   color: rgb(255 255 255 / 0.9);
 }
 
+/* Imported HTML carries inline black text and white backgrounds: keep it legible here. The public page drops those styles. */
+.cms-editor .sun-editor-editable :where(p, li, span, h1, h2, h3, h4, h5, h6, strong, em, td, th) {
+  color: rgb(255 255 255 / 0.9) !important;
+  background-color: transparent !important;
+}
+
 .cms-editor .sun-editor-editable a {
   color: #7dd3fc;
 }

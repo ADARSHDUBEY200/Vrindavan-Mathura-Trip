@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { AdminToaster } from "@/components/Admin/AdminToaster";
 import { CMSLoading } from "@/components/Admin/CMSLoading";
@@ -25,6 +26,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 async function AdminGate({ children }: { children: React.ReactNode }) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) redirect(ADMIN_LOGIN);
 
+  // The session check reads the clock, so it must wait for a real request.
+  await connection();
   const supabase = await createClient();
   const {
     data: { user },

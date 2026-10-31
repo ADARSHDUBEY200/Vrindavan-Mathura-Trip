@@ -16,6 +16,7 @@ import { EditorShell } from "@/components/Admin/CMS/RichTextSection";
 import { Field, FieldLabel, ListEditor, Section, TextArea, TextInput, Toggle } from "@/components/Admin/CMS/ui";
 import { useEditorController } from "@/components/Admin/CMS/useEditorController";
 import { CMSLoading } from "@/components/Admin/CMSLoading";
+import { BLOG_AUTHOR } from "@/config/site";
 import { readingMinutes, youtubeId } from "@/lib/cms/blog-fields";
 import { ADMIN_ROUTES } from "@/lib/cms/config";
 import { asObject, asString, htmlTextLength, isBlankHtml, stripEmpty, uid, withIds } from "@/lib/cms/utils";
@@ -112,7 +113,7 @@ const EMPTY: BlogFormState = {
   title: "",
   category: "",
   slug: "",
-  author: "",
+  author: BLOG_AUTHOR,
   meta: { title: "", description: "" },
   schema: { title: "", description: "" },
   image: "",
@@ -293,7 +294,7 @@ export default function BlogForm({ mode, id }: { mode: "create" | "edit"; id?: s
       <form ref={formRef} onSubmit={c.onSubmit} noValidate className="space-y-4">
         <CMSMetaSection editorType="Blog" title={form.title} category={form.category} slug={form.slug} onChange={patch} autoSlug={mode === "create"}>
           <Field label="Author" required hint={<Hint>Shown on the byline</Hint>}>
-            <TextInput required value={form.author} placeholder="e.g. Radha Sharma" onChange={(author) => patch({ author })} />
+            <TextInput required value={form.author} placeholder={`e.g. ${BLOG_AUTHOR}`} onChange={(author) => patch({ author })} />
           </Field>
         </CMSMetaSection>
 
