@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" },
     ],
   },
+  experimental: {
+    // Child-process workers crash the deploy build ("node process exited before we could
+    // connect to it"): they can't hold their loopback socket to Next there. Threads use none.
+    turbopackPluginRuntimeStrategy: "workerThreads",
+  },
   turbopack: {
     rules: {
       "*.css": {
