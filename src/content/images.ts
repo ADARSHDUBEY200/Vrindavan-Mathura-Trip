@@ -39,7 +39,6 @@ import imgAyodhya from "@/assets/photos/ayodhya.jpg";
 import imgRishikesh from "@/assets/photos/rishikesh.jpg";
 import imgKartikLamps from "@/assets/photos/kartik-lamps.jpg";
 import imgVrindavanStreet from "@/assets/photos/vrindavan-street.jpg";
-import imgPeacockFeather from "@/assets/photos/peacock-feather.jpg";
 import imgMathuraVishramDusk from "@/assets/photos/mathura-vishram-ghat-dusk.jpg";
 import imgMathuraJanmasthan from "@/assets/photos/mathura-janmasthan-street.jpg";
 import imgMathuraKansQila from "@/assets/photos/mathura-kans-qila.jpg";
@@ -255,11 +254,6 @@ export const photos = {
     src: imgVrindavanStreet,
     alt: "A busy shop selling devotional items in a Vrindavan street",
     credit: {"title": "Streets of Vrindavan 49", "author": "Goutam1962", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Streets_of_Vrindavan_49.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
-  },
-  "peacock-feather": {
-    src: imgPeacockFeather,
-    alt: "Close-up of a male Indian peacock feather in blue and green",
-    credit: {"title": "Feather of male Pavo cristatus (Indian peafowl)", "author": "MichaelMaggs", "license": "CC BY-SA 3.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Feather_of_male_Pavo_cristatus_(Indian_peafowl).jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"},
   },
   "vaishno-devi-dham": {
     src: imgVaishnoDeviDham,

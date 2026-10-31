@@ -3,6 +3,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { BookJourney, DarshanPlanner, Etiquette, MandirGlance, TempleChapters, TempleFinder, TemplesFaq, TemplesHero, WelcomeLetter } from "@/components/temples/ArchiveSections";
 import { eczar } from "@/components/vrindavan/fonts";
 import { SectionNav } from "@/components/vrindavan/SectionNav";
+import { chapterAnchor } from "@/content/temples-page";
 import { getTemplesPageContent } from "@/lib/cms/site-pages";
 import { TEMPLES_PATH } from "@/lib/cms/temple-fields";
 import { templeImageUrl } from "@/lib/cms/temple-image";
@@ -44,7 +45,7 @@ export default async function TemplesPage() {
   const nav = c.order.filter(show).flatMap((key) => {
     if (key === "glance") return [{ id: "mandir-list", label: "Mandir list" }];
     if (key === "explorer") return [{ id: "temple-finder", label: "Find a temple" }];
-    if (key === "chapters") return c.chapters.map((ch) => ({ id: ch.id, label: ch.nav }));
+    if (key === "chapters") return c.chapters.map((ch, i) => ({ id: chapterAnchor(c.chapters, i), label: ch.nav }));
     if (key === "planner") return [{ id: "timings", label: "Timings" }];
     if (key === "etiquette") return [{ id: "etiquette", label: "Etiquette" }];
     if (key === "faqs") return [{ id: "faqs", label: "FAQs" }];

@@ -6,7 +6,7 @@ import { Lotus, Mandala } from "@/components/svg/Ornaments";
 import { WhatsappIcon } from "@/components/svg/TravelIcons";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { STARTING_PRICE, STARTING_PRICE_INCLUDES, TIMINGS_VERIFIED_ON, formatInr, mailtoHref, phoneHref, site } from "@/config/site";
-import type { TempleChapter, TempleEntry } from "@/content/temples-page";
+import { chapterAnchor, type TempleChapter, type TempleEntry } from "@/content/temples-page";
 import { hasTempleImage, templeImageSrc } from "@/lib/cms/temple-image";
 import type { TemplesPageContent } from "@/lib/cms/site-pages";
 import type { TempleCardData } from "@/lib/cms/temples";
@@ -280,17 +280,17 @@ function Entry({ entry, flip }: { entry: TempleEntry; flip: boolean }) {
   );
 }
 
-function Chapter({ chapter, index }: { chapter: TempleChapter; index: number }) {
+function Chapter({ chapter, index, id }: { chapter: TempleChapter; index: number; id: string }) {
   const more = chapter.more.filter((m) => m.name.trim());
   return (
-    <section id={chapter.id} aria-labelledby={`${chapter.id}-title`} className={`tmpl-section ${index % 2 ? "tmpl-section-deep" : ""}`}>
+    <section id={id} aria-labelledby={`${id}-title`} className={`tmpl-section ${index % 2 ? "tmpl-section-deep" : ""}`}>
       <div className="container-x">
         <div className="tmpl-chapter-head">
           <span aria-hidden="true" lang="hi" className="tmpl-chapter-mark tmpl-font">
             {NUMERALS[(index + 1) % 10]}
           </span>
           <div>
-            <h2 id={`${chapter.id}-title`} className="tmpl-h2 tmpl-font">
+            <h2 id={`${id}-title`} className="tmpl-h2 tmpl-font">
               {chapter.title}
             </h2>
             <p className="tmpl-lede">
@@ -327,7 +327,7 @@ export function TempleChapters({ c }: C) {
   return (
     <>
       {c.chapters.map((chapter, i) => (
-        <Chapter key={chapter.id || i} chapter={chapter} index={i} />
+        <Chapter key={i} chapter={chapter} index={i} id={chapterAnchor(c.chapters, i)} />
       ))}
     </>
   );

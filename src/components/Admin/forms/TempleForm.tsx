@@ -182,7 +182,7 @@ function validateDraft(f: TempleFormState) {
   return validateDetails(f.details);
 }
 
-/** False until supabase-temples.sql has added the column the editor saves into. */
+/** True until supabase-temples.sql has added the column the editor saves into. */
 function useDetailsColumn() {
   const [missing, setMissing] = useState(false);
   useEffect(() => {

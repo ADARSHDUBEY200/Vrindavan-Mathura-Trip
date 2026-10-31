@@ -100,6 +100,12 @@ export type TemplesPage = {
   };
 };
 
+/** A chapter added in the CMS starts with a copy of its neighbour's hidden id, so anchors are made unique here. */
+export function chapterAnchor(chapters: TempleChapter[], index: number): string {
+  const id = chapters[index].id || "chapter";
+  return chapters.findIndex((c) => c.id === chapters[index].id) === index ? id : `${id}-${index + 1}`;
+}
+
 /** Section keys, in the PDF's order. */
 export const TEMPLES_PAGE_SECTIONS: Record<string, string> = {
   letter: "Welcome letter",
