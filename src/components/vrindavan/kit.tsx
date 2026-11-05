@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, type ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { Fragment } from "react";
+import { Clock } from "lucide-react";
 import { Rich } from "@/components/home/landing/Rich";
-import { Lotus } from "@/components/svg/Ornaments";
+import { Fact, Tip } from "@/components/destination/kit";
 import { picUrl, type Pic } from "@/content/vrindavan";
 
 const INTERNAL_LINK = /(\[[^\]]+\]\([^)]+\))/g;
@@ -15,7 +15,7 @@ export function Prose({ text }: { text: string }) {
       {text.split(INTERNAL_LINK).map((part, i) => {
         const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         return link ? (
-          <Link key={i} href={link[2]} className="vrn-link">
+          <Link key={i} href={link[2]} className="dg-link">
             {link[1]}
           </Link>
         ) : (
@@ -36,72 +36,43 @@ export function Shot({ pic, sizes, className = "object-cover", preload = false }
   return <Image src={preload ? pic.src : picUrl(pic)} alt={pic.alt} fill sizes={sizes} preload={preload} className={className} placeholder={preload && typeof pic.src !== "string" ? "blur" : "empty"} />;
 }
 
-const NUMERALS = "०१२३४५६७८९";
-
-/** Chapter numeral in Devanagari: decoration only, the heading carries the meaning. */
-export function ChapterMark({ n, className = "" }: { n: number; className?: string }) {
-  return (
-    <span aria-hidden="true" lang="hi" className={`vrn-numeral ${className}`}>
-      {NUMERALS[n]}
-    </span>
-  );
-}
-
-/** H3 for a place: links to its own page when it has one. */
-export function PlaceHeading({ name, href, id }: { name: string; href?: string; id?: string }) {
-  return (
-    <h3 id={id} className="vrn-h3">
-      {href ? (
-        <Link href={href} className="group inline underline-offset-[0.2em] hover:underline">
-          {name}
-          <ArrowUpRight aria-hidden="true" className="ml-1 inline size-[0.75em] align-baseline opacity-60 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </Link>
-      ) : (
-        name
-      )}
-    </h3>
-  );
-}
-
-/** H2 with an optional lede. */
-export function Head({ id, title, lede, className = "" }: { id: string; title: string; lede?: ReactNode; className?: string }) {
-  return (
-    <div className={className}>
-      <h2 id={id} className="vrn-h2">
-        {title}
-      </h2>
-      {lede && <p className="vrn-lede mt-4 max-w-2xl">{lede}</p>}
-    </div>
-  );
-}
-
-/** A guide's note: lotus label over a ruled list. */
+/** A guide's note over a list of tips. */
 export function LocalTips({ label, items, className = "" }: { label: string; items: string[]; className?: string }) {
   return (
-    <div className={`vrn-note ${className}`}>
-      <p className="vrn-note-label">
-        <Lotus className="w-5 shrink-0" />
-        {label}
-      </p>
-      <ul className="vrn-rules mt-1">
+    <Tip label={label} className={className}>
+      <ul className="dg-bullets">
         {items.map((t) => (
           <li key={t}>
             <Prose text={t} />
           </li>
         ))}
       </ul>
-    </div>
+    </Tip>
   );
 }
 
-/** The same note, for a single paragraph ("Harsh Sharma's local tip: ..."). */
+const LEADING_LABEL = /^\*\*([^*]+?):\*\*\s*/;
+
+/** A single-paragraph tip. Its bold lead ("Harsh Sharma's local tip:") becomes the label. */
 export function TipLine({ text, className = "" }: { text: string; className?: string }) {
+  const label = text.match(LEADING_LABEL)?.[1] ?? "Local tip";
   return (
-    <p className={`vrn-tipline ${className}`}>
-      <Lotus className="mt-1 w-5 shrink-0" />
-      <span>
-        <Prose text={text} />
-      </span>
-    </p>
+    <Tip label={label} className={className}>
+      <p>
+        <Prose text={text.replace(LEADING_LABEL, "")} />
+      </p>
+    </Tip>
+  );
+}
+
+/** Timings line: label and clock icon over the text. */
+export function TimingLine({ text, className = "" }: { text: string; className?: string }) {
+  const [, label, rest] = text.match(/^\*\*([^*]+?):\*\*\s*([\s\S]*)$/) ?? [null, "Timings", text];
+  return (
+    <div className={className}>
+      <Fact icon={Clock} label={label}>
+        <Prose text={rest} />
+      </Fact>
+    </div>
   );
 }

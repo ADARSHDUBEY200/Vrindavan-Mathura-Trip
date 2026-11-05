@@ -29,7 +29,7 @@ export function PictureWall({ frames }: { frames: Frame[] }) {
 
   return (
     <>
-      <ul className="vrn-wall">
+      <ul className="dg-wall reveal-stagger">
         {frames.map((f, i) => (
           <li key={f.caption} className={SPAN[f.span]}>
             <button
@@ -41,10 +41,10 @@ export function PictureWall({ frames }: { frames: Frame[] }) {
                 dialogRef.current?.showModal();
               }}
               aria-label={`View larger: ${f.caption}`}
-              className="group relative block size-full overflow-hidden rounded-lg bg-chandan"
+              className="group relative block size-full overflow-hidden rounded-2xl bg-[var(--dg-sand)]"
             >
               <Image src={f.src} alt={f.alt} fill sizes="(min-width: 768px) 25vw, 50vw" className="object-cover transition-transform duration-1200 ease-braj group-hover:scale-105" />
-              <span className="vrn-wall-caption">
+              <span className="dg-wall-caption">
                 {f.caption}
                 <Expand size={14} aria-hidden="true" className="shrink-0" />
               </span>
@@ -56,7 +56,7 @@ export function PictureWall({ frames }: { frames: Frame[] }) {
       <dialog
         ref={dialogRef}
         aria-label="Photo viewer"
-        className="vrn-viewer"
+        className="dg-viewer"
         onClick={(e) => {
           if (e.target === e.currentTarget) e.currentTarget.close();
         }}
@@ -77,13 +77,13 @@ export function PictureWall({ frames }: { frames: Frame[] }) {
             </span>
           </figcaption>
         </figure>
-        <button type="button" onClick={() => dialogRef.current?.close()} aria-label="Close photo viewer" className="vrn-viewer-btn right-3 top-3">
+        <button type="button" onClick={() => dialogRef.current?.close()} aria-label="Close photo viewer" className="dg-viewer-btn right-3 top-3">
           <X size={20} aria-hidden="true" />
         </button>
-        <button type="button" onClick={() => step(-1)} aria-label="Previous photo" className="vrn-viewer-btn bottom-2.5 left-3">
+        <button type="button" onClick={() => step(-1)} aria-label="Previous photo" className="dg-viewer-btn bottom-2.5 left-3">
           <ChevronLeft size={20} aria-hidden="true" />
         </button>
-        <button type="button" onClick={() => step(1)} aria-label="Next photo" className="vrn-viewer-btn bottom-2.5 right-3">
+        <button type="button" onClick={() => step(1)} aria-label="Next photo" className="dg-viewer-btn bottom-2.5 right-3">
           <ChevronRight size={20} aria-hidden="true" />
         </button>
       </dialog>

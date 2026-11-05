@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Mail, Phone } from "lucide-react";
+import { ArrowRight, CalendarDays, Info, Mail, Package, Phone } from "lucide-react";
+import { DestinationHero } from "@/components/destination/kit";
 import { WhatsappIcon } from "@/components/svg/TravelIcons";
-import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FOUNDER, mailtoHref, phoneHref } from "@/config/site";
 import { glance, hero, intro, pics, vrindavanCrumbs, VRINDAVAN_UPDATED, whatsappMessage, why } from "@/content/vrindavan";
 import { whatsappLink } from "@/lib/whatsapp";
@@ -10,119 +10,116 @@ import { Prose, Shot } from "./kit";
 
 const updatedLabel = new Date(VRINDAVAN_UPDATED).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
 
-/** Full-bleed opening: the jhanki curtain draws back once, as it does at Banke Bihari. */
+/** Prem Mandir at night, inset in a rounded frame, with the trust facts across its foot. */
 export function VrindavanHero() {
   const wa = whatsappLink(whatsappMessage);
+  const [place, ...lead] = hero.titleLead.split(" ");
   return (
-    <section aria-labelledby="vrn-title" className="vrn-dark relative isolate flex min-h-svh flex-col overflow-hidden bg-shyam lg:min-h-[max(100svh,44rem)]">
-      <Shot pic={pics.hero} sizes="100vw" preload className="vrn-hero-photo -z-10 object-cover object-[50%_40%]" />
-      <div className="vrn-hero-scrim absolute inset-0 -z-10" aria-hidden="true" />
-      <div className="vrn-curtain vrn-curtain-once" aria-hidden="true" />
-
-      <div className="container-x pt-[5.75rem] sm:pt-28">
-        <Breadcrumbs items={vrindavanCrumbs} light />
-      </div>
-
-      <div className="container-x mt-auto pb-24 pt-16 xl:pb-10">
-        <div className="grid items-end gap-x-14 gap-y-7 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-          <div>
-            <p className="hero-in flex flex-wrap items-baseline gap-x-3 text-[0.95rem] text-white/90 sm:text-base">
-              <span lang="hi" className="vrn-display text-xl text-haldi sm:text-2xl">
-                राधे राधे
-              </span>
-              {hero.greeting}
-            </p>
-            <h1 id="vrn-title" className="hero-in hero-in-1 mt-3">
-              <span className="vrn-h1 block">{hero.titleLead}:</span>{" "}
-              <span className="vrn-h1-rest mt-2 block">{hero.titleRest}</span>
-            </h1>
-          </div>
-          <div className="hero-in hero-in-2">
-            <p className="max-w-md text-[0.98rem] leading-relaxed text-white/90 sm:text-[1.05rem]">{hero.lede}</p>
-            <div className="mt-5 flex flex-wrap gap-2.5">
-              <EnquiryTrigger className="btn btn-primary">
-                Plan my trip
-                <ArrowRight size={17} aria-hidden="true" className="btn-arrow" />
-              </EnquiryTrigger>
-              {wa && (
-                <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-outline-light">
-                  <WhatsappIcon size={18} />
-                  WhatsApp
-                  <span className="sr-only"> (opens WhatsApp)</span>
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <dl className="hero-in hero-in-3 mt-6 grid grid-cols-4 gap-x-3 border-t border-white/20 pt-4 sm:mt-8 sm:pt-5">
-          {hero.stats.map((s) => (
-            <div key={s.label} className="flex flex-col-reverse justify-end gap-0.5">
-              <dt className="text-[0.68rem] leading-tight text-white/75 sm:text-xs">{s.label}</dt>
-              <dd className="vrn-display text-lg leading-tight text-white sm:text-[1.75rem]">{s.value}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
+    <DestinationHero
+      crumbs={vrindavanCrumbs}
+      photo={pics.hero}
+      objectPosition="50% 40%"
+      badge={
+        <>
+          <span lang="hi" className="font-semibold text-[var(--dg-o300)]">
+            राधे राधे
+          </span>
+          <span aria-hidden="true" className="text-white/50">
+            ·
+          </span>
+          {hero.greeting}
+        </>
+      }
+      place={place}
+      lead={lead.join(" ")}
+      sub={hero.titleRest}
+      lede={hero.lede}
+      actions={
+        <>
+          <EnquiryTrigger className="btn btn-primary">
+            Plan my trip
+            <ArrowRight size={17} aria-hidden="true" className="btn-arrow" />
+          </EnquiryTrigger>
+          {wa && (
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">
+              <WhatsappIcon size={18} />
+              WhatsApp
+              <span className="sr-only"> (opens WhatsApp)</span>
+            </a>
+          )}
+        </>
+      }
+      stats={hero.stats}
+    />
   );
 }
 
-/** The guide's letter, beside a niche-shaped ledger of quick facts. */
+/** The guide's letter, beside a ledger of quick facts. */
 export function VrindavanIntro() {
   const tel = phoneHref();
   return (
-    <section aria-label="Introduction" className="bg-chandan py-16 lg:py-24">
-      <div className="container-x grid items-start gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-20">
-        <div>
-          <p className="vrn-lead">
+    <section aria-label="Introduction" className="dg-section">
+      <div className="container-x grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:col-span-7">
+          <p className="eyebrow">A letter from a Brijwasi</p>
+          <p className="dg-lead mt-4">
             <Prose text={intro.lead} />
           </p>
-          <p className="vrn-body mt-6">
+          <p className="dg-body mt-4">
             <Prose text={intro.body} />
           </p>
 
-          <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-stone">
+          <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-stone">
             <span className="font-semibold text-ink">{FOUNDER.name}</span>
+            <span aria-hidden="true">·</span>
             <span>{FOUNDER.jobTitle}</span>
+            <span aria-hidden="true">·</span>
             <span className="inline-flex items-center gap-1.5">
               <CalendarDays size={14} aria-hidden="true" />
               Last updated <time dateTime={VRINDAVAN_UPDATED}>{updatedLabel}</time>
             </span>
           </p>
 
-          <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
-            <li>
-              <a href={tel} className="vrn-link inline-flex items-center gap-1.5">
-                <Phone size={15} aria-hidden="true" /> {intro.phone}
-              </a>
-            </li>
-            <li>
-              <a href={mailtoHref("Vrindavan trip enquiry")} className="vrn-link inline-flex items-center gap-1.5 break-all">
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {tel && (
+              <li>
+                <a href={tel} className="dg-chip">
+                  <Phone size={15} aria-hidden="true" /> {intro.phone}
+                </a>
+              </li>
+            )}
+            <li className="min-w-0 max-w-full">
+              <a href={mailtoHref("Vrindavan trip enquiry")} className="dg-chip max-w-full break-all">
                 <Mail size={15} aria-hidden="true" /> {intro.email}
               </a>
             </li>
             <li>
-              <Link href={intro.packagesLink.href} className="vrn-link">
-                {intro.packagesLink.label}
+              <Link href={intro.packagesLink.href} className="dg-chip">
+                <Package size={15} aria-hidden="true" /> {intro.packagesLink.label}
               </Link>
             </li>
           </ul>
 
-          <p className="vrn-callout mt-8">
-            <Prose text={intro.timingNote} />
+          <p className="dg-note mt-6">
+            <Info size={17} aria-hidden="true" />
+            <span>
+              <Prose text={intro.timingNote} />
+            </span>
           </p>
         </div>
 
-        <aside aria-labelledby="glance-title" className="vrn-niche vrn-dark bg-shyam reveal">
-          <h2 id="glance-title" className="vrn-h3 text-center">
-            {glance.title}
-          </h2>
-          <dl className="mt-6 divide-y divide-white/15">
+        <aside aria-labelledby="glance-title" className="dg-card reveal overflow-hidden lg:sticky lg:top-36 lg:col-span-5">
+          <div className="dg-wash border-b border-[var(--dg-o100)] px-6 py-5">
+            <p className="eyebrow">Quick facts</p>
+            <h2 id="glance-title" className="dg-h3 mt-2">
+              {glance.title}
+            </h2>
+          </div>
+          <dl className="divide-y divide-line px-6">
             {glance.rows.map((r) => (
-              <div key={r.label} className="py-3">
-                <dt className="text-xs font-semibold text-haldi">{r.label}</dt>
-                <dd className="mt-0.5 text-[0.95rem] leading-snug text-white">{r.value}</dd>
+              <div key={r.label} className="grid gap-1 py-3.5 sm:grid-cols-[9.5rem_minmax(0,1fr)] sm:gap-4">
+                <dt className="dg-label pt-0.5">{r.label}</dt>
+                <dd className="text-[0.9rem] font-medium leading-snug text-ink">{r.value}</dd>
               </div>
             ))}
           </dl>
@@ -132,38 +129,45 @@ export function VrindavanIntro() {
   );
 }
 
-/** Why Vrindavan is different: a river photograph, the argument, and the name taken apart. */
+/** Why Vrindavan is different: the river beside the argument, and the name taken apart. */
 export function VrindavanWhy() {
   return (
-    <section aria-labelledby="why-title" className="bg-chandan-deep">
-      <div className="grid lg:grid-cols-2">
-        <div className="relative min-h-72 sm:min-h-96 lg:min-h-full">
-          <Shot pic={pics.yamuna} sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[22%_50%]" />
+    <section aria-labelledby="why-title" className="dg-section dg-cream">
+      <div className="container-x grid items-center gap-8 lg:grid-cols-12 lg:gap-14">
+        <div className="dg-photo dg-photo-lg reveal-zoom aspect-[4/3] lg:col-span-5 lg:aspect-[4/5]">
+          <Shot pic={pics.yamuna} sizes="(min-width: 1024px) 40vw, 92vw" className="object-cover object-[22%_50%]" />
         </div>
-        <div className="container-x py-14 lg:mx-0 lg:max-w-[42rem] lg:px-14 lg:py-24">
-          <h2 id="why-title" className="vrn-h2">
+        <div className="lg:col-span-7">
+          <p className="eyebrow">The spirit of the place</p>
+          <h2 id="why-title" className="dg-h2 mt-3">
             {why.title}
           </h2>
-          <div className="vrn-body mt-6 grid gap-4">
+          <div className="dg-prose dg-body mt-4">
             {why.paragraphs.map((p) => (
               <p key={p}>
                 <Prose text={p} />
               </p>
             ))}
           </div>
-          <p aria-hidden="true" className="vrn-name-sum">
-            <span>
-              <b lang="hi">वृन्दा</b>
+          <p aria-hidden="true" className="mt-6 flex flex-wrap items-center gap-2.5 text-xs text-stone">
+            <span className="dg-card inline-flex flex-col px-4 py-2.5">
+              <b lang="hi" className="text-lg font-semibold text-ink">
+                वृन्दा
+              </b>
               tulsi
             </span>
-            <i>+</i>
-            <span>
-              <b lang="hi">वन</b>
+            <span className="text-lg font-medium text-ember-deep">+</span>
+            <span className="dg-card inline-flex flex-col px-4 py-2.5">
+              <b lang="hi" className="text-lg font-semibold text-ink">
+                वन
+              </b>
               forest
             </span>
-            <i>=</i>
-            <span>
-              <b lang="hi">वृन्दावन</b>
+            <span className="text-lg font-medium text-ember-deep">=</span>
+            <span className="inline-flex flex-col rounded-[1.25rem] bg-linear-to-r from-[var(--dg-o500)] to-[var(--dg-a500)] px-4 py-2.5 text-ink">
+              <b lang="hi" className="text-lg font-semibold">
+                वृन्दावन
+              </b>
               Vrindavan
             </span>
           </p>

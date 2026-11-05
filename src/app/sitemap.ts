@@ -1,9 +1,11 @@
 import type { MetadataRoute } from "next";
+import { brajGuides } from "@/content/braj";
 import { destinations } from "@/content/destinations";
 import { festivals } from "@/content/festivals";
 import { guides } from "@/content/guides";
 import { MATHURA_UPDATED } from "@/content/mathura";
 import { packages } from "@/content/packages";
+import { TAXI_PATH, TAXI_UPDATED } from "@/content/taxi";
 import { VRINDAVAN_UPDATED } from "@/content/vrindavan";
 import { LAST_UPDATED } from "@/config/site";
 import { BLOGS_PATH, blogPath, getPublishedBlogs } from "@/lib/cms/blogs";
@@ -26,10 +28,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     entry("/", 1, "weekly"),
     ...destinations.map((d) => entry(`/${d.slug}`, 0.9, "monthly", d.slug === "mathura" ? MATHURA_UPDATED : d.slug === "vrindavan" ? VRINDAVAN_UPDATED : CONTENT_UPDATED)),
+    ...brajGuides.map((g) => entry(g.path, 0.9, "monthly", g.updated)),
     entry("/tour-packages", 0.9, "weekly"),
     ...[...new Set(cmsPackages.map((p) => p.segment))].map((segment) => entry(`/tour-packages/${segment}`, 0.8, "weekly")),
     ...cmsPackages.map((p) => entry(p.path, 0.8, "weekly")),
     ...packages.map((p) => entry(`/tour-packages/${p.slug}`, 0.8)),
+    entry(TAXI_PATH, 0.9, "monthly", TAXI_UPDATED),
     entry("/temples", 0.8),
     entry("/mathura-vrindavan-temple-timings", 0.8),
     ...temples.map((t) => entry(t.path, 0.7)),

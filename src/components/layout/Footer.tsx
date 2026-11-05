@@ -11,8 +11,12 @@ import { whatsappLink } from "@/lib/whatsapp";
 const quickLinks = [
   { label: "Vrindavan", href: "/vrindavan" },
   { label: "Mathura", href: "/mathura" },
-  { label: "Govardhan & Barsana", href: "/govardhan-barsana" },
+  { label: "Govardhan", href: "/govardhan" },
+  { label: "Barsana", href: "/barsana" },
+  { label: "Nandgaon", href: "/nandgaon" },
+  { label: "Gokul", href: "/gokul" },
   { label: "Full Braj Yatra", href: "/braj-yatra" },
+  { label: "Taxi Service", href: "/mathura-vrindavan-taxi-service" },
   { label: "Temples", href: "/temples" },
   { label: "Temple Timings", href: "/mathura-vrindavan-temple-timings" },
   { label: "Festivals", href: "/festivals" },

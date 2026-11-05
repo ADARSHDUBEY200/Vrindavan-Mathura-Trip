@@ -1,52 +1,46 @@
 import Link from "next/link";
+import { ArrowUpRight, Footprints, UtensilsCrossed } from "lucide-react";
+import { SectionHead } from "@/components/destination/kit";
 import { bazaars, brajFood, brajHoli, eveningAarti, parikrama, pics, thingsToDo } from "@/content/vrindavan";
-import { Head, LocalTips, Prose, Shot, TipLine } from "./kit";
-
-/** The ring walks clockwise, as pilgrims do. */
-function ParikramaRing() {
-  return (
-    <div className="vrn-ring" aria-hidden="true">
-      <svg viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="54" className="vrn-ring-path" />
-      </svg>
-      <span className="vrn-ring-walker" />
-      <p>
-        <b>{parikrama.distance}</b>
-        {parikrama.distanceNote}
-      </p>
-    </div>
-  );
-}
+import { LocalTips, Prose, Shot, TipLine } from "./kit";
 
 export function ThingsToDoIntro() {
   return (
-    <section id="things-to-do" aria-labelledby="things-title" className="bg-chandan pt-16 lg:pt-24">
+    <section id="things-to-do" aria-labelledby="things-title" className="dg-section dg-cream pb-0 lg:pb-0">
       <div className="container-x">
-        <Head id="things-title" title={thingsToDo.title} lede={<Prose text={thingsToDo.lede} />} />
+        <SectionHead id="things-title" eyebrow="Beyond the temples" title={thingsToDo.title} lede={<Prose text={thingsToDo.lede} />} />
       </div>
     </section>
   );
 }
 
-/** The route as Braj itself drew it: a 19th-century pilgrim painting of the Vraj Parikrama. */
+/** The route as Braj itself drew it: a 19th-century pilgrim painting of the Vraj Parikrama, hung on a white mat. */
 export function ParikramaSection() {
   return (
-    <section aria-labelledby="parikrama-title" className="bg-chandan py-12 lg:py-16">
-      <div className="container-x grid items-start gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
-        <figure className="relative mx-auto w-full max-w-xl lg:sticky lg:top-40 lg:max-w-none">
-          <div className="vrn-painting">
-            <div className="relative aspect-[898/1260]">
+    <section aria-labelledby="parikrama-title" className="dg-section dg-cream pt-8 lg:pt-10">
+      <div className="container-x grid items-start gap-8 lg:grid-cols-12 lg:gap-14">
+        <figure className="relative mx-auto w-full max-w-md lg:sticky lg:top-40 lg:col-span-5 lg:max-w-none">
+          <div className="dg-card p-3">
+            <div className="dg-photo relative aspect-[898/1260] rounded-xl">
               <Shot pic={pics.pichhavai} sizes="(min-width: 1024px) 38vw, 100vw" />
             </div>
           </div>
-          <figcaption className="mt-3 text-xs leading-relaxed text-stone">{parikrama.paintingCaption}</figcaption>
-          <ParikramaRing />
+          <figcaption className="dg-small mt-3 text-center text-xs">{parikrama.paintingCaption}</figcaption>
+          <p aria-hidden="true" className="dg-card absolute right-3 top-3 flex items-center gap-3 px-4 py-3 shadow-lift sm:right-5 sm:top-5">
+            <span className="dg-icon size-9">
+              <Footprints size={17} />
+            </span>
+            <span>
+              <b className="block text-base font-bold leading-tight text-ink">{parikrama.distance}</b>
+              <span className="text-xs text-stone">{parikrama.distanceNote}</span>
+            </span>
+          </p>
         </figure>
-        <div>
-          <h3 id="parikrama-title" className="vrn-h3">
+        <div className="lg:col-span-7">
+          <h3 id="parikrama-title" className="dg-h2">
             {parikrama.title}
           </h3>
-          <div className="vrn-body mt-5 grid gap-4">
+          <div className="dg-prose dg-body mt-4">
             <p>
               <Prose text={parikrama.intro} />
             </p>
@@ -54,11 +48,11 @@ export function ParikramaSection() {
               <Prose text={parikrama.why} />
             </p>
           </div>
-          <LocalTips label={parikrama.tipLabel} items={parikrama.tips} className="mt-7" />
-          <div className="mt-9 border-t border-mitti/15 pt-7">
-            <p className="vrn-body">{parikrama.storyLead}</p>
-            <blockquote className="vrn-quote mt-3">{parikrama.storyQuote}</blockquote>
-            <p className="vrn-body mt-3">{parikrama.storyClose}</p>
+          <LocalTips label={parikrama.tipLabel} items={parikrama.tips} className="mt-6" />
+          <div className="dg-card mt-4 p-5 sm:p-6">
+            <p className="dg-body">{parikrama.storyLead}</p>
+            <blockquote className="dg-quote mt-4">{parikrama.storyQuote}</blockquote>
+            <p className="dg-small mt-4">{parikrama.storyClose}</p>
           </div>
         </div>
       </div>
@@ -66,27 +60,37 @@ export function ParikramaSection() {
   );
 }
 
-/** Three colours of Holi, full width, with a single block of practical copy. */
+/** Three colours of Holi as photo tiles, with a single block of practical copy. */
 export function HoliSection() {
   return (
-    <section aria-labelledby="holi-title" className="vrn-dark bg-kumkum">
-      <ul className="grid gap-px sm:grid-cols-3">
-        {brajHoli.frames.map((f) => (
-          <li key={f.label}>
-            <Link href={f.href} className="group relative block aspect-[16/10] overflow-hidden bg-black sm:aspect-[4/5]">
-              <Shot pic={f.picture} sizes="(min-width: 640px) 34vw, 100vw" className="object-cover transition-transform duration-1200 ease-braj group-hover:scale-105" />
-              <span className="vrn-frame-label">{f.label}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <div className="container-x grid gap-5 py-12 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-16 lg:py-16">
-        <h3 id="holi-title" className="vrn-h3">
-          {brajHoli.title}
-        </h3>
-        <p className="vrn-body">
-          <Prose text={brajHoli.text} />
-        </p>
+    <section aria-labelledby="holi-title" className="dg-section">
+      <div className="container-x">
+        <div className="grid gap-4 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-5">
+            <p className="eyebrow">February and March</p>
+            <h3 id="holi-title" className="dg-h2 mt-3">
+              {brajHoli.title}
+            </h3>
+          </div>
+          <p className="dg-body lg:col-span-7 lg:pt-8">
+            <Prose text={brajHoli.text} />
+          </p>
+        </div>
+        <ul className="reveal-stagger mt-7 grid gap-4 sm:grid-cols-3">
+          {brajHoli.frames.map((f) => (
+            <li key={f.label}>
+              <Link href={f.href} className="dg-tile aspect-[16/10] sm:aspect-[4/5]">
+                <Shot pic={f.picture} sizes="(min-width: 640px) 31vw, 92vw" />
+                <span className="dg-tile-arrow" aria-hidden="true">
+                  <ArrowUpRight size={16} />
+                </span>
+                <span className="dg-tile-body">
+                  <span className="dg-h4 block text-[1.05rem] text-white">{f.label}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -94,59 +98,63 @@ export function HoliSection() {
 
 export function AartiSection() {
   return (
-    <section aria-labelledby="aarti-title" className="vrn-dark bg-yamuna">
-      <div className="grid lg:grid-cols-2">
-        <div className="vrn-flush-left flex flex-col justify-center px-4 py-12 sm:px-6 lg:py-20">
-          <h3 id="aarti-title" className="vrn-h3">
-            {eveningAarti.title}
-          </h3>
-          <p className="vrn-lead mt-4">
-            <Prose text={eveningAarti.text} />
-          </p>
-        </div>
-        <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[28rem]">
-          <Shot pic={pics.diya} sizes="(min-width: 1024px) 50vw, 100vw" />
+    <section aria-labelledby="aarti-title" className="dg-section pt-0 lg:pt-0">
+      <div className="container-x">
+        <div className="dg-dark grid overflow-hidden rounded-[1.75rem] lg:grid-cols-2">
+          <div className="flex flex-col justify-center p-6 sm:p-9 lg:p-12">
+            <p className="eyebrow">At sunset</p>
+            <h3 id="aarti-title" className="dg-h2 mt-3">
+              {eveningAarti.title}
+            </h3>
+            <p className="mt-4 text-[1rem] leading-[1.75] text-white/90 sm:text-[1.08rem]">
+              <Prose text={eveningAarti.text} />
+            </p>
+          </div>
+          <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[26rem]">
+            <Shot pic={pics.diya} sizes="(min-width: 1024px) 50vw, 100vw" />
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/** A printed menu beside three round thalis. */
+/** Three plates beside the menu. */
 export function FoodSection() {
-  const plates = [
-    { picture: pics.rabri, className: "w-[62%] left-0 top-0 z-10" },
-    { picture: pics.kachori, className: "w-[52%] right-0 top-[20%] z-20" },
-    { picture: pics.lassi, className: "w-[44%] left-[14%] bottom-0 z-30" },
-  ];
   return (
-    <section id={brajFood.id} aria-labelledby="food-title" className="bg-chandan-deep py-16 lg:py-24">
-      <div className="container-x grid items-start gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-20">
-        <div className="relative mx-auto aspect-square w-full max-w-md lg:sticky lg:top-40 lg:max-w-none">
-          {plates.map((p) => (
-            <div key={p.picture.alt} className={`vrn-plate absolute aspect-square ${p.className}`}>
-              <Shot pic={p.picture} sizes="(min-width: 1024px) 24vw, 60vw" />
-            </div>
-          ))}
+    <section id={brajFood.id} aria-labelledby="food-title" className="dg-section dg-cream">
+      <div className="container-x grid items-start gap-8 lg:grid-cols-12 lg:gap-14">
+        <div className="reveal-stagger grid grid-cols-2 grid-rows-2 gap-3 lg:sticky lg:top-40 lg:col-span-5">
+          <div className="dg-photo dg-photo-zoom row-span-2 min-h-72 sm:min-h-96">
+            <Shot pic={pics.rabri} sizes="(min-width: 1024px) 20vw, 46vw" />
+          </div>
+          <div className="dg-photo dg-photo-zoom aspect-square">
+            <Shot pic={pics.kachori} sizes="(min-width: 1024px) 20vw, 46vw" />
+          </div>
+          <div className="dg-photo dg-photo-zoom aspect-square">
+            <Shot pic={pics.lassi} sizes="(min-width: 1024px) 20vw, 46vw" />
+          </div>
         </div>
-        <div>
-          <h3 id="food-title" className="vrn-h3">
+        <div className="lg:col-span-7">
+          <p className="eyebrow">Eat like a Brijwasi</p>
+          <h3 id="food-title" className="dg-h2 mt-3">
             {brajFood.title}
           </h3>
-          <p className="vrn-body mt-3">{brajFood.lede}</p>
-          <dl className="vrn-menu mt-6">
+          <p className="dg-lede mt-3">{brajFood.lede}</p>
+          <dl className="dg-card mt-6 divide-y divide-line px-5 sm:px-6">
             {brajFood.dishes.map((d) => (
-              <div key={d.name}>
-                <dt>{d.name}</dt>
-                <dd>
+              <div key={d.name} className="grid gap-1 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-5">
+                <dt className="dg-h4 flex items-start gap-2">
+                  <UtensilsCrossed size={14} aria-hidden="true" className="mt-1 shrink-0 text-ember-deep" />
+                  {d.name}
+                </dt>
+                <dd className="dg-small text-ink-soft">
                   <Prose text={d.text} />
                 </dd>
               </div>
             ))}
           </dl>
-          <p className="vrn-callout mt-7">
-            <Prose text={brajFood.rules} />
-          </p>
+          <TipLine text={brajFood.rules} className="mt-4" />
         </div>
       </div>
     </section>
@@ -155,26 +163,27 @@ export function FoodSection() {
 
 export function BazaarSection() {
   return (
-    <section aria-labelledby="bazaar-title" className="bg-chandan py-16 lg:py-24">
-      <div className="container-x grid items-center gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-lg bg-chandan-deep">
+    <section aria-labelledby="bazaar-title" className="dg-section">
+      <div className="container-x grid items-center gap-8 lg:grid-cols-12 lg:gap-14">
+        <div className="dg-photo dg-photo-lg reveal-zoom aspect-[16/10] lg:col-span-7">
           <Shot pic={pics.street} sizes="(min-width: 1024px) 56vw, 100vw" className="object-cover object-[80%_50%]" />
         </div>
-        <div>
-          <h3 id="bazaar-title" className="vrn-h3">
+        <div className="lg:col-span-5">
+          <p className="eyebrow">Souvenirs</p>
+          <h3 id="bazaar-title" className="dg-h2 mt-3">
             {bazaars.title}
           </h3>
-          <dl className="mt-5 grid gap-5">
+          <dl className="mt-5 grid gap-3">
             {bazaars.items.map((b) => (
-              <div key={b.name}>
-                <dt className="vrn-display text-xl text-ink">{b.name}</dt>
-                <dd className="vrn-body mt-1">
+              <div key={b.name} className="dg-card p-4">
+                <dt className="dg-h4">{b.name}</dt>
+                <dd className="dg-small mt-1 text-ink-soft">
                   <Prose text={b.text} />
                 </dd>
               </div>
             ))}
           </dl>
-          <TipLine text={bazaars.tip} className="mt-6" />
+          <TipLine text={bazaars.tip} className="mt-4" />
         </div>
       </div>
     </section>

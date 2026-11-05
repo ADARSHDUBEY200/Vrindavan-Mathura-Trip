@@ -1,8 +1,7 @@
-import "@/components/vrindavan/vrindavan.css";
+import "@/components/destination/guide.css";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BookSection, ContinuePlanning, FaqSection } from "@/components/vrindavan/ClosingSections";
 import { AartiSection, BazaarSection, FoodSection, HoliSection, ParikramaSection, ThingsToDoIntro } from "@/components/vrindavan/ExperienceSections";
-import { eczar } from "@/components/vrindavan/fonts";
 import { VrindavanHero, VrindavanIntro, VrindavanWhy } from "@/components/vrindavan/OpeningSections";
 import { AlleysSection, BestTimeSection, NearbySection, ReachSection, StaySection, TwoDaysSection } from "@/components/vrindavan/PlanningSections";
 import { SectionNav } from "@/components/vrindavan/SectionNav";
@@ -28,10 +27,10 @@ export const metadata = buildMetadata({
 export default function VrindavanPage() {
   const schema = buildVrindavanSchema();
   return (
-    <div className={`vrn ${eczar.variable}`}>
+    <div className="dg">
       <VrindavanHero />
+      <SectionNav items={sectionNav} prefix="dg" />
       <VrindavanIntro />
-      <SectionNav items={sectionNav} />
       <VrindavanWhy />
       <BestPlacesIntro />
       <BankeBihariChapter />

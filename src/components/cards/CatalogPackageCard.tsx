@@ -25,7 +25,7 @@ export function CatalogPackageCard({ pkg, perks = [], headingLevel: H = "h3" }: 
   const remote = typeof img?.src === "string";
 
   return (
-    <article className="group about-card relative flex h-full flex-col p-2">
+    <article className="group about-card relative flex h-full min-w-0 flex-col p-2">
       <div className="relative aspect-85/42 overflow-hidden rounded-[0.8rem] bg-sand">
         {img && (
           <Image
@@ -58,7 +58,8 @@ export function CatalogPackageCard({ pkg, perks = [], headingLevel: H = "h3" }: 
         {pkg.route.length > 0 && (
           <p className="flex items-center gap-1.5 text-xs text-gray-500">
             <MapPin size={13} aria-hidden="true" className="shrink-0 text-orange-500" />
-            <span className="truncate">{pkg.route.join(" · ")}</span>
+            {/* min-w-0 lets the line actually truncate: without it the unbroken route sets the card's width. */}
+            <span className="min-w-0 truncate">{pkg.route.join(" · ")}</span>
           </p>
         )}
         <H className="mt-1.5 line-clamp-2 text-[0.98rem] font-semibold leading-snug tracking-[-0.01em] text-gray-900 transition-colors group-hover:text-orange-500 sm:min-h-[2.6em]">

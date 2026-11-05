@@ -1,0 +1,1118 @@
+/*
+ * Destination guides (/mathura, /vrindavan): one design system for both pages, built on the site's own
+ * tokens (white and cream grounds, ink headings, the orange → amber accent) and set in Poppins alone.
+ * Everything is scoped to `.dg`, so no other route is affected. Layout stays in Tailwind utilities.
+ */
+@layer components {
+  .dg {
+    /* The site's text tokens, restated so shared components inside follow the dark sections too. */
+    --color-ink: #1f2328;
+    --color-ink-soft: #3f4650;
+    --color-stone: #5f6672;
+    --color-ember-deep: #c2410c;
+    --color-line: #ece9e4;
+    /* Tailwind's orange, amber and stone steps as literals: this file is imported by the pages, outside the theme build. */
+    --dg-o50: #fff7ed;
+    --dg-o100: #ffedd5;
+    --dg-o200: #fed7aa;
+    --dg-o300: #fdba74;
+    --dg-o400: #fb923c;
+    --dg-o500: #f97316;
+    --dg-o600: #ea580c;
+    --dg-a50: #fffbeb;
+    --dg-a100: #fef3c7;
+    --dg-a200: #fde68a;
+    --dg-a300: #fcd34d;
+    --dg-a400: #fbbf24;
+    --dg-a500: #f59e0b;
+    --dg-a900: #78350f;
+    --dg-a950: #451a03;
+    --dg-s200: #e7e5e4;
+    --dg-s700: #44403c;
+    --dg-s900: #1c1917;
+    --dg-cream: #fafaf9;
+    --dg-sand: #f5f5f4;
+    --dg-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 14px -6px rgb(15 23 42 / 0.08);
+    color: var(--color-ink-soft);
+    background: #fff;
+  }
+  /* Adds to html's scroll padding: anchors land just under the header and the sticky page links. */
+  .dg [id] {
+    scroll-margin-top: 2.75rem;
+  }
+  /* A wide child (table, rail) scrolls or wraps inside its column, never widens the page. */
+  .dg :where(.grid) > * {
+    min-width: 0;
+  }
+  /* Poppins is loaded upright only; emphasis is carried by weight, not a synthesised slant. */
+  .dg em {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Grounds                                                           */
+  /* ---------------------------------------------------------------- */
+  .dg-section {
+    padding-block: 3.25rem;
+  }
+  @media (min-width: 1024px) {
+    .dg-section {
+      padding-block: 4.5rem;
+    }
+  }
+  .dg-cream {
+    background: var(--dg-cream);
+  }
+  .dg-wash {
+    background: linear-gradient(180deg, #fffaf3 0%, var(--dg-o50) 100%);
+  }
+  /* The About page's dark ground. Re-pointing the text tokens recolours everything inside it. */
+  .dg-dark {
+    --color-ink: #fff;
+    --color-ink-soft: #e7e5e4;
+    --color-stone: #b8b2ac;
+    --color-ember-deep: var(--dg-o300);
+    --color-line: rgb(255 255 255 / 0.12);
+    color: var(--color-ink-soft);
+    background-color: #1c1210;
+    background-image:
+      radial-gradient(60% 80% at 100% 0%, rgb(234 88 12 / 0.22), transparent 70%),
+      linear-gradient(to bottom right, var(--dg-a950), #2a120a 45%, var(--dg-s900));
+  }
+  .dg-dark .eyebrow {
+    color: var(--dg-o300);
+  }
+  /* Shared light components (the enquiry form) set inside a dark section */
+  .dg-light {
+    --color-ink: #1f2328;
+    --color-ink-soft: #3f4650;
+    --color-stone: #5f6672;
+    --color-ember-deep: #c2410c;
+    --color-line: #ece9e4;
+    color: var(--color-ink);
+  }
+  .dg-dark .dg-photo-veil {
+    background: linear-gradient(to right, rgb(28 18 16 / 0.96) 0%, rgb(28 18 16 / 0.88) 50%, rgb(28 18 16 / 0.7) 100%);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Type                                                              */
+  /* ---------------------------------------------------------------- */
+  .dg-h1 {
+    font-size: clamp(2rem, 1.5rem + 2.1vw, 3.1rem);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+  }
+  .dg-h1-sub {
+    display: block;
+    margin-top: 0.6rem;
+    max-width: 36rem;
+    font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  .dg-h2 {
+    font-size: clamp(1.55rem, 1.28rem + 1.15vw, 2.3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+  }
+  .dg-h3 {
+    font-size: clamp(1.2rem, 1.08rem + 0.55vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+  .dg-h4 {
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+  }
+  .dg-lede {
+    font-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--color-stone);
+  }
+  .dg-lead {
+    font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  .dg-body {
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .dg-small {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--color-stone);
+  }
+  .dg-prose > * + * {
+    margin-top: 0.85rem;
+  }
+  .dg-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ember-deep);
+  }
+  /* The site's brand gradient, as in the About page H1. */
+  .dg-brand {
+    background-image: linear-gradient(to right, var(--dg-o500), var(--dg-a500));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .dg-brand-light {
+    background-image: linear-gradient(to right, var(--dg-o400), var(--dg-a300));
+  }
+  .dg-link {
+    color: var(--color-ember-deep);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.3s var(--ease-braj);
+  }
+  .dg-link:hover {
+    text-decoration-color: currentColor;
+  }
+  .dg-quote {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.2rem);
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  .dg-quote::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    bottom: 0.2em;
+    width: 3px;
+    border-radius: 3px;
+    background: linear-gradient(to bottom, var(--dg-o500), var(--dg-a400));
+  }
+
+  /* Stop number: "01" in a soft orange chip */
+  .dg-num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.1rem;
+    height: 1.6rem;
+    padding-inline: 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--color-ember-deep);
+    background: var(--dg-o50);
+    box-shadow: inset 0 0 0 1px var(--dg-o200);
+  }
+  .dg-dark .dg-num {
+    color: var(--dg-o200);
+    background: rgb(249 115 22 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(253 186 116 / 0.3);
+  }
+
+  /* Diamond-dot list, after the site's eyebrow marker */
+  .dg-bullets {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .dg-bullets > li {
+    position: relative;
+    padding-left: 1.15rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+  .dg-bullets > li::before {
+    content: "";
+    position: absolute;
+    left: 0.1rem;
+    top: 0.62em;
+    width: 0.42rem;
+    height: 0.42rem;
+    rotate: 45deg;
+    border-radius: 1.5px;
+    background: linear-gradient(135deg, var(--dg-o500), var(--dg-a500));
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Surfaces                                                          */
+  /* ---------------------------------------------------------------- */
+  .dg-card {
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    background: #fff;
+    box-shadow: var(--dg-shadow);
+  }
+  .dg-dark .dg-card {
+    border-color: rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.04);
+    box-shadow: none;
+  }
+  .dg-lift {
+    transition:
+      transform 0.5s var(--ease-braj),
+      box-shadow 0.5s var(--ease-braj),
+      border-color 0.5s var(--ease-braj);
+  }
+  .dg-lift:hover {
+    transform: translateY(-3px);
+    border-color: var(--dg-o200);
+    box-shadow: 0 1px 2px rgb(28 25 23 / 0.04), 0 18px 36px -22px rgb(28 25 23 / 0.3);
+  }
+  /* Rounded icon tile, as on the About page */
+  .dg-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    color: var(--dg-o600);
+    background: var(--dg-o50);
+    box-shadow: inset 0 0 0 1px var(--dg-o100);
+  }
+  .dg-dark .dg-icon {
+    color: var(--dg-o300);
+    background: rgb(234 88 12 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(253 186 116 / 0.2);
+  }
+
+  /* The guide's voice: a local tip */
+  .dg-tip {
+    border: 1px solid var(--dg-o100);
+    border-radius: 1rem;
+    padding: 1rem 1.15rem 1.05rem;
+    background: linear-gradient(180deg, #fffaf3, var(--dg-o50));
+  }
+  .dg-dark .dg-tip {
+    border-color: rgb(253 186 116 / 0.18);
+    background: rgb(255 255 255 / 0.05);
+  }
+  .dg-tip-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-ember-deep);
+  }
+  .dg-tip-label svg {
+    flex: none;
+  }
+
+  /* Neutral note: timings disclaimers and similar */
+  .dg-note {
+    display: flex;
+    gap: 0.75rem;
+    border-radius: 1rem;
+    padding: 0.95rem 1.1rem;
+    background: var(--dg-sand);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: var(--color-ink-soft);
+  }
+  .dg-note > svg {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--color-ember-deep);
+  }
+  .dg-warn {
+    border: 1px solid var(--dg-a200);
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.35rem;
+    background: var(--dg-a50);
+  }
+
+  /* Labelled fact rows: timings, entry, what to expect */
+  .dg-facts {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .dg-fact {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  .dg-fact > svg {
+    margin-top: 0.15rem;
+    color: var(--color-ember-deep);
+  }
+
+  /* Contact chips */
+  .dg-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: 9999px;
+    padding: 0.4rem 0.9rem;
+    background: #fff;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition:
+      border-color 0.3s var(--ease-braj),
+      color 0.3s var(--ease-braj);
+  }
+  .dg-chip svg {
+    flex: none;
+    color: var(--color-ember-deep);
+  }
+  .dg-chip:hover {
+    border-color: var(--dg-o300);
+    color: var(--color-ember-deep);
+  }
+  /* Pill label over a photograph or a dark hero */
+  .dg-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 9999px;
+    padding: 0.35rem 0.85rem;
+    background: rgb(255 255 255 / 0.1);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #fff;
+    backdrop-filter: blur(10px);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Photographs                                                       */
+  /* ---------------------------------------------------------------- */
+  .dg-photo {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: var(--dg-sand);
+    isolation: isolate;
+  }
+  .dg-photo img {
+    transition: transform 1.2s var(--ease-braj);
+  }
+  .group:hover .dg-photo img,
+  .dg-photo-zoom:hover img {
+    transform: scale(1.045);
+  }
+  .dg-photo-lg {
+    border-radius: 1.5rem;
+  }
+  .dg-caption {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 1;
+    max-width: calc(100% - 1.5rem);
+    border-radius: 9999px;
+    padding: 0.3rem 0.75rem;
+    background: rgb(255 255 255 / 0.92);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #1f2328;
+    box-shadow: 0 6px 16px -10px rgb(0 0 0 / 0.5);
+    backdrop-filter: blur(8px);
+  }
+  /* Photo tile: text over a darkened foot */
+  .dg-tile {
+    position: relative;
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: #1c1210;
+    isolation: isolate;
+  }
+  .dg-tile img {
+    transition: transform 1.2s var(--ease-braj);
+  }
+  .dg-tile:hover img {
+    transform: scale(1.05);
+  }
+  .dg-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(to top, rgb(20 12 8 / 0.9) 0%, rgb(20 12 8 / 0.5) 38%, transparent 68%);
+  }
+  .dg-tile-body {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    padding: 1rem 1.15rem 1.1rem;
+    color: #fff;
+  }
+  .dg-tile-body h3,
+  .dg-tile-body h4 {
+    color: #fff;
+  }
+  .dg-tile-arrow {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.9);
+    color: #1f2328;
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.4s var(--ease-braj),
+      transform 0.4s var(--ease-braj);
+  }
+  .dg-tile:hover .dg-tile-arrow,
+  .dg-tile:focus-visible .dg-tile-arrow {
+    opacity: 1;
+    transform: none;
+  }
+  @media (hover: none) {
+    .dg-tile-arrow {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Hero                                                              */
+  /* ---------------------------------------------------------------- */
+  .dg-hero-frame {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 1.75rem;
+    background: #1c1210;
+  }
+  .dg-hero-photo {
+    animation: dg-settle 2.4s var(--ease-braj) both;
+  }
+  .dg-hero-scrim {
+    background:
+      linear-gradient(to top, rgb(20 12 8 / 0.92) 0%, rgb(20 12 8 / 0.62) 38%, rgb(20 12 8 / 0.08) 72%),
+      linear-gradient(to right, rgb(20 12 8 / 0.5), transparent 60%);
+  }
+  /* On narrow screens the title and buttons cover most of the frame, so the veil climbs higher. */
+  @media (max-width: 1023px) {
+    .dg-hero-scrim {
+      background: linear-gradient(to top, rgb(20 12 8 / 0.94) 0%, rgb(20 12 8 / 0.72) 45%, rgb(20 12 8 / 0.35) 80%, rgb(20 12 8 / 0.2) 100%);
+    }
+  }
+  .dg-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(28 25 23 / 0.04), 0 18px 40px -24px rgb(28 25 23 / 0.3);
+  }
+  .dg-stats > div {
+    padding: 0.95rem 1.1rem;
+  }
+  .dg-stats > div:nth-child(odd) {
+    border-right: 1px solid var(--color-line);
+  }
+  .dg-stats > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--color-line);
+  }
+  @media (min-width: 640px) {
+    .dg-stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .dg-stats > div {
+      padding: 1.1rem 1.5rem;
+    }
+    .dg-stats > div:nth-child(-n + 2) {
+      border-bottom: 0;
+    }
+    .dg-stats > div:not(:last-child) {
+      border-right: 1px solid var(--color-line);
+    }
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Sticky page links: a white pill under the site header             */
+  /* ---------------------------------------------------------------- */
+  .dg-subnav {
+    position: sticky;
+    top: 5.1rem;
+    z-index: 30;
+    margin-top: 1.5rem;
+    padding-inline: 0.75rem;
+    pointer-events: none;
+  }
+  @media (min-width: 640px) {
+    .dg-subnav {
+      top: 5.75rem;
+    }
+  }
+  .dg-subnav-list {
+    display: flex;
+    gap: 0.15rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    border: 1px solid var(--color-line);
+    border-radius: 9999px;
+    padding: 0.25rem;
+    background: rgb(255 255 255 / 0.9);
+    box-shadow: 0 10px 28px -16px rgb(28 25 23 / 0.35);
+    backdrop-filter: blur(12px);
+    pointer-events: auto;
+  }
+  .dg-subnav-link {
+    display: block;
+    border-radius: 9999px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: nowrap;
+    color: var(--color-ink-soft);
+    transition:
+      background-color 0.3s var(--ease-braj),
+      color 0.3s var(--ease-braj);
+  }
+  .dg-subnav-link:hover {
+    color: var(--color-ember-deep);
+  }
+  .dg-subnav-link[aria-current="true"] {
+    color: var(--color-ink);
+    background-image: linear-gradient(to right, var(--dg-o500), var(--dg-a500));
+  }
+  .dg-subnav-link:focus-visible {
+    outline-offset: -2px;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Places index: a rail of photo cards, seven across on desktop      */
+  /* ---------------------------------------------------------------- */
+  .dg-index {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 9.75rem;
+    gap: 0.75rem;
+    margin-inline: -1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding: 0.25rem 1rem 0.5rem;
+    scroll-padding-inline: 1rem;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .dg-index::-webkit-scrollbar {
+    display: none;
+  }
+  .dg-index > li {
+    scroll-snap-align: start;
+  }
+  @media (min-width: 640px) {
+    .dg-index {
+      margin-inline: -1.5rem;
+      padding-inline: 1.5rem;
+      scroll-padding-inline: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .dg-index {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(var(--dg-index-cols, 7), minmax(0, 1fr));
+      margin-inline: 0;
+      overflow: visible;
+      padding-inline: 0;
+    }
+  }
+  .dg-index-link {
+    display: block;
+    height: 100%;
+    border-radius: 1.1rem;
+    padding: 0.4rem 0.4rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--color-line);
+    transition:
+      transform 0.5s var(--ease-braj),
+      box-shadow 0.5s var(--ease-braj),
+      border-color 0.5s var(--ease-braj);
+  }
+  .dg-index-link:hover {
+    transform: translateY(-3px);
+    border-color: var(--dg-o200);
+    box-shadow: 0 16px 30px -22px rgb(28 25 23 / 0.35);
+  }
+  .dg-index-link .dg-photo {
+    border-radius: 0.8rem;
+  }
+  /* Four or five stops fill the row with wider, landscape frames. */
+  @media (min-width: 1024px) {
+    .dg-index[data-few] .dg-photo {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* The year as one bar                                               */
+  /* ---------------------------------------------------------------- */
+  .dg-year {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 3px;
+  }
+  .dg-year > li {
+    position: relative;
+    border-radius: 0.5rem;
+    padding-block: 0.8rem 0.7rem;
+    text-align: center;
+    font-size: clamp(0.6rem, 0.48rem + 0.45vw, 0.8rem);
+    font-weight: 600;
+  }
+  /* Winter, summer and monsoon differ in lightness as well as hue, so they separate for every reader. */
+  .dg-year > li[data-season="winter"] {
+    background-image: linear-gradient(to bottom, var(--dg-o500), var(--dg-a500));
+    color: var(--color-ink);
+  }
+  .dg-year > li[data-season="summer"] {
+    background: var(--dg-a100);
+    color: var(--dg-a900);
+  }
+  .dg-year > li[data-season="monsoon"] {
+    background: var(--dg-s200);
+    color: var(--dg-s700);
+  }
+  .dg-year > li[data-best]::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0.35rem;
+    bottom: -0.55rem;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--color-ink);
+  }
+  .dg-year > li[data-best="good"]::after {
+    background: repeating-linear-gradient(90deg, var(--color-ink) 0 4px, transparent 4px 7px);
+  }
+  .dg-year > li i {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 0 0 1.5px var(--color-ink);
+  }
+  .dg-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .dg-key::before {
+    content: "";
+    width: 1.1rem;
+    height: 0.7rem;
+    border-radius: 0.25rem;
+    background: var(--dg-key);
+  }
+  .dg-key-winter {
+    --dg-key: linear-gradient(to right, var(--dg-o500), var(--dg-a500));
+  }
+  .dg-key-summer {
+    --dg-key: var(--dg-a100);
+  }
+  .dg-key-monsoon {
+    --dg-key: var(--dg-s200);
+  }
+  .dg-key-best::before {
+    height: 3px;
+    background: var(--color-ink);
+  }
+  .dg-key-good::before {
+    height: 3px;
+    background: repeating-linear-gradient(90deg, var(--color-ink) 0 4px, transparent 4px 7px);
+  }
+  .dg-key-fest::before {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 0 0 1.5px var(--color-ink);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Timelines                                                         */
+  /* ---------------------------------------------------------------- */
+  .dg-steps {
+    position: relative;
+    display: grid;
+    gap: 1.1rem;
+    padding-left: 1.6rem;
+  }
+  .dg-steps::before {
+    content: "";
+    position: absolute;
+    left: 0.34rem;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, var(--dg-o400), var(--dg-a300) 60%, var(--color-line));
+  }
+  .dg-steps > li {
+    position: relative;
+  }
+  .dg-steps > li::before {
+    content: "";
+    position: absolute;
+    left: -1.6rem;
+    top: 0.28rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid var(--dg-o500);
+    border-radius: 9999px;
+    background: #fff;
+  }
+
+  /* Numbered rules: "1" chips down a hairline */
+  .dg-rules {
+    counter-reset: dg-rule;
+    display: grid;
+    gap: 0.25rem;
+  }
+  .dg-rules > li {
+    position: relative;
+    counter-increment: dg-rule;
+    padding: 0.55rem 0 0.55rem 2.6rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+  .dg-rules > li::before {
+    content: counter(dg-rule);
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-ember-deep);
+    background: var(--dg-o50);
+    box-shadow: inset 0 0 0 1px var(--dg-o200);
+  }
+  .dg-dark .dg-rules > li::before {
+    color: var(--dg-o200);
+    background: rgb(249 115 22 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(253 186 116 / 0.3);
+  }
+
+  /* Timings table */
+  .dg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+  .dg-table caption {
+    padding: 0.9rem 1.1rem 0.4rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .dg-table th,
+  .dg-table td {
+    padding: 0.65rem clamp(0.6rem, 2vw, 1.1rem);
+    vertical-align: top;
+  }
+  .dg-table thead th {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-stone);
+  }
+  .dg-table tbody tr {
+    border-top: 1px solid var(--color-line);
+  }
+  .dg-table tbody th {
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Mathura: the aarti, with lamps set adrift                         */
+  /* ---------------------------------------------------------------- */
+  .dg-aarti {
+    background:
+      radial-gradient(70% 45% at 50% 108%, rgb(249 115 22 / 0.55), transparent 72%),
+      radial-gradient(40% 50% at 100% 0%, rgb(245 158 11 / 0.14), transparent 70%),
+      linear-gradient(to bottom, #1c1210, #2a140b 60%, #3b1a0b);
+  }
+  .dg-diya {
+    position: absolute;
+    bottom: 0.5rem;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 9999px;
+    opacity: 0;
+    background: #ffd98a;
+    box-shadow:
+      0 0 10px 3px rgb(255 190 92 / 0.8),
+      0 0 26px 8px rgb(249 115 22 / 0.35);
+    animation: dg-diya-drift 13s ease-out infinite;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Vrindavan: darshan hours on one clock                             */
+  /* ---------------------------------------------------------------- */
+  .dg-strip {
+    --dg-strip-name: 0rem;
+    --dg-strip-text: 0rem;
+    --dg-strip-gap: 0rem;
+  }
+  .dg-strip-scale {
+    position: relative;
+    height: 1.25rem;
+    margin-left: calc(var(--dg-strip-name) + var(--dg-strip-gap));
+    margin-right: calc(var(--dg-strip-text) + var(--dg-strip-gap));
+    font-size: 0.72rem;
+    color: var(--color-stone);
+  }
+  .dg-strip-scale span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .dg-strip-row {
+    display: grid;
+    gap: 0.35rem;
+    padding-block: 0.7rem;
+  }
+  .dg-strip-row + .dg-strip-row {
+    border-top: 1px solid var(--color-line);
+  }
+  .dg-strip-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    text-underline-offset: 3px;
+  }
+  .dg-strip-name:hover {
+    text-decoration: underline;
+  }
+  .dg-strip-name span {
+    font-weight: 400;
+    color: var(--color-stone);
+  }
+  .dg-strip-track {
+    position: relative;
+    height: 0.6rem;
+    border-radius: 9999px;
+    background: var(--dg-sand);
+  }
+  .dg-strip-track i {
+    position: absolute;
+    top: -0.2rem;
+    bottom: -0.2rem;
+    width: 1px;
+    background: rgb(31 35 40 / 0.15);
+  }
+  .dg-strip-track b {
+    position: absolute;
+    inset-block: 0;
+    border-radius: 9999px;
+    background-image: linear-gradient(to right, var(--dg-o500), var(--dg-a500));
+  }
+  .dg-strip-text {
+    font-size: 0.8125rem;
+    color: var(--color-stone);
+  }
+  @media (min-width: 900px) {
+    .dg-strip {
+      --dg-strip-name: 11rem;
+      --dg-strip-text: 16rem;
+      --dg-strip-gap: 1.25rem;
+    }
+    .dg-strip-row {
+      grid-template-columns: var(--dg-strip-name) minmax(0, 1fr) var(--dg-strip-text);
+      align-items: center;
+      gap: var(--dg-strip-gap);
+    }
+  }
+
+  /* Vrindavan picture wall */
+  .dg-wall {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 40vw;
+    grid-auto-flow: dense;
+    gap: 0.6rem;
+  }
+  @media (min-width: 768px) {
+    .dg-wall {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: clamp(10rem, 16vw, 14rem);
+      gap: 0.75rem;
+    }
+  }
+  .dg-wall-caption {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1.75rem 0.85rem 0.7rem;
+    background: linear-gradient(to top, rgb(20 12 8 / 0.82), transparent);
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #fff;
+  }
+  .dg-viewer {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    background: rgb(20 12 8 / 0.96);
+    color: #fff;
+  }
+  .dg-viewer-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.14);
+    color: #fff;
+    transition: background-color 0.25s var(--ease-braj);
+  }
+  .dg-viewer-btn:hover {
+    background: rgb(255 255 255 / 0.26);
+  }
+  html:has(.dg-viewer[open]) {
+    overflow: hidden;
+  }
+
+  /* Distance bars (how to reach) */
+  .dg-distance {
+    display: block;
+    height: 0.4rem;
+    margin-top: 0.35rem;
+    border-radius: 9999px;
+    background-image: linear-gradient(to right, var(--dg-o500), var(--dg-a400));
+  }
+
+  /* Nearby tiles: the closest two larger */
+  .dg-nearby {
+    display: grid;
+    grid-auto-rows: 15rem;
+    gap: 0.75rem;
+  }
+  @media (min-width: 640px) {
+    .dg-nearby {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .dg-nearby {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-auto-rows: 16rem;
+    }
+    .dg-nearby > li {
+      grid-column: span 3;
+    }
+    .dg-nearby > li:nth-child(-n + 2) {
+      grid-column: span 6;
+    }
+  }
+}
+
+/* Phones: every section heading (eyebrow, title, lede) centres; body copy, lists and cards stay left-aligned. */
+@media (max-width: 767px) {
+  .dg :is(.dg-h2, .dg-h3),
+  .dg .dg-head {
+    text-align: center;
+  }
+  .dg .eyebrow {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+  }
+  .dg :is(.dg-h2, .dg-h3) + :is(.dg-lede, .dg-small),
+  .dg .dg-head :is(.dg-lede, .dg-small, .dg-h1-sub),
+  .dg .dg-head > div {
+    margin-inline: auto;
+    text-align: center;
+  }
+}
+
+@keyframes dg-settle {
+  from {
+    transform: scale(1.06);
+  }
+}
+@keyframes dg-diya-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(1);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 1rem), -13rem) scale(0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dg-hero-photo,
+  .dg-diya {
+    animation: none !important;
+  }
+  .dg-diya {
+    opacity: 0.85;
+  }
+  .dg-lift:hover,
+  .dg-index-link:hover {
+    transform: none;
+  }
+  .group:hover .dg-photo img,
+  .dg-photo-zoom:hover img,
+  .dg-tile:hover img {
+    transform: none;
+  }
+}

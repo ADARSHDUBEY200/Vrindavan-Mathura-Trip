@@ -60,6 +60,23 @@ import imgBankeBihariLane from "@/assets/photos/banke-bihari-lane.jpg";
 import imgKulhadLassiMalai from "@/assets/photos/kulhad-lassi-malai.jpg";
 import imgJalebiRabriPlate from "@/assets/photos/jalebi-rabri-plate.jpg";
 import imgParikramaPichhavai from "@/assets/photos/vraj-parikrama-pichhavai.jpg";
+import imgGokulTemple1848 from "@/assets/photos/gokul-temple-1848.jpg";
+import imgBarsanaFacade from "@/assets/photos/barsana-temple-facade.jpg";
+import imgGovardhanHill from "@/assets/photos/govardhan-hill.jpg";
+import imgRamanRetiTemple from "@/assets/photos/raman-reti-temple.jpg";
+import imgRadhaKund from "@/assets/photos/radha-kund.jpg";
+import imgBarsanaRadharani from "@/assets/photos/barsana-radharani.jpg";
+import imgBarsanaGate from "@/assets/photos/barsana-gate.jpg";
+import imgKirtiMandir from "@/assets/photos/kirti-mandir.jpg";
+import imgNandgaonHillTemple from "@/assets/photos/nandgaon-hill-temple.jpg";
+import imgNandgaonHolyCrowd from "@/assets/photos/nandgaon-holi-crowd.jpg";
+import imgNandgaonSamaj from "@/assets/photos/nandgaon-samaj.jpg";
+import imgRamanRetiAshram from "@/assets/photos/raman-reti-ashram.jpg";
+import imgRamanRetiSand from "@/assets/photos/raman-reti-sand.jpg";
+import imgTaxiSedan from "@/assets/photos/taxi-sedan-dzire.jpg";
+import imgTaxiErtiga from "@/assets/photos/taxi-ertiga.jpg";
+import imgTaxiInnova from "@/assets/photos/taxi-innova-crysta.jpg";
+import imgTaxiTempo from "@/assets/photos/taxi-tempo-traveller.jpg";
 
 export type Credit = { title: string; author: string; license: string; licenseUrl?: string; sourceUrl: string };
 export type Photo = { src: StaticImageData; alt: string; credit: Credit };
@@ -359,6 +376,91 @@ export const photos = {
     src: imgBrajHaveli,
     alt: "Carved sandstone balconies and jharokhas on an old haveli in a Braj town",
     credit: {"title":"Street Scenes and Temples of Mathura & Vrindavan 037","author":"Shoot stufz","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Street_Scenes_and_Temples_of_Mathura_%26_Vrindavan_037.jpg","licenseUrl":"https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "gokul-temple-1848": {
+    src: imgGokulTemple1848,
+    alt: "Engraving of the great temple at Gokul on the bank of the Yamuna, from Meyer's Universum, 1848",
+    credit: {"title": "\"Great Temple at Gokul -a small town near Mathura-,\" from Meyer's Universum, 1848", "author": "Meyer's Universum", "license": "Public domain", "sourceUrl": "https://commons.wikimedia.org/wiki/File:%22Great_Temple_at_Gokul_-a_small_town_near_Mathura-,%22_from_Meyer%27s_Universum,_1848.jpg"},
+  },
+  "raman-reti-temple": {
+    src: imgRamanRetiTemple,
+    alt: "White temple spires above the sandy courtyard at Raman Reti, Gokul",
+    credit: {"title": "Raman Reti", "author": "Parth0308", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Raman_Reti.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "raman-reti-sand": {
+    src: imgRamanRetiSand,
+    alt: "A pilgrim sitting in the soft sacred sand at Raman Reti, Gokul",
+    credit: {"title": "Ramanreti (52210)", "author": "Aliva Sahoo", "license": "CC BY-SA 3.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ramanreti_(52210).jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"},
+  },
+  "raman-reti-ashram": {
+    src: imgRamanRetiAshram,
+    alt: "Tree-lined path to the ashram gateway at Raman Reti, Gokul",
+    credit: {"title": "Ramanreti Ashram", "author": "Aliva Sahoo", "license": "CC BY-SA 3.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ramanreti_Ashram.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"},
+  },
+  "govardhan-hill": {
+    src: imgGovardhanHill,
+    alt: "Weathered sandstone of Govardhan hill, Giriraj ji, among scrub and trees",
+    credit: {"title": "Govardhan hill, Govardhan", "author": "Ekabhishek", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Govardhan_hill,_Govardhan.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "radha-kund": {
+    src: imgRadhaKund,
+    alt: "The still water of Radha Kund near Govardhan with temples along its banks",
+    credit: {"title": "Radha Kund 2", "author": "Kridha20", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Radha_Kund_2.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "barsana-radharani": {
+    src: imgBarsanaRadharani,
+    alt: "Domed sandstone arcades of Shri Radha Rani Temple, Ladli Ji, on the hill at Barsana",
+    credit: {"title": "Radharani Temple Barsana 3", "author": "Kridha20", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Radharani_Temple_Barsana_3.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "barsana-temple-facade": {
+    src: imgBarsanaFacade,
+    alt: "Carved sandstone facade and doorway of a temple in Barsana",
+    credit: {"title": "Barsana Temple", "author": "Lalitgupta isgec", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barsana_Temple.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "barsana-gate": {
+    src: imgBarsanaGate,
+    alt: "The carved entrance gate on the road into Barsana",
+    credit: {"title": "Barsana 2", "author": "Kridha20", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barsana_2.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "kirti-mandir": {
+    src: imgKirtiMandir,
+    alt: "The white marble domes of Kirti Mandir in Barsana, dedicated to Kirti Maiya",
+    credit: {"title": "Kirti Mandir, Barsana", "author": "Avinashjha1806", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kirti_Mandir,_Barsana.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "nandgaon-hill-temple": {
+    src: imgNandgaonHillTemple,
+    alt: "Holi crowds gathered below the hilltop temple at Nandgaon",
+    credit: {"title": "Nandgaon Holi, India", "author": "Kshitijpatle", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nandgaon_Holi,_India.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "nandgaon-holi-crowd": {
+    src: imgNandgaonHolyCrowd,
+    alt: "Men in colour-drenched turbans during the Holi celebrations at Nandgaon",
+    credit: {"title": "Vibrant and mesmerizing Holi celebrations - Nandgaon, Mathura , India", "author": "Anushtupde", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vibrant_and_mesmerizing_Holi_celebrations_-_Nandgaon,_Mathura_,_India.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "nandgaon-samaj": {
+    src: imgNandgaonSamaj,
+    alt: "Singers seated together for the samaj at Nandgaon, covered in Holi colour",
+    credit: {"title": "The Samaj Rituals- Holi at Nandgaon , Mathura", "author": "Anushtupde", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Samaj_Rituals-_Holi_at_Nandgaon_,_Mathura.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "taxi-sedan": {
+    src: imgTaxiSedan,
+    alt: "A silver Maruti Suzuki Dzire sedan parked on a paved drive",
+    credit: {"title": "Maruti Suzuki Dzire VXi VVT", "author": "Biswarup Ganguly", "license": "CC BY 3.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Maruti_Suzuki_Dzire_VXi_VVT.JPG", "licenseUrl": "https://creativecommons.org/licenses/by/3.0"},
+  },
+  "taxi-ertiga": {
+    src: imgTaxiErtiga,
+    alt: "A white Maruti Suzuki Ertiga MUV parked on open grass",
+    credit: {"title": "2022 Maruti Suzuki Ertiga LXi", "author": "Ramakrishna Mission Vidyapith", "license": "Public domain", "sourceUrl": "https://commons.wikimedia.org/wiki/File:2022_Maruti_Suzuki_Ertiga_LXi.jpg"},
+  },
+  "taxi-innova": {
+    src: imgTaxiInnova,
+    alt: "A pearl-white Toyota Innova Crysta seen from the front right",
+    credit: {"title": "Toyota Innova Crysta 2.4 Z front right", "author": "Premnath Kudva", "license": "CC BY-SA 4.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Toyota_Innova_Crysta_2.4_Z_front_right.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"},
+  },
+  "taxi-tempo-traveller": {
+    src: imgTaxiTempo,
+    alt: "A white Force Tempo Traveller van with curtained windows, parked under trees",
+    credit: {"title": "Force Traveller Luxury", "author": "वंपायर; cropped and adjusted by Mr.choppers", "license": "CC BY-SA 2.0", "sourceUrl": "https://commons.wikimedia.org/wiki/File:Force_Traveller_Luxury.jpg", "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0"},
   },
 } satisfies Record<string, Photo>;
 

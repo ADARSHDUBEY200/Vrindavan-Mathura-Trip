@@ -508,9 +508,9 @@ export const nearby = {
   lede: "Many guests extend their trip to the wider Braj region. These are the best **places to visit near Vrindavan**:",
   places: [
     { name: "Mathura", distance: "about 11 to 15 km", text: "Krishna Janmasthan, Dwarkadhish and the Vishram Ghat aarti.", href: "/mathura", picture: pic("vishram-ghat") },
-    { name: "Gokul and Raman Reti", distance: "about 20 km", text: "Krishna's infancy and the soft sacred sands.", href: "/temples/gokul", picture: pic("gokul") },
-    { name: "Govardhan", distance: "about 25 to 30 km", text: "The sacred hill, Daan Ghati and Radha Kund.", href: "/govardhan-barsana", picture: pic("daan-ghati") },
-    { name: "Barsana and Nandgaon", distance: "about 50 to 60 km", text: "Radha's village and Krishna's boyhood home.", href: "/temples/radha-rani-temple-barsana", picture: pic("radha-rani-barsana") },
+    { name: "Gokul and Raman Reti", distance: "about 20 km", text: "Krishna's infancy and the soft sacred sands.", href: "/gokul", picture: pic("gokul") },
+    { name: "Govardhan", distance: "about 25 to 30 km", text: "The sacred hill, Daan Ghati and Radha Kund.", href: "/govardhan", picture: pic("daan-ghati") },
+    { name: "Barsana and Nandgaon", distance: "about 50 to 60 km", text: "Radha's village and Krishna's boyhood home.", href: "/barsana", picture: pic("radha-rani-barsana") },
     { name: "Baldeo (Dauji)", text: "The temple of Krishna's elder brother Balarama.", href: "/temples/dauji-baldeo", picture: pic("dauji") },
     { name: "Agra", distance: "about 70 km", text: "The Taj Mahal and Agra Fort, for those who want to combine pilgrimage with history.", href: "/tour-packages/agra-mathura-vrindavan-3-days", picture: pic("taj-mahal") },
   ],
@@ -592,7 +592,8 @@ export const book = {
 /** Internal links to the rest of the Braj section. */
 export const continuePlanning = [
   { label: "Mathura", text: "Krishna's birthplace and the Vishram Ghat aarti", href: "/mathura" },
-  { label: "Govardhan & Barsana", text: "The sacred hill, Radha Rani and Nandgaon", href: "/govardhan-barsana" },
+  { label: "Govardhan", text: "Giriraj, the 21 km Parikrama and Radha Kund", href: "/govardhan" },
+  { label: "Barsana & Nandgaon", text: "Radha Rani's hilltop home and Krishna's village", href: "/barsana" },
   { label: "Full Braj Yatra", text: "Gokul, Baldeo and the wider 84 Kos", href: "/braj-yatra" },
   { label: "Temples of Braj", text: "History, dress code and tips for each temple", href: "/temples" },
   { label: "Festivals of Braj", text: "Janmashtami, Holi, Radhashtami and more", href: "/festivals" },

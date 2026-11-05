@@ -49,7 +49,7 @@ export const heroSlides: { eyebrow: string; title: string; text: string; image: 
     title: "Walk around Giriraj ji",
     text: "The 21 km parikrama past Kusum Sarovar, Mansi Ganga and Radha Kund — on foot or by car.",
     image: "kusum-sarovar",
-    cta: { label: "Plan a Govardhan day", href: "/govardhan-barsana" },
+    cta: { label: "Plan a Govardhan day", href: "/govardhan" },
   },
   {
     eyebrow: "Festival yatras",
@@ -70,8 +70,8 @@ export const heroSlides: { eyebrow: string; title: string; text: string; image: 
 export const destinationCards: { name: string; href: string; image: PhotoKey; text: string; distance: string }[] = [
   { name: "Vrindavan", href: "/vrindavan", image: "prem-mandir", text: "Banke Bihari, Prem Mandir, ISKCON and the Yamuna ghats.", distance: "Heart of Braj" },
   { name: "Mathura", href: "/mathura", image: "vishram-ghat", text: "Krishna Janmabhoomi, Dwarkadhish and Vishram Ghat aarti.", distance: "≈ 15 km from Vrindavan" },
-  { name: "Govardhan", href: "/govardhan-barsana", image: "govardhan-dham", text: "Giriraj ji, the 21 km parikrama and Radha Kund.", distance: "≈ 25 km from Mathura" },
-  { name: "Barsana & Nandgaon", href: "/govardhan-barsana", image: "radha-rani-barsana", text: "Shri Radha’s hilltop temple and Nanda Baba’s village.", distance: "≈ 45 km from Mathura" },
+  { name: "Govardhan", href: "/govardhan", image: "govardhan-dham", text: "Giriraj ji, the 21 km parikrama and Radha Kund.", distance: "≈ 25 km from Mathura" },
+  { name: "Barsana & Nandgaon", href: "/barsana", image: "radha-rani-barsana", text: "Shri Radha’s hilltop temple and Nanda Baba’s village.", distance: "≈ 45 km from Mathura" },
   { name: "Gokul & Baldeo", href: "/braj-yatra", image: "gokul", text: "Krishna’s childhood village and the temple of Dauji.", distance: "≈ 15–20 km from Mathura" },
 ];
 

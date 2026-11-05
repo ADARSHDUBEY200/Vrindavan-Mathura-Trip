@@ -149,9 +149,12 @@ export const mainNav: NavItem[] = [
       links: [
         { label: "Vrindavan", href: "/vrindavan", note: "Banke Bihari, Prem Mandir & the ghats", image: "prem-mandir" },
         { label: "Mathura", href: "/mathura", note: "Janmabhoomi, Dwarkadhish & Vishram Ghat", image: "vishram-ghat" },
-        { label: "Govardhan & Barsana", href: "/govardhan-barsana", note: "Parikrama, Radha Rani & Nandgaon", image: "radha-rani-barsana" },
-        { label: "Full Braj Yatra", href: "/braj-yatra", note: "Gokul, Baldeo & the wider 84 Kos", image: "kusum-sarovar" },
+        { label: "Govardhan", href: "/govardhan", note: "Giriraj, the Parikrama & Radha Kund", image: "kusum-sarovar" },
+        { label: "Barsana", href: "/barsana", note: "Radha Rani's hilltop home", image: "radha-rani-barsana" },
+        { label: "Nandgaon", href: "/nandgaon", note: "Nand Bhavan & Lathmar Holi", image: "nandgaon-hill-temple" },
+        { label: "Gokul", href: "/gokul", note: "Raman Reti & Krishna's infancy", image: "raman-reti-temple" },
       ],
+      footer: { label: "Full Braj Yatra: Gokul, Baldeo & the 84 Kos", href: "/braj-yatra" },
     },
   },
   {

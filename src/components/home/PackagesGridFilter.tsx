@@ -65,7 +65,7 @@ export function PackagesGridFilter({ items, bands, allLabel = "All trips" }: Pro
         })}
       </div>
 
-      <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:mt-7 lg:grid-cols-3 xl:grid-cols-4">
+      <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-7 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((i) => (
           <li key={i.key} hidden={!visible.has(i.key)}>
             {i.card}

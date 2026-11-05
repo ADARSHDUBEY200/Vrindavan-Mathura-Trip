@@ -402,9 +402,9 @@ export const nearMathura = {
   title: "Add a Third Day: Places to Visit Near Mathura",
   lede: "Many guests extend their **Mathura sightseeing** to the wider Braj region. These are the best **places to visit near Mathura**:",
   items: [
-    { name: "Gokul and Raman Reti", distance: "about 12 to 15 km", text: "Krishna's infancy and the soft sacred sands.", image: "gokul", href: "/temples/gokul" },
-    { name: "Govardhan", distance: "about 22 to 25 km", text: "The sacred hill, Daan Ghati and Radha Kund.", image: "govardhan-dham", href: "/govardhan-barsana" },
-    { name: "Barsana and Nandgaon", distance: "about 50 to 60 km", text: "Radha's village and Krishna's boyhood home.", image: "radha-rani-barsana", href: "/temples/radha-rani-temple-barsana" },
+    { name: "Gokul and Raman Reti", distance: "about 12 to 15 km", text: "Krishna's infancy and the soft sacred sands.", image: "gokul", href: "/gokul" },
+    { name: "Govardhan", distance: "about 22 to 25 km", text: "The sacred hill, Daan Ghati and Radha Kund.", image: "govardhan-dham", href: "/govardhan" },
+    { name: "Barsana and Nandgaon", distance: "about 50 to 60 km", text: "Radha's village and Krishna's boyhood home.", image: "radha-rani-barsana", href: "/barsana" },
     { name: "Baldeo (Dauji)", text: "The temple of Krishna's elder brother Balarama.", image: "dauji", href: "/temples/dauji-baldeo" },
     { name: "Agra", distance: "about 55 to 60 km", text: "The Taj Mahal and Agra Fort, for those who want to combine pilgrimage with history.", image: "taj-mahal", href: "/tour-packages/agra-mathura-vrindavan-3-days" },
   ] as { name: string; distance?: string; text: string; image: PhotoKey; href: string }[],

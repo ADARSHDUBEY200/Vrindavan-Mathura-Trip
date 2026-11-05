@@ -26,7 +26,7 @@ export function useEnquiryPopup() {
 const AUTO_OPEN_MS = 15_000;
 const SEEN_KEY = "enquiry-popup-seen";
 /** Pages that already lead with an enquiry form. */
-const NO_AUTO_OPEN = ["/contact"];
+const NO_AUTO_OPEN = ["/contact", "/mathura-vrindavan-taxi-service"];
 
 function seen(): boolean {
   try {
